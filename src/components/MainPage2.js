@@ -101,8 +101,13 @@ function MainPage2() {
 
         <div className={styles.blueCircle}>
           <div className={styles.circle1}>
-            <p>필유인</p>
+            <p className={styles.title}>필유인</p>
           </div>
+          <p className={styles.explanation}>
+            필유인과 함께 나에게 필요한 교내 및 교외활동을
+            <br />
+            원하는 사람들과 참여해보세요
+          </p>
         </div>
 
         <div className={styles.frame}>
@@ -137,6 +142,35 @@ function MainPage2() {
           필유인에서 경험할 수 있습니다
         </p>
         <button className={styles.findTeamMate}>나에게 맞는 팀원 찾기</button>
+      </div>
+      <div className={styles.footer}>
+        <img src="img/fill-you-in-logo-blue.png" alt="logo" />
+        <div>
+          <ul>
+            기업정보
+            <li>필유인 소개</li>
+            <li>연혁</li>
+            <li>Contact Us</li>
+          </ul>
+          <ul>
+            사업영역
+            <li>이용약관</li>
+            <li>보호정책</li>
+            <li>이용 규칙</li>
+          </ul>
+          <ul>
+            투자정보
+            <li>주식정보</li>
+            <li>채무정보</li>
+            <li>공시정보</li>
+          </ul>
+          <ul>
+            공지사항
+            <li>회사소식</li>
+            <li>Q&A</li>
+            <li>이용문의</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

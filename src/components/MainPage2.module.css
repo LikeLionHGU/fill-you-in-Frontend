@@ -152,6 +152,7 @@
   left: 0px;
   top: 1152px;
   background: rgba(240, 255, 255, 0.8);
+  z-index: 10;
 }
 .section2 p:nth-child(1) {
   font-size: 60px;
@@ -185,22 +186,23 @@
   top: 1434px;
   right: 668px;
   overflow: hidden;
-  border: solid 1px black;
+  box-shadow: 0px 0px 10px gray;
+  background-color: white;
 }
 .whiteCircle .circle2 {
   width: 796px;
   height: 796px;
   border-radius: 50%;
-  border: 1px solid black;
   position: absolute;
   top: 1773px;
   left: 111px;
+  box-shadow: 0px 0px 10px gray;
 }
 .whiteCircle .circle3 {
   width: 340px;
   height: 340px;
   border-radius: 50%;
-  border: solid 1px black;
+  box-shadow: 0px 0px 10px gray;
   position: absolute;
   top: 215px;
   left: 230px;
@@ -328,4 +330,19 @@
   border-radius: 50px;
   color: white;
   font-size: 20px;
+}
+
+/* footer css */
+.footer {
+  width: 1920px;
+  height: 383px;
+  border: solid 1px black;
+  position: absolute;
+  top: 4655px;
+}
+.footer img {
+  width: 172px;
+  position: absolute;
+  top: 87px;
+  left: 100px;
 }
