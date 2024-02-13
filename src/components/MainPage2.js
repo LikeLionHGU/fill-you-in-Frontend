@@ -145,30 +145,37 @@ function MainPage2() {
       </div>
       <div className={styles.footer}>
         <img src="img/fill-you-in-logo-blue.png" alt="logo" />
-        <div>
+        <div className={styles.footerInfo}>
           <ul>
-            기업정보
+            <p>기업정보</p>
             <li>필유인 소개</li>
             <li>연혁</li>
             <li>Contact Us</li>
           </ul>
           <ul>
-            사업영역
+            <p>사업영역</p>
             <li>이용약관</li>
             <li>보호정책</li>
             <li>이용 규칙</li>
           </ul>
           <ul>
-            투자정보
+            <p>투자정보</p>
             <li>주식정보</li>
             <li>채무정보</li>
             <li>공시정보</li>
           </ul>
           <ul>
-            공지사항
+            <p>공지사항</p>
             <li>회사소식</li>
             <li>Q&A</li>
             <li>이용문의</li>
+          </ul>
+        </div>
+        <div className={styles.footerInfo2}>
+          <ul>
+            <p>개인정보처리방침</p>
+            <li>사이트맵</li>
+            <li>제보하기</li>
           </ul>
         </div>
       </div>
