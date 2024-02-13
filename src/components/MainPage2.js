@@ -8,10 +8,10 @@ function MainPage2() {
         <div className={styles.flex1}>
           <img src="/img/fill-you-in-logo.png" alt="logo" />
           <div className={styles.navigation}>
-            <a href="#">활동찾기</a>
-            <a href="#">팀원 라운지</a>
-            <a href="#">팀 관리</a>
-            <a href="#">마이페이지</a>
+            <a href="#!">활동찾기</a>
+            <a href="#!">팀원 라운지</a>
+            <a href="#!">팀 관리</a>
+            <a href="#!">마이페이지</a>
             <button>로그아웃</button>
           </div>
         </div>
