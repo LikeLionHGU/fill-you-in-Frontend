@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MainPage2.module.css";
+import ModifyProfile from "./ModifyProfile";
 
 function MainPage2() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const toLogout = () => {
+    alert("logout");
+    // localStorage.removeItem("memberID");
+  };
+  const showModal = () => {
+    setModalOpen(true);
+  };
   return (
     <div className={styles.mainpage2}>
       <div className={styles.section1}>
@@ -12,7 +21,7 @@ function MainPage2() {
             <a href="#!">팀원 라운지</a>
             <a href="#!">팀 관리</a>
             <a href="#!">마이페이지</a>
-            <button>로그아웃</button>
+            <button onClick={toLogout}>로그아웃</button>
           </div>
         </div>
         <div className={styles.phrases}>
@@ -32,21 +41,21 @@ function MainPage2() {
           한동대학교 콘텐츠융합디자인 학부 8학기
         </p>
         <div className={styles.info}>
-          <p>
-            <span className={styles.subHeading}>관심분야</span>
-            <span>UX/UI 디자이너</span>
-          </p>
-          <p>
-            <span className={styles.subHeading}>희망직무</span>
-            <span>프로덕트 디자이너</span>
-          </p>
-          <p>
-            <span className={styles.subHeading}>자기소개</span>
-            <span>
+          <div className={styles.category}>
+            <div className={styles.subHeading}>관심분야</div>
+            <div className={styles.subExplanation}>UX/UI 디자이너</div>
+          </div>
+          <div className={styles.category}>
+            <div className={styles.subHeading}>희망직무</div>
+            <div className={styles.subExplanation}>프로덕트 디자이너</div>
+          </div>
+          <div className={styles.category}>
+            <div className={styles.subHeading}>자기소개</div>
+            <div className={styles.subExplanation}>
               열정을 가지고 매 순간 최선을 다하는 디자이너 입니다. 많은 관심
               부탁 드려요
-            </span>
-          </p>
+            </div>
+          </div>
         </div>
       </div>
       <div className={styles.announcement}>
@@ -178,6 +187,10 @@ function MainPage2() {
             <li>제보하기</li>
           </ul>
         </div>
+      </div>
+      <div className={styles.modal}>
+        <button onClick={showModal}>modal</button>
+        {modalOpen && <ModifyProfile />}
       </div>
     </div>
   );
