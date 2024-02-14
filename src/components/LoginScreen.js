@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+
+import { GoogleLogin } from "@react-oauth/google"; // login    버튼
 
 const Container = styled.div`
   background-color: #ffffff;
@@ -11,9 +13,16 @@ const Container = styled.div`
   > div {
     background-color: #ffffff;
     height: 100%;
-    /* overflow: hidden; */
+
     position: relative;
     width: 100%;
+  }
+  > div > .google-login-btn {
+    // 구글버튼 디자인 이미 주어져서 아직
+    height: 200px;
+    background-color: black;
+    position: absolute;
+    /* left: 1000px; */
   }
 `;
 
@@ -21,12 +30,13 @@ const Header = styled.div`
   display: flex;
 
   width: 100vw;
+
   height: 100px;
 
   > img {
+    // 로고 이미지
     margin-left: 3.8vw;
     margin-top: 1.67vw;
-
     height: 62px;
     width: 232px;
   }
@@ -62,6 +72,7 @@ const ShortP = styled.p`
 `;
 
 const Bubbles = styled.div`
+  // 디자인 //
   height: 660px;
   overflow: hidden;
   width: 52%;
@@ -188,16 +199,47 @@ const LoginGroup = styled.div`
     width: 36px;
   }
 `;
-
 const googleButton = () => {
   console.log("BUTTON CLICKEd");
 };
 
 export const LoginScreen = () => {
+  const getLoginData = async (credentialIdToken) => {
+    const url = process.env.REACT_APP_BACK_URL; // 백엔드 api url
+
+    console.log(url, "이게맞나");
+    const token = credentialIdToken;
+    const data = {
+      googleIdToken: token, // 백으로 넘겨줄 credential 토큰
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log("Server Response", responseData);
+      console.log(responseData.jwt); // 백엔드에서 전달해준 jwt 토큰
+      if (responseData.jwt) {
+        // console.log("jwt 존재함");
+        localStorage.setItem("loginToken", responseData.jwt); // 로컬에 해당 Jwt를 저장해줌
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   return (
     <Container className="index">
       <div>
-        {/* <div className="div"> */}
         <Header>
           <img
             className="fill-you-in-logo"
@@ -220,6 +262,7 @@ export const LoginScreen = () => {
           <div className="ellipse-5" />
         </Bubbles>
         <LoginGroup onClick={googleButton}>
+          {/* 구글 로그인 버튼.... 
           <div className="overlap-group">
             <div className="text-wrapper-2">Google로 로그인</div>
             <img
@@ -227,7 +270,19 @@ export const LoginScreen = () => {
               alt="Element"
               src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65c5a8a67211e272ff217379/img/-------2-500-1.png"
             />
-          </div>
+          </div> */}
+          <GoogleLogin
+            className="google-login-btn"
+            onSuccess={(credentialResponse) => {
+              console.log(credentialResponse); // 로그인한 객체 전부 가져옴
+
+              getLoginData(credentialResponse.credential); // 로그인 성공하면 유저 credential 정보를 넘겨줌
+            }}
+            onError={() => {
+              alert("로그인에 실패했습니다.");
+              console.log("Login Failed");
+            }}
+          />
         </LoginGroup>
       </div>
     </Container>
