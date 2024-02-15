@@ -190,7 +190,7 @@ function MainPage2() {
       </div>
       <div className={styles.modal}>
         <button onClick={showModal}>modal</button>
-        {modalOpen && <ModifyProfile />}
+        {modalOpen && <ModifyProfile setModalOpen={setModalOpen} />}
       </div>
     </div>
   );
