@@ -11,8 +11,8 @@ body {
   position: relative;
   border: solid 1px black;
   background-color: #04b1b1;
-  width: 1920px;
-  height: 729px;
+  width: 100vw;
+  height: 60vh;
 }
 
 /* flex1 css */
