@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./MainPage2.module.css";
 import ModifyProfile from "./ModifyProfile";
 
 function MainPage2() {
   const [modalOpen, setModalOpen] = useState(false);
+  // const navigate = useNavigate();
   const toLogout = () => {
     alert("logout");
     // localStorage.removeItem("memberID");
+    // navigate("/");
   };
   const showModal = () => {
     setModalOpen(true);

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const DEPARTMENT_OPTION = [
@@ -7,12 +8,14 @@ const DEPARTMENT_OPTION = [
   { value: "4", name: "콘텐츠융합디자인학부" },
 ];
 
-const CLUB_OPTION = [
-  { name: "멋쟁이사자처럼" },
-  { name: "PARD" },
-  { name: "SOUL" },
-  { name: "마음" },
-  { name: "멋사" },
+const clubOption = [
+  "멋쟁이사자처럼",
+  "멋사",
+  "마음",
+  "SOUL",
+  "PARD",
+  "REVERE",
+  "NEO",
 ];
 
 const SelectBox = (props) => {
@@ -25,19 +28,36 @@ const SelectBox = (props) => {
   );
 };
 
-const OptionBox = (props) => {
-  return (
-    <>
-      {props.option.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.name}
-        </option>
-      ))}
-    </>
-  );
-};
-
 function ModifyProfile({ setModalOpen }) {
+  const [inputValue, setInputValue] = useState("");
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+  // const [post, setPost] = useState({})
+  // const submitPost = (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+
+  //   formData.append("image", file);
+  //   formData.append("c_answer", post.contents);
+  //   formData.append("t_answer", post.title);
+  //   formData.append("memberID", memberID);
+  //   formData.append("q_id", id);
+
+  //   fetch("https://ll-api.jungsub.com/talk/mypage/answer", {
+  //     method: "POST",
+  //     body: formData,
+  //     headers: {},
+  //   })
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //       console.log(json.ok);
+  //       if (!!json.ok) {
+  //         window.location.reload();
+  //       }
+  //     });
+  // };
+
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -48,55 +68,74 @@ function ModifyProfile({ setModalOpen }) {
       <ModalWrapper>
         <Container>
           <Title>프로필 수정</Title>
-          <button onClick={closeModal}>
+          <button onClick={closeModal} className="closeModalBtn">
             <img src="img/cancelBtn.png" alt="img" />
           </button>
-          <Flex1>
-            <div>
-              <Input1>
-                <p className="title">이름</p>
-                <input value="학부생" disabled></input>
-              </Input1>
-              <Input1>
-                <p className="title">학기 수</p>
+          {/* <form onSubmit={submitPost}> */}
+          <form>
+            <Flex1>
+              <div>
+                <Input1>
+                  <p className="title">이름</p>
+                  <input value="학부생" disabled></input>
+                </Input1>
+                <Input1>
+                  <p className="title">학기 수</p>
+                  <input name="semester"></input>
+                </Input1>
+                <Input1>
+                  <p className="title">학부</p>
+                  <SelectBox option={DEPARTMENT_OPTION}></SelectBox>
+                </Input1>
+                <Input1>
+                  <p className="title">이메일</p>
+                  <input value="1234" disabled></input>
+                </Input1>
+              </div>
+              <div>
+                <Input2>
+                  <p className="title">소속 학회 및 동아리</p>
+                  <input
+                    list="searchClub"
+                    name="affiliations"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                  ></input>
+                  <datalist id="searchClub" className="scrollable">
+                    {clubOption
+                      .filter((clubOption) =>
+                        clubOption
+                          .toLowerCase()
+                          .includes(inputValue.toLowerCase())
+                      )
+                      .slice(0, 5)
+                      .map((clubOption) => (
+                        <option key={clubOption} value={clubOption} />
+                      ))}
+                  </datalist>
+                </Input2>
+                <Input2>
+                  <p className="title">희망 활동 분야</p>
+                  <input></input>
+                </Input2>
+                <Input2>
+                  <p className="title">관심 직무</p>
+                  <input></input>
+                </Input2>
+                <Input2>
+                  <p className="title">보유기술</p>
+                  <input></input>
+                </Input2>
+              </div>
+              <Input3>
+                <p className="title">자기소개</p>
                 <input></input>
-              </Input1>
-              <Input1>
-                <p className="title">학부</p>
-                <SelectBox option={DEPARTMENT_OPTION}></SelectBox>
-              </Input1>
-              <Input1>
-                <p className="title">이메일</p>
-                <input value="1234" disabled></input>
-              </Input1>
-            </div>
-            <div>
-              <Input2>
-                <p className="title">소속 학회 및 동아리</p>
-                <input list="searchClub"></input>
-                <datalist id="searchClub">
-                  <OptionBox option={CLUB_OPTION}></OptionBox>
-                </datalist>
-              </Input2>
-              <Input2>
-                <p className="title">희망 활동 분야</p>
-                <input></input>
-              </Input2>
-              <Input2>
-                <p className="title">관심 직무</p>
-                <input></input>
-              </Input2>
-              <Input2>
-                <p className="title">보유기술</p>
-                <input></input>
-              </Input2>
-            </div>
-            <Input3>
-              <p className="title">자기소개</p>
-              <input></input>
-            </Input3>
-          </Flex1>
-          <button type="submit">저장</button>
+              </Input3>
+            </Flex1>
+            <button type="submit" className="submitBtnInModal">
+              저장
+            </button>
+          </form>
         </Container>
       </ModalWrapper>
     </>
@@ -143,6 +182,28 @@ const Container = styled.div`
   border: 1px solid black;
   border-radius: 80px;
   overflow-y: scroll;
+
+  > .closeModalBtn {
+    border: none;
+    background: none;
+
+    > img {
+      width: 26px;
+      position: absolute;
+      right: 50px;
+    }
+  }
+
+  > form > .submitBtnInModal {
+    border: none;
+    background-color: #06b5b5;
+    width: 7.7vw;
+    height: 4.4vh;
+    border-radius: 50px;
+    position: absolute;
+    right: 10%;
+    color: white;
+  }
 `;
 
 const Flex1 = styled.div`
@@ -200,6 +261,15 @@ const Input2 = styled.div`
     width: 98%;
     height: 35%;
     border: none;
+  }
+
+  > .scrollable {
+    height: 10px;
+    overflow-y: scroll;
+  }
+
+  > datalist > option {
+    background-color: white;
   }
 `;
 
