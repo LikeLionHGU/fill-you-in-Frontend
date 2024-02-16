@@ -29,37 +29,24 @@ const SelectBox = (props) => {
 };
 
 function ModifyProfile({ setModalOpen }) {
+  const [affiliations, setAffiliations] = useState([]);
+
   const [inputValue, setInputValue] = useState("");
+
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
-  // const [post, setPost] = useState({})
-  // const submitPost = (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-
-  //   formData.append("image", file);
-  //   formData.append("c_answer", post.contents);
-  //   formData.append("t_answer", post.title);
-  //   formData.append("memberID", memberID);
-  //   formData.append("q_id", id);
-
-  //   fetch("https://ll-api.jungsub.com/talk/mypage/answer", {
-  //     method: "POST",
-  //     body: formData,
-  //     headers: {},
-  //   })
-  //     .then((response) => response.json())
-  //     .then((json) => {
-  //       console.log(json.ok);
-  //       if (!!json.ok) {
-  //         window.location.reload();
-  //       }
-  //     });
-  // };
 
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const addCategory = () => {
+    if (inputValue !== "") {
+      setAffiliations([...affiliations, inputValue]);
+      console.log(affiliations);
+      setInputValue("");
+    }
   };
   return (
     <>
@@ -113,6 +100,21 @@ function ModifyProfile({ setModalOpen }) {
                         <option key={clubOption} value={clubOption} />
                       ))}
                   </datalist>
+                  <button type="button" onClick={addCategory}>
+                    등록
+                  </button>
+                  <div className="category">
+                    {affiliations.map((club) => (
+                      <>
+                        <span>
+                          {club}
+                          <button>
+                            <img src="img/cancelBtn.png" alt="img" />
+                          </button>
+                        </span>
+                      </>
+                    ))}
+                  </div>
                 </Input2>
                 <Input2>
                   <p className="title">희망 활동 분야</p>
@@ -200,8 +202,8 @@ const Container = styled.div`
     width: 7.7vw;
     height: 4.4vh;
     border-radius: 50px;
-    position: absolute;
-    right: 10%;
+    position: relative;
+    left: 80%;
     color: white;
   }
 `;
@@ -247,7 +249,7 @@ const Input1 = styled.div`
 
 const Input2 = styled.div`
   width: 17vw;
-  height: 10vh;
+  min-height: 10vh;
 
   > .title {
     font-size: 20px;
@@ -258,24 +260,38 @@ const Input2 = styled.div`
 
   > input {
     background-color: #f4f3f1;
-    width: 98%;
-    height: 35%;
+    width: 80%;
+    height: 3.5vh;
     border: none;
   }
 
-  > .scrollable {
-    height: 10px;
-    overflow-y: scroll;
-  }
+  > .category {
+    margin: 5px 0 5px 0;
 
-  > datalist > option {
-    background-color: white;
+    > span {
+      font-size: 13px;
+      border: solid 2px #04b1b1;
+      border-radius: 10px;
+      padding: 2px 30px 2px 2px;
+
+      > button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+
+        > img {
+          width: 8px;
+        }
+      }
+    }
   }
 `;
 
 const Input3 = styled.div`
   width: 20vw;
   height: 40vh;
+
   > .title {
     font-size: 21px;
     font-weight: 500;
