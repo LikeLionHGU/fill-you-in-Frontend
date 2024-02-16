@@ -1,9 +1,9 @@
-import MainPage2 from "./components/MainPage2";
+import RouteSet from "./RouteSet";
 
 function App() {
   return (
     <>
-      <MainPage2 />
+      <RouteSet />
     </>
   );
 }
