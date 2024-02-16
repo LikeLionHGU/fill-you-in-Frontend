@@ -207,7 +207,6 @@ export const LoginScreen = () => {
   const getLoginData = async (credentialIdToken) => {
     const url = process.env.REACT_APP_BACK_URL; // 백엔드 api url
 
-    console.log(url, "이게맞나");
     const token = credentialIdToken;
     const data = {
       googleIdToken: token, // 백으로 넘겨줄 credential 토큰
