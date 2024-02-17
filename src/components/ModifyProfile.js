@@ -48,6 +48,13 @@ function ModifyProfile({ setModalOpen }) {
       setInputValue("");
     }
   };
+
+  const onRemove = (club) => {
+    console.log(affiliations);
+    setAffiliations((prev) => {
+      return prev.filter((index) => index !== club);
+    });
+  };
   return (
     <>
       <Background></Background>
@@ -97,7 +104,9 @@ function ModifyProfile({ setModalOpen }) {
                       )
                       .slice(0, 5)
                       .map((clubOption) => (
-                        <option key={clubOption} value={clubOption} />
+                        <>
+                          <option key={clubOption} value={clubOption} />
+                        </>
                       ))}
                   </datalist>
                   <button type="button" onClick={addCategory}>
@@ -108,7 +117,7 @@ function ModifyProfile({ setModalOpen }) {
                       <>
                         <span>
                           {club}
-                          <button>
+                          <button type="button" onClick={() => onRemove(club)}>
                             <img src="img/cancelBtn.png" alt="img" />
                           </button>
                         </span>
