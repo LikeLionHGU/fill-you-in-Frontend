@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./MainPage2.module.css";
 import ModifyProfile from "./ModifyProfile";
 
 function MainPage2() {
   const [modalOpen, setModalOpen] = useState(false);
+  // const navigate = useNavigate();
   const toLogout = () => {
     alert("logout");
     // localStorage.removeItem("memberID");
+    // navigate("/");
   };
   const showModal = () => {
     setModalOpen(true);
@@ -33,50 +36,40 @@ function MainPage2() {
           <p>나의 이력을 관리하고 원하는 팀을 구성할 수 있어요</p>
         </div>
         <input placeholder="원하는 공모전, 대회 등을 입력해보세요" />
-      </div>
-      <div className={styles.profile}>
-        <img src="img/profileImgSample.jpeg" alt="profileImg" />
-        <p className={styles.name}>석예슬</p>
-        <p className={styles.academicInfo}>
-          한동대학교 콘텐츠융합디자인 학부 8학기
-        </p>
-        <div className={styles.info}>
-          <div className={styles.category}>
-            <div className={styles.subHeading}>관심분야</div>
-            <div className={styles.subExplanation}>UX/UI 디자이너</div>
-          </div>
-          <div className={styles.category}>
-            <div className={styles.subHeading}>희망직무</div>
-            <div className={styles.subExplanation}>프로덕트 디자이너</div>
-          </div>
-          <div className={styles.category}>
-            <div className={styles.subHeading}>자기소개</div>
-            <div className={styles.subExplanation}>
-              열정을 가지고 매 순간 최선을 다하는 디자이너 입니다. 많은 관심
-              부탁 드려요
-            </div>
-          </div>
+        <div className={styles.profile}>
+          <img src="img/profileImgSample.jpeg" alt="profileImg" />
+          <p className={styles.name}>석예슬</p>
+          <p className={styles.academicInfo}>
+            한동대학교 콘텐츠융합디자인 학부 8학기
+          </p>
+          <p className={styles.academicInfo}>tjsrb439@handong.ac.kr</p>
         </div>
       </div>
-      <div className={styles.announcement}>
-        <h4>교내공지</h4>
-        <ol className={styles.flex2}>
-          <div>
-            <li>2024 SW 페스티벌 개최 안내</li>
-            <li>2024 SW 창업 경진 대회 안내</li>
-            <li>실전! 머신러닝 문제해결 캠프 안내</li>
-          </div>
-          <div>
-            <li>THE CEO 공모전 안내</li>
-            <li>제 2회 학생 주도형 SW 해커톤 경진 대회</li>
-            <li>트레이딩 머신 프로젝트</li>
-          </div>
-          <div>
-            <li>KT AIVLE School 4기 교육학교 추천</li>
-            <li>대경권 SW 산학 프로젝트 경진대회</li>
-            <li>제 10회 소개팅 안내</li>
-          </div>
-        </ol>
+
+      <div className={styles.grid}>
+        <div></div>
+        <div className={styles.announcement}>
+          <h4>교내공지</h4>
+          <ol className={styles.flex2}>
+            <div>
+              <li>2024 SW 페스티벌 개최 안내</li>
+              <li>2024 SW 창업 경진 대회 안내</li>
+            </div>
+            <div>
+              <li>THE CEO 공모전 안내</li>
+              <li>제 2회 학생 주도형 SW 해커톤 경진 대회</li>
+            </div>
+            <div>
+              <li>KT AIVLE School 4기 교육학교 추천</li>
+              <li>대경권 SW 산학 프로젝트 경진대회</li>
+            </div>
+            <div>
+              <li>제 10회 소개딩 안내</li>
+              <li>트레이딩 머신 프로젝트</li>
+            </div>
+          </ol>
+        </div>
+        <div></div>
       </div>
       <div className={styles.section2}>
         <p>
@@ -190,7 +183,7 @@ function MainPage2() {
       </div>
       <div className={styles.modal}>
         <button onClick={showModal}>modal</button>
-        {modalOpen && <ModifyProfile />}
+        {modalOpen && <ModifyProfile setModalOpen={setModalOpen} />}
       </div>
     </div>
   );
