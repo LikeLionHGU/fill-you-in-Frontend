@@ -103,9 +103,14 @@ const FirstVisitModal = ({ isOpen, closeModal }) => {
   const showModal = () => {
     setModalOpen(true);
   };
+
+  const handleFirstVisit = () => {
+    // 처음 방문한건지 아닌지...
+    localStorage.setItem("notFirst", true);
+  };
+
   return (
     <>
-      {" "}
       {modalOpen === true ? (
         <ModifyProfile />
       ) : (
@@ -117,7 +122,11 @@ const FirstVisitModal = ({ isOpen, closeModal }) => {
               <ModalButtons>
                 <MakeProfile onClick={showModal}>프로필 작성하기</MakeProfile>
 
-                <MakeLater onClick={closeModal}>나중에 작성하기</MakeLater>
+                <MakeLater onClick={closeModal}>
+                  {" "}
+                  {/* onClick={handleFirstVisit}*/}
+                  나중에 작성하기
+                </MakeLater>
               </ModalButtons>
             </ModalContents>
           </Modal>

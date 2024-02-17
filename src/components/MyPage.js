@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import FirstVisitModal from "./FirstVisitModal";
@@ -311,6 +311,40 @@ export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
 
+  //
+  //
+  // 프로파일 설정하고 받아오는 부분
+  const [profile, setProfile] = useState([]);
+  const getProfile = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+
+      setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+  //
+  //
+  //프로파일 설정하고 받아오는 부분
+
   // const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -326,17 +360,31 @@ export const MyPage = () => {
   const handleGoMainPage = () => {
     navigate("/MainPage");
   };
-  const handleLogout = () => {
+  const handleLogoutMsg = () => {
+    ///// < = jwt를 백엔드로 계속 보내면서 확인해야할듯
     if (window.confirm("로그아웃 하시겠습니까?")) {
-      localStorage.removeItem("loginToken"); // 로그인 토큰 제거해주고
+      localStorage.removeItem("loginToken"); // 로그인 토큰 제거
       navigate("/");
     }
   };
 
+  // const loginToken = localStorage.getItem("loginToken");
+
+  // const handleLogout = () => {
+  //   if (loginToken == null) {
+  //     navigate("/");
+  //   }
+  // };
+  // let notFirst = localStorage.getItem("notFirst");
+  // console.log(profile.fields);
   return (
     <Index>
-      {isModalOpen ? (
-        <FirstVisitModal isOpen={isModalOpen} closeModal={closeModal} />
+      {{ isModalOpen } ? (
+        <FirstVisitModal
+          isOpen={isModalOpen}
+          closeModal={closeModal}
+          setIsModalOpen
+        />
       ) : null}
       <div className="div1">
         <TopBackground>
@@ -351,7 +399,7 @@ export const MyPage = () => {
             <NavButton>활동 찾기</NavButton>
             <NavButton>팀원 라운지</NavButton>
             <NavButton>팀 관리</NavButton>
-            <NavButton onClick={handleLogout}>로그아웃</NavButton>
+            <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
           </NavBar>
         </TopBackground>
         <ProfilePic>프로필 이미지</ProfilePic>
@@ -381,26 +429,50 @@ export const MyPage = () => {
                     onClick={showModal}
                   />
                   {modalOpen === true ? <ModifyProfile /> : null}
-                  <Username>석예슬</Username>
+                  <Username>
+                    {profile?.firstName} {profile?.lastName}
+                  </Username>
                 </div>
-                <SchoolMajor>한동대학교 콘텐츠융합디자인과 4학년</SchoolMajor>
+                <SchoolMajor>
+                  한동대학교{" "}
+                  {profile?.department == null ? (
+                    <span> ____(학부)____ </span>
+                  ) : (
+                    profile?.department
+                  )}
+                  {profile?.semester == null ? (
+                    <span> ____(학기수)____ </span>
+                  ) : (
+                    profile?.semester
+                  )}
+                </SchoolMajor>
                 <div className="profileInfo">
                   <TableCol>
                     <span>메일</span>
-                    <div className="table-email">yeseul.ove@handong.ac.kr</div>
+                    <div className="table-email">{profile?.email}</div>
                   </TableCol>
                   <TableCol>
                     <span>희망분야</span>
                     <div className="table-list">
-                      <div>없음</div>
-                      <div>없음</div>
+                      {profile?.fields?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                        <div>희망분야 없음</div>
+                      ) : (
+                        <div>여러개 반환 필요</div>
+
+                        // <div>{profile.fields}</div>
+                      )}
                     </div>
                   </TableCol>
                   <TableCol>
                     <span>관심직무</span>
                     <div className="table-list">
-                      <div>없음</div>
-                      <div>없음</div>
+                      {profile?.fields?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                        <div>관심직무 없음</div>
+                      ) : (
+                        <div>여러개 반환 필요</div>
+
+                        // <div>{profile.jobs}</div>
+                      )}
                     </div>
                   </TableCol>
                 </div>
@@ -410,9 +482,25 @@ export const MyPage = () => {
                   <div>보유 기술</div>
                 </div>
                 <div className="club-technique-list">
-                  <div>없음</div>
                   <div>
-                    포토샵 <br /> 피그마
+                    {profile?.affiliations?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                      <div>동아리 없음</div>
+                    ) : (
+                      <div>동아리 여러개 필요?</div>
+
+                      // <div>{profile.jobs}</div>
+                    )}
+                  </div>
+                  <div>
+                    {profile?.skills?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                      <div>기술 없음</div>
+                    ) : (
+                      <div>
+                        기술 여러개 필요 ( br로 구분), 포토샵 <br /> 피그마
+                      </div>
+
+                      // <div>{profile.jobs}</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -421,7 +509,11 @@ export const MyPage = () => {
               {/* 화면 오른쪽 콘텐츠 */}
 
               <IntroduceBox>
-                <p>자기소개란 텍스트 박스</p>
+                {profile?.introduction == null ? (
+                  <p>자기소개란</p>
+                ) : (
+                  profile?.introduction
+                )}
               </IntroduceBox>
 
               <ContentBar>
@@ -430,7 +522,7 @@ export const MyPage = () => {
                 <BarTitle>수상 내역</BarTitle>
               </ContentBar>
               <CareerBox> 이력을 관리해보세요.</CareerBox>
-            </PageContent>{" "}
+            </PageContent>
           </ContentContainer>
         </BottomBackground>
       </div>
