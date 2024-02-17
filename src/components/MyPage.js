@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import FirstVisitModal from "./FirstVisitModal";
 import ModifyProfile from "./ModifyProfile";
+import PictureSelect from "./PictureSelect";
 
 const TopBackground = styled.div`
   /* 배너 배경.. */
@@ -305,33 +306,16 @@ const CareerBox = styled.div`
   /* border: 2px solid red; */
   color: #005f5f;
 `;
-const MakeProfileModal = () => {
-  return (
-    <div>
-      <div className="view-wrapper">
-        <div className="view">
-          <div className="overlap-2">
-            <div className="view-2">
-              <div className="overlap-group-wrapper">
-                <div className="div-wrapper">
-                  <div className="text-wrapper-11">프로필 작성하기</div>
-                </div>
-              </div>
-              <div className="text-wrapper-12">나중에 작성하기</div>
-            </div>
-            <div className="text-wrapper-13">프로필을 입력해보세요 !</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
 
   // const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const openPicModal = () => setIsPicModalOpen(true);
+  const closePicModal = () => setIsPicModalOpen(false);
 
   const navigate = useNavigate();
   const handleGoMainPage = () => {
@@ -368,7 +352,7 @@ export const MyPage = () => {
         <ProfilePic>프로필 이미지</ProfilePic>
         <EditIcon
           onClick={() => {
-            <ModifyProfile />;
+            setIsPicModalOpen(true);
           }}
         >
           <img
@@ -377,7 +361,9 @@ export const MyPage = () => {
             src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
           />
         </EditIcon>
-
+        {isPicModalOpen === true ? (
+          <PictureSelect isOpen={isPicModalOpen} closeModal={closePicModal} />
+        ) : null}
         <BottomBackground>
           <ContentContainer>
             <Sidebar>
