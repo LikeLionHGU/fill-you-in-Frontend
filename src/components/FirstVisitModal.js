@@ -28,6 +28,7 @@ const ModalExitBackground = styled.div`
   z-index: 1500;
 `;
 const Modal = styled.div`
+  box-shadow: 0 0 30px 1px #0000002a; // drop-down shadow 모달 그림자
   z-index: 2000; // 배경 보다 위에 있도록 함
   position: fixed;
   display: flex;
@@ -106,8 +107,9 @@ const FirstVisitModal = ({ isOpen, closeModal }) => {
           <ModalButtons>
             <MakeProfile
               onClick={() => {
-                console.log("Button clicked");
-                <ModifyProfile style={{ zIndex: 30 }} />;
+                {
+                  true && <ModifyProfile />;
+                }
                 // 프로필 수정 모달이랑 연결....안되는중
               }}
             >
