@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import placeholderImg from "../img/searchImg.png";
 
 const DEPARTMENT_OPTION = [
   { value: "1", name: "" },
@@ -10,6 +11,9 @@ const DEPARTMENT_OPTION = [
 
 const clubOption = [
   "멋쟁이사자처럼",
+  "멋쟁이사자처럼1",
+  "멋쟁이사자처럼2",
+  "멋쟁이사자처럼3",
   "멋사",
   "마음",
   "SOUL",
@@ -32,9 +36,18 @@ function ModifyProfile({ setModalOpen }) {
   const [affiliations, setAffiliations] = useState([]);
 
   const [inputValue, setInputValue] = useState("");
+  const [showSelect, setShowSelect] = useState(false);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
+    setShowSelect(event.target.value.trim() !== "");
+  };
+
+  const handleSelectChange = (event) => {
+    setInputValue("");
+    setShowSelect(false);
+    setAffiliations([...affiliations, event.target.value]);
+    console.log(affiliations);
   };
 
   const closeModal = () => {
@@ -46,6 +59,7 @@ function ModifyProfile({ setModalOpen }) {
       setAffiliations([...affiliations, inputValue]);
       console.log(affiliations);
       setInputValue("");
+      setShowSelect(false);
     }
   };
 
@@ -89,29 +103,45 @@ function ModifyProfile({ setModalOpen }) {
               <div>
                 <Input2>
                   <p className="title">소속 학회 및 동아리</p>
-                  <input
-                    list="searchClub"
-                    name="affiliations"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                  ></input>
-                  <datalist id="searchClub" className="scrollable">
-                    {clubOption
-                      .filter((clubOption) =>
-                        clubOption
-                          .toLowerCase()
-                          .includes(inputValue.toLowerCase())
-                      )
-                      .slice(0, 5)
-                      .map((clubOption) => (
-                        <>
-                          <option key={clubOption} value={clubOption} />
-                        </>
-                      ))}
-                  </datalist>
-                  <button type="button" onClick={addCategory}>
-                    등록
-                  </button>
+                  <div>
+                    <div>
+                      <input
+                        id="searchClub"
+                        name="affiliations"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                      ></input>
+                      <PlaceholderImage
+                        src={placeholderImg}
+                        alt="Placeholder"
+                        show={!inputValue}
+                      />
+                    </div>
+                    <button type="button" onClick={addCategory}>
+                      등록
+                    </button>
+                  </div>
+                  {showSelect && (
+                    <select
+                      id="searchClub"
+                      size={3}
+                      onChange={handleSelectChange}
+                    >
+                      {clubOption
+                        .filter((clubOption) =>
+                          clubOption
+                            .toLowerCase()
+                            .includes(inputValue.toLowerCase())
+                        )
+                        .map((clubOption) => (
+                          <>
+                            <option key={clubOption} value={clubOption}>
+                              {clubOption}
+                            </option>
+                          </>
+                        ))}
+                    </select>
+                  )}
                   <div className="category">
                     {affiliations.map((club) => (
                       <>
@@ -188,7 +218,7 @@ const ModalWrapper = styled.div`
 const Container = styled.div`
   width: 67vw;
   height: 65vh;
-  z-index: 100;
+  z-index: 400; //원래 100이었음
   background-color: white;
   border: 1px solid black;
   border-radius: 80px;
@@ -267,26 +297,65 @@ const Input2 = styled.div`
     margin: 10px 0px 10px 0px;
   }
 
-  > input {
-    background-color: #f4f3f1;
+  > div {
+    position: relative;
+
+    > div {
+      position: relative;
+      width: 98%;
+      height: 3.5vh;
+
+      > input {
+        width: 100%;
+        height: 100%;
+        padding-left: 40px; /* 이미지와 텍스트 간격을 위해 왼쪽 패딩 설정 */
+        border: none;
+        background-color: #f4f3f1;
+
+        &:focus {
+          outline: none;
+        }
+
+        &::placeholder {
+          background: url(${placeholderImg}) no-repeat 10px center;
+        }
+      }
+    }
+
+    > button {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 5px;
+      width: 18%;
+      height: 3.5vh;
+      background-color: #f4f3f1;
+      border: none;
+    }
+  }
+
+  > select {
     width: 80%;
-    height: 3.5vh;
-    border: none;
+    min-height: 2vh;
   }
 
   > .category {
     margin: 5px 0 5px 0;
+    max-height: 3.5vh;
+    max-width: 98%;
+    white-space: nowrap;
+    overflow-x: scroll;
 
     > span {
       font-size: 13px;
       border: solid 2px #04b1b1;
       border-radius: 10px;
-      padding: 2px 30px 2px 2px;
+      padding: 2px 2px 2px 2px;
 
       > button {
         background: none;
         border: none;
-        padding: 0;
+        padding: 0 2px 0 10px;
         margin: 0;
 
         > img {
@@ -295,6 +364,16 @@ const Input2 = styled.div`
       }
     }
   }
+`;
+
+const PlaceholderImage = styled.img`
+  position: absolute;
+  left: 10px; /* 이미지 위치 조정 */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px; /* 이미지 크기 조정 */
+  opacity: ${({ show }) =>
+    show ? 1 : 0}; /* 입력값이 없는 경우에만 이미지 표시 */
 `;
 
 const Input3 = styled.div`
