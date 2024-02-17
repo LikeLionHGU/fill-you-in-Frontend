@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ModifyProfile from "./ModifyProfile";
+import { useState } from "react";
 
 const ModalBackground = styled.div`
   z-index: 1000; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
@@ -98,28 +99,31 @@ const MakeLater = styled.div`
 `;
 
 const FirstVisitModal = ({ isOpen, closeModal }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
   return (
-    <ModalBackground style={{ display: isOpen ? "flex" : "none" }}>
-      <ModalExitBackground onClick={closeModal}></ModalExitBackground>
-      <Modal>
-        <ModalContents>
-          <ModalText>프로필을 입력해보세요!</ModalText>
-          <ModalButtons>
-            <MakeProfile
-              onClick={() => {
-                {
-                  true && <ModifyProfile />;
-                }
-                // 프로필 수정 모달이랑 연결....안되는중
-              }}
-            >
-              프로필 작성하기
-            </MakeProfile>
-            <MakeLater onClick={closeModal}>나중에 작성하기</MakeLater>
-          </ModalButtons>
-        </ModalContents>
-      </Modal>
-    </ModalBackground>
+    <>
+      {" "}
+      {modalOpen === true ? (
+        <ModifyProfile />
+      ) : (
+        <ModalBackground style={{ display: isOpen ? "flex" : "none" }}>
+          <ModalExitBackground onClick={closeModal}></ModalExitBackground>
+          <Modal>
+            <ModalContents>
+              <ModalText>프로필을 입력해보세요!</ModalText>
+              <ModalButtons>
+                <MakeProfile onClick={showModal}>프로필 작성하기</MakeProfile>
+
+                <MakeLater onClick={closeModal}>나중에 작성하기</MakeLater>
+              </ModalButtons>
+            </ModalContents>
+          </Modal>
+        </ModalBackground>
+      )}
+    </>
   );
 };
 

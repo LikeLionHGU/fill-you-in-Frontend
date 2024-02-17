@@ -317,6 +317,11 @@ export const MyPage = () => {
   const openPicModal = () => setIsPicModalOpen(true);
   const closePicModal = () => setIsPicModalOpen(false);
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
+
   const navigate = useNavigate();
   const handleGoMainPage = () => {
     navigate("/MainPage");
@@ -373,7 +378,9 @@ export const MyPage = () => {
                     className="edit-icon-content"
                     alt="editIcon"
                     src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
+                    onClick={showModal}
                   />
+                  {modalOpen === true ? <ModifyProfile /> : null}
                   <Username>석예슬</Username>
                 </div>
                 <SchoolMajor>한동대학교 콘텐츠융합디자인과 4학년</SchoolMajor>
