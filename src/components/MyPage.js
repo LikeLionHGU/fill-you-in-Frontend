@@ -1,6 +1,9 @@
-import React from "react";
-import "./style.css";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import FirstVisitModal from "./FirstVisitModal";
+import ModifyProfile from "./ModifyProfile";
+import PictureSelect from "./PictureSelect";
 
 const TopBackground = styled.div`
   /* 배너 배경.. */
@@ -52,7 +55,6 @@ const NavButton = styled.div`
     border-radius: 5px;
   }
 `;
-
 const Index = styled.div`
   background-color: #ffffff;
   display: flex;
@@ -97,9 +99,7 @@ const EditIcon = styled.div`
     cursor: pointer;
   }
 `;
-
 const EditIconImg = styled.img``;
-
 const BottomBackground = styled.div`
   // 화면의 아래쪽 흰색 배경 container
   display: block;
@@ -110,7 +110,6 @@ const ContentContainer = styled.div`
   /* border: 2px solid red; */
   padding: 30px 30px;
 `;
-
 const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
@@ -190,7 +189,6 @@ const Sidebar = styled.div`
     color: black;
   }
 `;
-
 const Username = styled.div`
   display: flex;
   justify-content: center;
@@ -206,11 +204,9 @@ const Username = styled.div`
   width: 70%;
   /* border: 2px solid black; */
 `;
-
 const PageContent = styled.div`
   display: flex;
   flex-direction: column;
-
   align-items: center;
   width: 100%;
   padding: 20px 50px;
@@ -248,7 +244,6 @@ const BarTitle = styled.div`
   font-weight: 600;
   width: 30%;
 `;
-
 const TableCol = styled.div`
   display: flex;
   margin-bottom: 10px;
@@ -295,12 +290,10 @@ const TableCol = styled.div`
     /* border: 2px solid red; */
   }
 `;
-
 const SchoolMajor = styled.div`
   /* border: 2px solid red; */
   padding: 5px 5px;
 `;
-
 const CareerBox = styled.div`
   display: flex;
   justify-content: center;
@@ -314,36 +307,37 @@ const CareerBox = styled.div`
   color: #005f5f;
 `;
 
-const MakeProfileModal = () => {
-  return (
-    <div>
-      <div className="view-wrapper">
-        <div className="view">
-          <div className="overlap-2">
-            <div className="view-2">
-              <div className="overlap-group-wrapper">
-                <div className="div-wrapper">
-                  <div className="text-wrapper-11">프로필 작성하기</div>
-                </div>
-              </div>
-              <div className="text-wrapper-12">나중에 작성하기</div>
-            </div>
-            <div className="text-wrapper-13">프로필을 입력해보세요 !</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const MyPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
+
+  // const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const openPicModal = () => setIsPicModalOpen(true);
+  const closePicModal = () => setIsPicModalOpen(false);
+
+  const navigate = useNavigate();
+  const handleGoMainPage = () => {
+    navigate("/MainPage");
+  };
+  const handleLogout = () => {
+    if (window.confirm("로그아웃 하시겠습니까?")) {
+      localStorage.removeItem("loginToken"); // 로그인 토큰 제거해주고
+      navigate("/");
+    }
+  };
+
   return (
     <Index>
-      {/* <MakeProfileModal /> */}
+      {isModalOpen ? (
+        <FirstVisitModal isOpen={isModalOpen} closeModal={closeModal} />
+      ) : null}
       <div className="div1">
         <TopBackground>
           <Header>
             <img
+              onClick={handleGoMainPage}
               alt="LogoImage"
               src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/--@2x.png"
             />
@@ -352,18 +346,24 @@ export const MyPage = () => {
             <NavButton>활동 찾기</NavButton>
             <NavButton>팀원 라운지</NavButton>
             <NavButton>팀 관리</NavButton>
-            <NavButton>로그아웃</NavButton>
+            <NavButton onClick={handleLogout}>로그아웃</NavButton>
           </NavBar>
         </TopBackground>
         <ProfilePic>프로필 이미지</ProfilePic>
-        <EditIcon>
+        <EditIcon
+          onClick={() => {
+            setIsPicModalOpen(true);
+          }}
+        >
           <img
             className="edit-icon-profile-pic"
             alt="editIcon"
             src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
           />
         </EditIcon>
-
+        {isPicModalOpen === true ? (
+          <PictureSelect isOpen={isPicModalOpen} closeModal={closePicModal} />
+        ) : null}
         <BottomBackground>
           <ContentContainer>
             <Sidebar>

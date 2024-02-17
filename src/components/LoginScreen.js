@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
+import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google"; // login    버튼
 
 const Container = styled.div`
@@ -204,10 +206,11 @@ const googleButton = () => {
 };
 
 export const LoginScreen = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const getLoginData = async (credentialIdToken) => {
     const url = process.env.REACT_APP_BACK_URL; // 백엔드 api url
 
-    console.log(url, "이게맞나");
     const token = credentialIdToken;
     const data = {
       googleIdToken: token, // 백으로 넘겨줄 credential 토큰
@@ -236,33 +239,45 @@ export const LoginScreen = () => {
       console.error("error", error);
     }
   };
+  const navigate = useNavigate();
+  let loginToken = localStorage.getItem("loginToken");
+  const checkLogin = () => {
+    if (loginToken) setLoggedIn(true);
+    else setLoggedIn(false);
+  };
+  useEffect(() => {
+    checkLogin();
+  }, []);
 
-  return (
-    <Container className="index">
-      <div>
-        <Header>
-          <img
-            className="fill-you-in-logo"
-            alt="Image"
-            src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65c5a8a67211e272ff217379/img/--@2x.png"
-          />
-        </Header>
+  return loggedIn ? (
+    navigate("/MainPage") // 만약 로그인 된 상태라면
+  ) : (
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
+      <Container className="index">
+        <div>
+          <Header>
+            <img
+              className="fill-you-in-logo"
+              alt="Image"
+              src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65c5a8a67211e272ff217379/img/--@2x.png"
+            />
+          </Header>
 
-        <TextWrapper>
-          채움이 있는 대학생활,
-          <br />
-          필유인 입니다.
-        </TextWrapper>
-        <ShortP>나의 이력을 관리하고 원하는 팀을 구성할 수 있어요.</ShortP>
-        <Bubbles>
-          <div className="ellipse" />
-          <div className="ellipse-2" />
-          <div className="ellipse-3" />
-          <div className="ellipse-4" />
-          <div className="ellipse-5" />
-        </Bubbles>
-        <LoginGroup onClick={googleButton}>
-          {/* 구글 로그인 버튼.... 
+          <TextWrapper>
+            채움이 있는 대학생활,
+            <br />
+            필유인 입니다.
+          </TextWrapper>
+          <ShortP>나의 이력을 관리하고 원하는 팀을 구성할 수 있어요.</ShortP>
+          <Bubbles>
+            <div className="ellipse" />
+            <div className="ellipse-2" />
+            <div className="ellipse-3" />
+            <div className="ellipse-4" />
+            <div className="ellipse-5" />
+          </Bubbles>
+          <LoginGroup onClick={googleButton}>
+            {/* 구글 로그인 버튼.... 
           <div className="overlap-group">
             <div className="text-wrapper-2">Google로 로그인</div>
             <img
@@ -271,21 +286,23 @@ export const LoginScreen = () => {
               src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65c5a8a67211e272ff217379/img/-------2-500-1.png"
             />
           </div> */}
-          <GoogleLogin
-            className="google-login-btn"
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse); // 로그인한 객체 전부 가져옴
 
-              getLoginData(credentialResponse.credential); // 로그인 성공하면 유저 credential 정보를 넘겨줌
-            }}
-            onError={() => {
-              alert("로그인에 실패했습니다.");
-              console.log("Login Failed");
-            }}
-          />
-        </LoginGroup>
-      </div>
-    </Container>
+            <GoogleLogin
+              className="google-login-btn"
+              onSuccess={(credentialResponse) => {
+                // console.log(credentialResponse); // 로그인한 객체 전부 가져옴
+                getLoginData(credentialResponse.credential); // 로그인 성공하면 유저 credential 정보를 넘겨줌
+                navigate("/MainPage");
+              }}
+              onError={() => {
+                alert("로그인에 실패했습니다.");
+                console.log("Login Failed");
+              }}
+            />
+          </LoginGroup>
+        </div>
+      </Container>
+    </GoogleOAuthProvider>
   );
 };
 export default LoginScreen;
