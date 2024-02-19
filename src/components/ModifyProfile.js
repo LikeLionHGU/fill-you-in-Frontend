@@ -2,27 +2,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import placeholderImg from "../img/searchImg.png";
 
-const DEPARTMENT_OPTION = [
-  { value: "1", name: "" },
-  { value: "2", name: "전산전자공학부" },
-  { value: "3", name: "ICT 창업학부" },
-  { value: "4", name: "콘텐츠융합디자인학부" },
-];
-
-const clubOption = [];
-
-const filedsOption = [];
-
-const SelectBox = (props) => {
-  return (
-    <select>
-      {props.option.map((option) => (
-        <option value={option.name} />
-      ))}
-    </select>
-  );
-};
-
 function InputBox({
   inputValue,
   name,
@@ -69,10 +48,29 @@ function InputBox({
       )}
       <div className="category">
         {arrays &&
-          arrays.map((option) => (
+          arrays.map((option, idx) => (
             <>
               <span>
-                {option}
+                {name !== "Affiliations" ? (
+                  <button
+                    className="pinBtn"
+                    onClick={() => {
+                      const newArr = [...arrays];
+                      newArr[idx] = {
+                        ...newArr[idx],
+                        isPinned: !option.isPinned,
+                      };
+                      setArrays(newArr);
+                    }}
+                  >
+                    {option.isPinned ? (
+                      <img src="img/pinned.png" alt="img" className="pin" />
+                    ) : (
+                      <img src="img/notPinned.png" alt="img" className="pin" />
+                    )}
+                  </button>
+                ) : null}
+                {option.name}
                 <button
                   type="button"
                   onClick={() => onRemove(option, arrays, setArrays)}
@@ -88,10 +86,22 @@ function InputBox({
 }
 
 function ModifyProfile({ setModalOpen }) {
-  const [affiliations, setAffiliations] = useState([]); //소속 학회 및 동아리
-  const [fields, setFields] = useState([]); //희망 활동 분야
-  const [jobs, setJobs] = useState([]); //관심 직무
-  const [skills, setSkills] = useState([]); //보유기술
+  const [profile, setProfile] = useState([]); //프로필 정보
+
+  const [departments, setDepartments] = useState(""); //백에게 전달할 학부
+  const [departmentsOption, setDepartmentsOption] = useState([" "]); // 받아올 학부 정보
+
+  const [affiliations, setAffiliations] = useState([]); //백에게 전달할 소속 학회 및 동아리
+  const [affiliationsOption, setAffiliationsOption] = useState([]); //받아올 동아리 정보
+
+  const [fields, setFields] = useState([]); //백에게 전달할 희망 활동 분야
+  const [fieldsOption, setFieldsOption] = useState([]);
+
+  const [jobs, setJobs] = useState([]); //백에게 전달할 관심 직무
+  const [jobsOption, setJobsOption] = useState([]);
+
+  const [skills, setSkills] = useState([]); //백에게 전달할 보유기술
+  const [skillsOption, setSkillsOption] = useState([]);
 
   const [inputValue, setInputValue] = useState({
     Affiliations: "",
@@ -112,10 +122,10 @@ function ModifyProfile({ setModalOpen }) {
     setShowSelect(value.trim() !== "");
   };
 
-  const handleSelectChange = (event, arrays, setArrays, name) => {
-    setInputValue({ ...inputValue, [name]: "" });
+  const handleSelectChange = (event, arrays, setArrays, Name) => {
+    setInputValue({ ...inputValue, [Name]: "" });
     setShowSelect(false);
-    setArrays([...arrays, event.target.value]);
+    setArrays([...arrays, { name: event.target.value, isPinned: true }]);
     console.log(affiliations);
   };
 
@@ -135,6 +145,52 @@ function ModifyProfile({ setModalOpen }) {
     console.log("enter 막음");
   };
 
+  const getProfile = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+
+      setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const getDepartments = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/departments";
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      const variable = responseData.departments.map((item) => item.name);
+      setDepartmentsOption(variable);
+      console.log(departmentsOption);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   const getAffiliations = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/affiliations";
 
@@ -150,16 +206,88 @@ function ModifyProfile({ setModalOpen }) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Server Response", responseData.affiliations);
-      // 받아온 데이터를 콘솔로 확인
-      const affiliationsOption = responseData.affiliations;
+      const variable = responseData.affiliations.map((item) => item.name);
+      setAffiliationsOption(variable);
       console.log(affiliationsOption);
     } catch (error) {
       console.error("error", error);
     }
   };
 
-  useEffect(() => getAffiliations, []);
+  const getFields = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/fields";
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      const variable = responseData.fields.map((item) => item.name);
+      setFieldsOption(variable);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const getJobs = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/jobs";
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      const variable = responseData.jobs.map((item) => item.name);
+      setJobsOption(variable);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const getSkills = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/skills";
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      const variable = responseData.skills.map((item) => item.name);
+      setSkillsOption(variable);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+    getDepartments();
+    getAffiliations();
+    getFields();
+    getJobs();
+    getSkills();
+  }, []);
   return (
     <>
       <Background></Background>
@@ -175,19 +303,28 @@ function ModifyProfile({ setModalOpen }) {
               <div>
                 <Input1>
                   <p className="title">이름</p>
-                  <input value="학부생" disabled></input>
+                  <input
+                    value={`${profile?.firstName} ${profile?.lastName}`}
+                    disabled
+                  ></input>
                 </Input1>
                 <Input1>
                   <p className="title">학기 수</p>
-                  <input name="semester" placeholder="ex : 7"></input>
+                  <input name="semester" placeholder="ex) 7"></input>
                 </Input1>
                 <Input1>
                   <p className="title">학부</p>
-                  <SelectBox option={DEPARTMENT_OPTION}></SelectBox>
+                  <select>
+                    {departmentsOption.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </Input1>
                 <Input1>
                   <p className="title">이메일</p>
-                  <input value="1234" disabled></input>
+                  <input value={profile?.email} disabled></input>
                 </Input1>
               </div>
               <div>
@@ -201,7 +338,7 @@ function ModifyProfile({ setModalOpen }) {
                     handleSelectChange={handleSelectChange}
                     arrays={affiliations}
                     onRemove={onRemove}
-                    options={clubOption}
+                    options={affiliationsOption}
                     setArrays={setAffiliations}
                   ></InputBox>
                 </Input2>
@@ -215,7 +352,7 @@ function ModifyProfile({ setModalOpen }) {
                     handleSelectChange={handleSelectChange}
                     arrays={fields}
                     onRemove={onRemove}
-                    options={filedsOption}
+                    options={fieldsOption}
                     setArrays={setFields}
                   />
                 </Input2>
@@ -227,8 +364,10 @@ function ModifyProfile({ setModalOpen }) {
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
                     handleSelectChange={handleSelectChange}
-                    affiliations={affiliations}
+                    arrays={jobs}
                     onRemove={onRemove}
+                    options={jobsOption}
+                    setArrays={setJobs}
                   />
                 </Input2>
                 <Input2>
@@ -239,8 +378,10 @@ function ModifyProfile({ setModalOpen }) {
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
                     handleSelectChange={handleSelectChange}
-                    affiliations={affiliations}
+                    arrays={skills}
                     onRemove={onRemove}
+                    options={skillsOption}
+                    setArrays={setSkills}
                   />
                 </Input2>
               </div>
@@ -337,7 +478,7 @@ const Title = styled.p`
 `;
 
 const Input1 = styled.div`
-  width: 10vw;
+  width: 11vw;
   height: 10vh;
 
   > .title {
@@ -349,7 +490,7 @@ const Input1 = styled.div`
 
   > input {
     background-color: #f4f3f1;
-    width: 98%;
+    width: 100%;
     height: 35%;
     border: none;
     &:focus {
@@ -362,6 +503,10 @@ const Input1 = styled.div`
     height: 40%;
     background-color: #f4f3f1;
     border: none;
+
+    &:focus {
+      outline: none;
+    }
   }
 `;
 
@@ -416,21 +561,32 @@ const Input2 = styled.div`
     max-width: 98%;
     white-space: nowrap;
     overflow-x: scroll;
+    padding: 5px;
 
     > span {
       font-size: 13px;
       border: solid 2px #04b1b1;
       border-radius: 10px;
-      padding: 2px 2px 2px 2px;
+      padding: 2px 2px 2px 5px;
+      margin: 0 5px 0 0;
+
+      > .pinBtn {
+        padding-left: 2px;
+        margin-right: 5px;
+      }
 
       > button {
         background: none;
         border: none;
-        padding: 0 2px 0 10px;
+        padding: 0 2px 0 8px;
         margin: 0;
 
         > img {
           width: 8px;
+        }
+
+        > .pin {
+          vertical-align: middle;
         }
       }
     }
