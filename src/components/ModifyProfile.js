@@ -1,7 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import placeholderImg from "../img/searchImg.png";
 
+// const getProfile = async () => {
+//   const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+//   try {
+//     const response = await fetch(url, {
+//       method: "GET", //(+ GET인지 POST인지 명세 확인)
+//       headers: {
+//         Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP Error! Status: ${response.status}`);
+//     }
+//     const responseData = await response.json();
+//     console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+
+//     setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+//   } catch (error) {
+//     console.error("error", error);
+//   }
+// };
+
+// useEffect(() => {
+//   getProfile();
+// }, []);
 const DEPARTMENT_OPTION = [
   { value: "1", name: "" },
   { value: "2", name: "전산전자공학부" },
@@ -9,18 +35,9 @@ const DEPARTMENT_OPTION = [
   { value: "4", name: "콘텐츠융합디자인학부" },
 ];
 
-const clubOption = [
-  "멋쟁이사자처럼",
-  "멋쟁이사자처럼1",
-  "멋쟁이사자처럼2",
-  "멋쟁이사자처럼3",
-  "멋사",
-  "마음",
-  "SOUL",
-  "PARD",
-  "REVERE",
-  "NEO",
-];
+const clubOption = [];
+
+const filedsOption = [];
 
 const SelectBox = (props) => {
   return (
@@ -32,21 +49,99 @@ const SelectBox = (props) => {
   );
 };
 
-function ModifyProfile({ setModalOpen }) {
-  const [affiliations, setAffiliations] = useState([]);
+function InputBox({
+  inputValue,
+  name,
+  handleInputChange,
+  showSelect,
+  handleSelectChange,
+  arrays,
+  onRemove,
+  options,
+  setArrays,
+}) {
+  return (
+    <>
+      <div>
+        <div>
+          <input
+            name={name}
+            value={inputValue}
+            onChange={handleInputChange}
+          ></input>
+        </div>
+      </div>
+      {showSelect && inputValue && (
+        <select
+          id="search"
+          size={3}
+          onChange={(event) => {
+            handleSelectChange(event, arrays, setArrays, name);
+          }}
+        >
+          {options &&
+            options
+              .filter((option) =>
+                option.toLowerCase().includes(inputValue.toLowerCase())
+              )
+              .map((option) => (
+                <>
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                </>
+              ))}
+        </select>
+      )}
+      <div className="category">
+        {arrays &&
+          arrays.map((option) => (
+            <>
+              <span>
+                {option}
+                <button
+                  type="button"
+                  onClick={() => onRemove(option, arrays, setArrays)}
+                >
+                  <img src="img/cancelBtn.png" alt="img" />
+                </button>
+              </span>
+            </>
+          ))}
+      </div>
+    </>
+  );
+}
 
-  const [inputValue, setInputValue] = useState("");
+function ModifyProfile({ setModalOpen }) {
+  const [affiliations, setAffiliations] = useState([]); //소속 학회 및 동아리
+  const [fields, setFields] = useState([]); //희망 활동 분야
+  const [jobs, setJobs] = useState([]); //관심 직무
+  const [skills, setSkills] = useState([]); //보유기술
+
+  const [inputValue, setInputValue] = useState({
+    Affiliations: "",
+    Fields: "",
+    Jobs: "",
+    Skills: "",
+  });
+  const { Affiliations, Fields, Jobs, Skills } = inputValue;
+
   const [showSelect, setShowSelect] = useState(false);
 
   const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-    setShowSelect(event.target.value.trim() !== "");
+    const { name, value } = event.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+    setShowSelect(value.trim() !== "");
   };
 
-  const handleSelectChange = (event) => {
-    setInputValue("");
+  const handleSelectChange = (event, arrays, setArrays, name) => {
+    setInputValue({ ...inputValue, [name]: "" });
     setShowSelect(false);
-    setAffiliations([...affiliations, event.target.value]);
+    setArrays([...arrays, event.target.value]);
     console.log(affiliations);
   };
 
@@ -54,21 +149,38 @@ function ModifyProfile({ setModalOpen }) {
     setModalOpen(false);
   };
 
-  const addCategory = () => {
-    if (inputValue !== "") {
-      setAffiliations([...affiliations, inputValue]);
-      console.log(affiliations);
-      setInputValue("");
-      setShowSelect(false);
-    }
-  };
-
-  const onRemove = (club) => {
-    console.log(affiliations);
-    setAffiliations((prev) => {
+  const onRemove = (club, arrays, setArrays) => {
+    console.log(arrays);
+    setArrays((prev) => {
       return prev.filter((index) => index !== club);
     });
   };
+
+  const getAffiliations = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/affiliations";
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+      console;
+
+      // setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => getAffiliations, []);
   return (
     <>
       <Background></Background>
@@ -89,7 +201,7 @@ function ModifyProfile({ setModalOpen }) {
                 </Input1>
                 <Input1>
                   <p className="title">학기 수</p>
-                  <input name="semester"></input>
+                  <input name="semester" placeholder="ex : 7"></input>
                 </Input1>
                 <Input1>
                   <p className="title">학부</p>
@@ -103,69 +215,55 @@ function ModifyProfile({ setModalOpen }) {
               <div>
                 <Input2>
                   <p className="title">소속 학회 및 동아리</p>
-                  <div>
-                    <div>
-                      <input
-                        id="searchClub"
-                        name="affiliations"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                      ></input>
-                      <PlaceholderImage
-                        src={placeholderImg}
-                        alt="Placeholder"
-                        show={!inputValue}
-                      />
-                    </div>
-                    <button type="button" onClick={addCategory}>
-                      등록
-                    </button>
-                  </div>
-                  {showSelect && (
-                    <select
-                      id="searchClub"
-                      size={3}
-                      onChange={handleSelectChange}
-                    >
-                      {clubOption
-                        .filter((clubOption) =>
-                          clubOption
-                            .toLowerCase()
-                            .includes(inputValue.toLowerCase())
-                        )
-                        .map((clubOption) => (
-                          <>
-                            <option key={clubOption} value={clubOption}>
-                              {clubOption}
-                            </option>
-                          </>
-                        ))}
-                    </select>
-                  )}
-                  <div className="category">
-                    {affiliations.map((club) => (
-                      <>
-                        <span>
-                          {club}
-                          <button type="button" onClick={() => onRemove(club)}>
-                            <img src="img/cancelBtn.png" alt="img" />
-                          </button>
-                        </span>
-                      </>
-                    ))}
-                  </div>
+                  <InputBox
+                    inputValue={Affiliations}
+                    name="Affiliations"
+                    handleInputChange={handleInputChange}
+                    showSelect={showSelect}
+                    handleSelectChange={handleSelectChange}
+                    arrays={affiliations}
+                    onRemove={onRemove}
+                    options={clubOption}
+                    setArrays={setAffiliations}
+                  ></InputBox>
                 </Input2>
                 <Input2>
                   <p className="title">희망 활동 분야</p>
-                  <input></input>
+                  <InputBox
+                    inputValue={Fields}
+                    name="Fields"
+                    handleInputChange={handleInputChange}
+                    showSelect={showSelect}
+                    handleSelectChange={handleSelectChange}
+                    arrays={fields}
+                    onRemove={onRemove}
+                    options={filedsOption}
+                    setArrays={setFields}
+                  />
                 </Input2>
                 <Input2>
                   <p className="title">관심 직무</p>
-                  <input></input>
+                  <InputBox
+                    inputValue={Jobs}
+                    name="Jobs"
+                    handleInputChange={handleInputChange}
+                    showSelect={showSelect}
+                    handleSelectChange={handleSelectChange}
+                    affiliations={affiliations}
+                    onRemove={onRemove}
+                  />
                 </Input2>
                 <Input2>
                   <p className="title">보유기술</p>
-                  <input></input>
+                  <InputBox
+                    inputValue={Skills}
+                    name="Skills"
+                    handleInputChange={handleInputChange}
+                    showSelect={showSelect}
+                    handleSelectChange={handleSelectChange}
+                    affiliations={affiliations}
+                    onRemove={onRemove}
+                  />
                 </Input2>
               </div>
               <Input3>
@@ -276,6 +374,9 @@ const Input1 = styled.div`
     width: 98%;
     height: 35%;
     border: none;
+    &:focus {
+      outline: none;
+    }
   }
 
   > select {
@@ -306,37 +407,29 @@ const Input2 = styled.div`
       height: 3.5vh;
 
       > input {
-        width: 100%;
+        width: 85%;
         height: 100%;
         padding-left: 40px; /* 이미지와 텍스트 간격을 위해 왼쪽 패딩 설정 */
         border: none;
         background-color: #f4f3f1;
-
+        background-image: url(${placeholderImg});
+        background-repeat: no-repeat;
+        background-position: 10px center;
         &:focus {
           outline: none;
         }
-
-        &::placeholder {
-          background: url(${placeholderImg}) no-repeat 10px center;
-        }
       }
-    }
-
-    > button {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 5px;
-      width: 18%;
-      height: 3.5vh;
-      background-color: #f4f3f1;
-      border: none;
     }
   }
 
   > select {
-    width: 80%;
+    margin-top: 5px;
+    width: 100%;
     min-height: 2vh;
+    border: none;
+
+    > option {
+    }
   }
 
   > .category {
@@ -364,16 +457,6 @@ const Input2 = styled.div`
       }
     }
   }
-`;
-
-const PlaceholderImage = styled.img`
-  position: absolute;
-  left: 10px; /* 이미지 위치 조정 */
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px; /* 이미지 크기 조정 */
-  opacity: ${({ show }) =>
-    show ? 1 : 0}; /* 입력값이 없는 경우에만 이미지 표시 */
 `;
 
 const Input3 = styled.div`

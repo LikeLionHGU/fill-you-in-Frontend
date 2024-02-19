@@ -209,7 +209,7 @@ export const LoginScreen = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const getLoginData = async (credentialIdToken) => {
-    const url = process.env.REACT_APP_BACK_URL; // 백엔드 api url
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/auth/login"; // 백엔드 api url
 
     const token = credentialIdToken;
     const data = {
