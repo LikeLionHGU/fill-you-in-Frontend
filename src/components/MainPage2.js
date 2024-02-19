@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import styles from "./MainPage2.module.css";
 import ModifyProfile from "./ModifyProfile";
 
+import styled from "styled-components";
+
 function MainPage2() {
-  const [modalOpen, setModalOpen] = useState(false);
-  // const navigate = useNavigate();
-  const toLogout = () => {
-    alert("logout");
-    // localStorage.removeItem("memberID");
-    // navigate("/");
+  const handleLogoutMsg = () => {
+    ///// < = jwt를 백엔드로 계속 보내면서 확인해야할듯
+    if (window.confirm("로그아웃 하시겠습니까?")) {
+      localStorage.removeItem("loginToken"); // 로그인 토큰 제거
+      navigate("/");
+    }
   };
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
   const showModal = () => {
     setModalOpen(true);
   };
@@ -19,13 +23,15 @@ function MainPage2() {
       <div className={styles.section1}>
         <div className={styles.flex1}>
           <img src="/img/fill-you-in-logo.png" alt="logo" />
-          <div className={styles.navigation}>
-            <a href="#!">활동찾기</a>
-            <a href="#!">팀원 라운지</a>
-            <a href="#!">팀 관리</a>
-            <a href="#!">마이페이지</a>
-            <button onClick={toLogout}>로그아웃</button>
-          </div>
+          <NavBar>
+            <NavButton>활동 찾기</NavButton>
+            <NavButton>팀원 라운지</NavButton>
+            <NavButton>팀 관리</NavButton>
+            <NavButton onClick={() => navigate("/Mypage")}>
+              마이페이지
+            </NavButton>
+            <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
+          </NavBar>
         </div>
         <div className={styles.phrases}>
           <p>
@@ -190,3 +196,36 @@ function MainPage2() {
 }
 
 export default MainPage2;
+
+const NavBar = styled.div`
+  //헤더 바
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  padding: 30px 20px;
+`;
+
+const NavButton = styled.div`
+  display: flex;
+  justify-content: center;
+  /* width: 80px; */
+  padding: 11px 16px;
+  margin-left: 10px;
+
+  //navbar 버튼 스타일
+  background-color: #04b1b1;
+  color: white;
+  font-family: "Pretendard-SemiBold", Helvetica;
+  font-size: 15px;
+  font-weight: 400;
+  transition: 0.3s;
+
+  &:hover {
+    /* nav 버튼들 */
+    background-color: rgb(28, 28, 28, 0.15);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+`;
