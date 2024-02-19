@@ -246,7 +246,7 @@ const BarTitle = styled.div`
 `;
 const TableCol = styled.div`
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   padding: 5px 5px;
   > span {
     display: flex;
@@ -293,6 +293,18 @@ const TableCol = styled.div`
 const SchoolMajor = styled.div`
   /* border: 2px solid red; */
   padding: 5px 5px;
+  font-family: "Pretendard-SemiBold", Helvetica;
+
+  font-weight: 600;
+  margin-bottom: 5px;
+
+  > span {
+    color: #1b1b1b;
+  }
+  > div {
+    display: inline;
+    color: lightgray;
+  }
 `;
 const CareerBox = styled.div`
   display: flex;
@@ -307,6 +319,14 @@ const CareerBox = styled.div`
   color: #005f5f;
 `;
 
+const None = styled.span`
+  display: flex;
+  align-items: center;
+  height: 24px;
+  color: #a5a5a5; //////////////////////////
+  font-size: 16px;
+  font-family: "Pretendard-SemiBold", Helvetica;
+`;
 export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
@@ -368,24 +388,17 @@ export const MyPage = () => {
     }
   };
 
-  // const loginToken = localStorage.getItem("loginToken");
-
-  // const handleLogout = () => {
-  //   if (loginToken == null) {
-  //     navigate("/");
-  //   }
-  // };
-  // let notFirst = localStorage.getItem("notFirst");
-  // console.log(profile.fields);
   return (
     <Index>
-      {{ isModalOpen } ? (
-        <FirstVisitModal
-          isOpen={isModalOpen}
-          closeModal={closeModal}
-          setIsModalOpen
-        />
-      ) : null}
+      {
+        profile?.isFirstProfileVisit === true ? ( // 첫방문이 맞으면 FirstVisitModal 띄움
+          <FirstVisitModal
+            isOpen={isModalOpen}
+            closeModal={closeModal}
+            setIsModalOpen
+          />
+        ) : null // 첫방문이 아니면 FirstVisitModal 띄우지 않기
+      }
       <div className="div1">
         <TopBackground>
           <Header>
@@ -399,6 +412,13 @@ export const MyPage = () => {
             <NavButton>활동 찾기</NavButton>
             <NavButton>팀원 라운지</NavButton>
             <NavButton>팀 관리</NavButton>
+            <NavButton
+              onClick={() => {
+                window.location.reload("/MyPage");
+              }}
+            >
+              마이페이지
+            </NavButton>
             <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
           </NavBar>
         </TopBackground>
@@ -436,14 +456,14 @@ export const MyPage = () => {
                 <SchoolMajor>
                   한동대학교{" "}
                   {profile?.department == null ? (
-                    <span> ____(학부)____ </span>
+                    <div> (학부) </div> // 아무 값도 없을 때 기본으로 들어가는 부분
                   ) : (
-                    profile?.department
+                    <span> {profile?.department}</span>
                   )}
                   {profile?.semester == null ? (
-                    <span> ____(학기수)____ </span>
+                    <div> (학기수)</div>
                   ) : (
-                    profile?.semester
+                    <span> {profile?.semester}학기</span>
                   )}
                 </SchoolMajor>
                 <div className="profileInfo">
@@ -455,10 +475,17 @@ export const MyPage = () => {
                     <span>희망분야</span>
                     <div className="table-list">
                       {profile?.fields?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                        <div>희망분야 없음</div>
+                        <None>없음</None>
                       ) : (
-                        <div>여러개 반환 필요</div>
+                        <>
+                          {/* {profile.fields.map((field) => (
+                            <div>{field}</div>
+                          ))} */}
+                          <div>field 1</div>
+                          <div>field 2</div>
+                        </>
 
+                        // <div>여러개 반환 필요</div>
                         // <div>{profile.fields}</div>
                       )}
                     </div>
@@ -466,11 +493,19 @@ export const MyPage = () => {
                   <TableCol>
                     <span>관심직무</span>
                     <div className="table-list">
-                      {profile?.fields?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                        <div>관심직무 없음</div>
+                      {profile?.jobs?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                        <None>없음</None>
                       ) : (
-                        <div>여러개 반환 필요</div>
-
+                        // {var step;
+                        //   for (step = 0; step < 5; step++) {
+                        //     // Runs 5 times, with values of step 0 through 4.
+                        //     console.log("Walking east one step");
+                        //   }
+                        // }
+                        <>
+                          <div>jobs 1</div>
+                          <div>jobs 2</div>
+                        </>
                         // <div>{profile.jobs}</div>
                       )}
                     </div>
@@ -484,22 +519,31 @@ export const MyPage = () => {
                 <div className="club-technique-list">
                   <div>
                     {profile?.affiliations?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                      <div>동아리 없음</div>
+                      <None>없음</None>
                     ) : (
-                      <div>동아리 여러개 필요?</div>
-
-                      // <div>{profile.jobs}</div>
+                      <div>
+                        {/* map 써서 배열 출력하기,,,,, */}
+                        <div> {profile?.affiliations?.length}개 데이터</div>
+                        <div> {profile?.affiliations?.[0]}</div>
+                        <div> {profile?.affiliations?.[1]}</div>
+                        <div> {profile?.affiliations?.[2]}</div>
+                      </div>
                     )}
                   </div>
                   <div>
                     {profile?.skills?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                      <div>기술 없음</div>
+                      <None>없음</None>
                     ) : (
                       <div>
-                        기술 여러개 필요 ( br로 구분), 포토샵 <br /> 피그마
-                      </div>
+                        <div> [{profile?.skills?.length}개 데이터] </div>
+                        <div>{profile.skills?.[0].name}</div>
+                        <div>{profile.skills?.[1].name}</div>
 
-                      // <div>{profile.jobs}</div>
+                        {profile?.skills?.map((it) => {
+                          // maps로 데이터 가져오는 부분,,,, 보류
+                          <div> 1. {it}</div>;
+                        })}
+                      </div>
                     )}
                   </div>
                 </div>
