@@ -2,32 +2,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import placeholderImg from "../img/searchImg.png";
 
-// const getProfile = async () => {
-//   const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
-
-//   try {
-//     const response = await fetch(url, {
-//       method: "GET", //(+ GET인지 POST인지 명세 확인)
-//       headers: {
-//         Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
-//       },
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`HTTP Error! Status: ${response.status}`);
-//     }
-//     const responseData = await response.json();
-//     console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
-
-//     setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
-//   } catch (error) {
-//     console.error("error", error);
-//   }
-// };
-
-// useEffect(() => {
-//   getProfile();
-// }, []);
 const DEPARTMENT_OPTION = [
   { value: "1", name: "" },
   { value: "2", name: "전산전자공학부" },
@@ -156,6 +130,11 @@ function ModifyProfile({ setModalOpen }) {
     });
   };
 
+  const submitPost = (event) => {
+    event.preventDefault();
+    console.log("enter 막음");
+  };
+
   const getAffiliations = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/affiliations";
 
@@ -171,10 +150,10 @@ function ModifyProfile({ setModalOpen }) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
-      console;
-
-      // setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      console.log("Server Response", responseData.affiliations);
+      // 받아온 데이터를 콘솔로 확인
+      const affiliationsOption = responseData.affiliations;
+      console.log(affiliationsOption);
     } catch (error) {
       console.error("error", error);
     }
@@ -191,8 +170,7 @@ function ModifyProfile({ setModalOpen }) {
           <button onClick={closeModal} className="closeModalBtn">
             <img src="img/cancelBtn.png" alt="img" />
           </button>
-          {/* <form onSubmit={submitPost}> */}
-          <form>
+          <form onSubmit={submitPost}>
             <Flex1>
               <div>
                 <Input1>
