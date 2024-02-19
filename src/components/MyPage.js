@@ -29,13 +29,13 @@ const NavBar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: right;
-  padding: 30px 20px;
+  padding: 33px 20px;
 `;
 const NavButton = styled.div`
   display: flex;
   justify-content: center;
   /* width: 80px; */
-  padding: 11px 16px;
+  padding: 11px 16px; // NavBar에서 padding 33px 해서 여기 버튼 간격이랑 합치면 44px 떨어지게 됨.
   margin-left: 10px;
 
   //navbar 버튼 스타일
