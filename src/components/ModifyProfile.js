@@ -155,7 +155,7 @@ function ModifyProfile({ setModalOpen }) {
     if (Name !== "Affiliations") {
       setArrays([...arrays, { name: event.target.value, isPinned: false }]);
     } else {
-      setArrays([...arrays, { name: event.target.value }]);
+      setArrays([...arrays, event.target.value]);
     }
   };
 
@@ -172,32 +172,20 @@ function ModifyProfile({ setModalOpen }) {
 
   const submitPost = async (event) => {
     event.preventDefault();
-
-    const formData = new FormData();
-    const url = "/api/fillyouin/my-profile"; //
     const semesterInt = parseInt(post.semester);
+
     const modifyProfileInfo = {
       semester: semesterInt,
-      departments: post.departments,
+      department: post.departments,
       affiliations: affiliations,
       fields: fields,
       jobs: jobs,
-      skiils: skills,
+      skills: skills,
       introduction: post.introduction,
     };
 
-    formData.append("semester", semesterInt);
-    formData.append("departments", JSON.stringify(post.departments));
-    formData.append("affiliations", JSON.stringify(affiliations));
-    formData.append("fields", JSON.stringify(fields));
-    formData.append("jobs", JSON.stringify(jobs));
-    formData.append("skills", JSON.stringify(skills));
-    formData.append("introduction", JSON.stringify(post.introduction));
-
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
+    const url = "/api/fillyouin/my-profile";
+    console.log("Bearer " + localStorage.getItem("loginToken"));
     try {
       const response = await fetch(url, {
         method: "PUT", //(+ GET인지 POST인지 명세 확인)
@@ -205,14 +193,18 @@ function ModifyProfile({ setModalOpen }) {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
         },
-        body: JSON.stringify(formData),
+
+        body: JSON.stringify(modifyProfileInfo),
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
       });
 
       if (!response.ok) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
-      const responseData = await response.json();
-      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
     } catch (error) {
       console.error("error", error);
     }
@@ -585,6 +577,10 @@ const Input1 = styled.div`
     height: 40%;
     background-color: #f4f3f1;
     border: none;
+    -o-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 
     &:focus {
       outline: none;
