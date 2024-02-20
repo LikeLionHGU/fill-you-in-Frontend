@@ -18,24 +18,11 @@ const SideBar = styled.div`
   /* border: 2px solid red; */
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  width: 240px; // 전체화면에서 퍼센트..
+  width: 240px; // 전체화면에서 퍼센트로 하는게 나을듯..
   height: 100vh;
   background-color: #04b1b1;
   color: white;
   padding-top: 100px;
-
-  /* > .scrap-icon {
-    // 나중에 코드 바꾸기
-    width: 40px;
-    height: 40px;
-    background-color: black;
-  }
-  > .search-icon {
-    color: white;
-    width: 30px;
-    height: 30px;
-    background-color: black;
-  } */
 `;
 
 const SideBarButtons = styled.div`
@@ -55,17 +42,10 @@ const SideBarButtons = styled.div`
 
     &:hover {
       background-color: rgb(28, 28, 28, 0.15);
-      /* color: #04b1b1; */
       cursor: pointer;
-      /* > .scrap-icon {
-        //아이콘이 이미지 파일이어서 이미지 자체를 필터링해서 비슷한 색으로 바꿔줌...
-        filter: invert(18%) sepia(95%) saturate(839%) hue-rotate(144deg)
-          brightness(69%) contrast(97%);
-      } */
     }
   }
   > .search-nav-button > .search-icon {
-    /* color: white; */
     width: 22px;
     height: 22px;
     margin-right: 20px;
@@ -89,18 +69,6 @@ const SideBarButtons = styled.div`
     margin-right: 20px;
   }
 `;
-// const LogoImg = styled.div`
-//   display: flex;
-//   z-index: 1500;
-
-//   left: 2.8%;
-//   position: absolute;
-//   top: 3%;
-//   padding: 2px;
-//   > img {
-//     width: 37.9%;
-//   }
-// `;
 const MainContents = styled.div`
   display: flex;
   width: 100%;
@@ -114,39 +82,6 @@ const MainContainer = styled.div`
   width: 100%;
 `;
 
-// const NavBar = styled.div`
-//   //헤더 바
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: right;
-//   background-color: white;
-//   padding: 30px 20px;
-//   /* border: 2px solid green; */
-// `;
-// const NavButton = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   /* width: 80px; */
-//   padding: 11px 16px;
-//   margin-left: 10px;
-
-//   //navbar 버튼 스타일
-
-//   background-color: white;
-//   color: #04b1b1;
-//   font-family: "Pretendard-SemiBold", Helvetica;
-//   font-size: 15px;
-//   font-weight: 400;
-//   transition: 0.3s;
-
-//   &:hover {
-//     /* nav 버튼들 */
-//     background-color: rgb(28, 28, 28, 0.15);
-//     font-weight: 500;
-//     cursor: pointer;
-//     border-radius: 5px;
-//   }
-// `;
 const Content = styled.div`
   display: flex;
   align-items: center;
@@ -160,7 +95,7 @@ const Content = styled.div`
 
 const ContentWrapoer = styled.div`
   display: flex;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   flex-direction: column;
   width: 100%; // 위에서 좌우에 padding 7% 넣어서 너비를 100%해도 빈칸 생김.
 `;
@@ -168,17 +103,17 @@ const ContentText = styled.div`
   // 팀원 찾아보세요 text //
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 80px;
   font-size: 20px;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 `;
 
-const ProfileSearch = styled.div`
-  //검색창
-  display: flex;
-  height: 200px;
-  border: 2px solid pink;
-`;
+// const ProfileSearch = styled.div`
+//   //검색창
+//   display: flex;
+//   height: 200px;
+//   border: 2px solid pink;
+// `;
 
 const Profiles = styled.div`
   //프로필 넣기
@@ -231,7 +166,7 @@ function ScrappedProfile() {
             <Content>
               {/* 팀원검색 or 스크랩한 프로필. 디폴트를 팀원검색으로 두고, 상태 변환해서 스크랩 프로필 내용 보여주기..  */}
               <ScrappedTeammates />
-              {""}
+
               {/* <ScrappedTeammates /> */}
 
               {/*팀원검색 Or 스크랩한 프로필*/}
@@ -246,9 +181,9 @@ function ScrappedProfile() {
 const ScrappedTeammates = () => {
   return (
     <ContentWrapoer>
-      <ContentText>000님, 팀원을 찾아보세요 !</ContentText>
+      <ContentText>000님, 스크랩한 프로필이에요 !</ContentText>
       {/* <ProfileSearch>검색창</ProfileSearch> */}
-      <Profiles></Profiles>
+      <Profiles>ㅣ미밈</Profiles>
     </ContentWrapoer>
   );
 };
