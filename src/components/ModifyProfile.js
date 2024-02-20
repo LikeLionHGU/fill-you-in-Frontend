@@ -55,7 +55,11 @@ function InputBox({
                   <button
                     className="pinBtn"
                     onClick={() => {
-                      const newArr = [...arrays];
+                      const newArray = arrays.map((item) => ({
+                        ...item,
+                        isPinned: false,
+                      }));
+                      const newArr = [...newArray];
                       newArr[idx] = {
                         ...newArr[idx],
                         isPinned: !option.isPinned,
@@ -88,7 +92,12 @@ function InputBox({
 function ModifyProfile({ setModalOpen }) {
   const [profile, setProfile] = useState([]); //프로필 정보
 
-  const [departments, setDepartments] = useState(""); //백에게 전달할 학부
+  const [post, setPost] = useState({
+    semester: "",
+    departments: "",
+    introduction: "",
+  });
+
   const [departmentsOption, setDepartmentsOption] = useState([" "]); // 받아올 학부 정보
 
   const [affiliations, setAffiliations] = useState([]); //백에게 전달할 소속 학회 및 동아리
@@ -104,11 +113,15 @@ function ModifyProfile({ setModalOpen }) {
   const [skillsOption, setSkillsOption] = useState([]);
 
   const [inputValue, setInputValue] = useState({
-    Affiliations: "",
-    Fields: "",
-    Jobs: "",
-    Skills: "",
+    semester: "",
+    departments: "",
+    affiliations: "",
+    fields: "",
+    jobs: "",
+    skills: "",
+    introduction: "",
   });
+
   const { Affiliations, Fields, Jobs, Skills } = inputValue;
 
   const [showSelect, setShowSelect] = useState(false);
@@ -122,11 +135,28 @@ function ModifyProfile({ setModalOpen }) {
     setShowSelect(value.trim() !== "");
   };
 
+  const changeValue = (e) => {
+    setPost({
+      ...post,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const changeValue2 = (e) => {
+    setPost({
+      ...post,
+      departments: e.target.value,
+    });
+  };
+
   const handleSelectChange = (event, arrays, setArrays, Name) => {
     setInputValue({ ...inputValue, [Name]: "" });
     setShowSelect(false);
-    setArrays([...arrays, { name: event.target.value, isPinned: true }]);
-    console.log(affiliations);
+    if (Name !== "Affiliations") {
+      setArrays([...arrays, { name: event.target.value, isPinned: false }]);
+    } else {
+      setArrays([...arrays, { name: event.target.value }]);
+    }
   };
 
   const closeModal = () => {
@@ -140,9 +170,52 @@ function ModifyProfile({ setModalOpen }) {
     });
   };
 
-  const submitPost = (event) => {
+  const submitPost = async (event) => {
     event.preventDefault();
-    console.log("enter 막음");
+
+    const formData = new FormData();
+    const url = "/api/fillyouin/my-profile"; //
+    const semesterInt = parseInt(post.semester);
+    const modifyProfileInfo = {
+      semester: semesterInt,
+      departments: post.departments,
+      affiliations: affiliations,
+      fields: fields,
+      jobs: jobs,
+      skiils: skills,
+      introduction: post.introduction,
+    };
+
+    formData.append("semester", semesterInt);
+    formData.append("departments", JSON.stringify(post.departments));
+    formData.append("affiliations", JSON.stringify(affiliations));
+    formData.append("fields", JSON.stringify(fields));
+    formData.append("jobs", JSON.stringify(jobs));
+    formData.append("skills", JSON.stringify(skills));
+    formData.append("introduction", JSON.stringify(post.introduction));
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "PUT", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+    } catch (error) {
+      console.error("error", error);
+    }
   };
 
   const getProfile = async () => {
@@ -168,7 +241,7 @@ function ModifyProfile({ setModalOpen }) {
     }
   };
 
-  const getDepartments = async () => {
+  const getDepartmentsOption = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/departments";
 
     try {
@@ -185,13 +258,13 @@ function ModifyProfile({ setModalOpen }) {
       const responseData = await response.json();
       const variable = responseData.departments.map((item) => item.name);
       setDepartmentsOption(variable);
-      console.log(departmentsOption);
+      setPost({ ...post, departments: variable[0] });
     } catch (error) {
       console.error("error", error);
     }
   };
 
-  const getAffiliations = async () => {
+  const getAffiliationsOption = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/affiliations";
 
     try {
@@ -214,7 +287,7 @@ function ModifyProfile({ setModalOpen }) {
     }
   };
 
-  const getFields = async () => {
+  const getFieldsOption = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/fields";
 
     try {
@@ -236,7 +309,7 @@ function ModifyProfile({ setModalOpen }) {
     }
   };
 
-  const getJobs = async () => {
+  const getJobsOption = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/jobs";
 
     try {
@@ -252,13 +325,14 @@ function ModifyProfile({ setModalOpen }) {
       }
       const responseData = await response.json();
       const variable = responseData.jobs.map((item) => item.name);
+      console.log("Jobs" + responseData);
       setJobsOption(variable);
     } catch (error) {
       console.error("error", error);
     }
   };
 
-  const getSkills = async () => {
+  const getSkillsOption = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/skills";
 
     try {
@@ -282,11 +356,11 @@ function ModifyProfile({ setModalOpen }) {
 
   useEffect(() => {
     getProfile();
-    getDepartments();
-    getAffiliations();
-    getFields();
-    getJobs();
-    getSkills();
+    getDepartmentsOption();
+    getAffiliationsOption();
+    getFieldsOption();
+    getJobsOption();
+    getSkillsOption();
   }, []);
   return (
     <>
@@ -298,7 +372,7 @@ function ModifyProfile({ setModalOpen }) {
           <button onClick={closeModal} className="closeModalBtn">
             <img src="img/cancelBtn.png" alt="img" />
           </button>
-          <form onSubmit={submitPost}>
+          <form onSubmit={submitPost} id="submitProfileInfo">
             <Flex1>
               <div>
                 <Input1>
@@ -306,15 +380,19 @@ function ModifyProfile({ setModalOpen }) {
                   <input
                     value={`${profile?.firstName} ${profile?.lastName}`}
                     disabled
-                  ></input>
+                  />
                 </Input1>
                 <Input1>
                   <p className="title">학기 수</p>
-                  <input name="semester" placeholder="ex) 7"></input>
+                  <input
+                    name="semester"
+                    placeholder="ex) 7"
+                    onChange={changeValue}
+                  />
                 </Input1>
                 <Input1>
                   <p className="title">학부</p>
-                  <select>
+                  <select onChange={changeValue2}>
                     {departmentsOption.map((option, index) => (
                       <option key={index} value={option}>
                         {option}
@@ -324,7 +402,7 @@ function ModifyProfile({ setModalOpen }) {
                 </Input1>
                 <Input1>
                   <p className="title">이메일</p>
-                  <input value={profile?.email} disabled></input>
+                  <input value={profile?.email} disabled />
                 </Input1>
               </div>
               <div>
@@ -340,7 +418,7 @@ function ModifyProfile({ setModalOpen }) {
                     onRemove={onRemove}
                     options={affiliationsOption}
                     setArrays={setAffiliations}
-                  ></InputBox>
+                  />
                 </Input2>
                 <Input2>
                   <p className="title">희망 활동 분야</p>
@@ -387,7 +465,11 @@ function ModifyProfile({ setModalOpen }) {
               </div>
               <Input3>
                 <p className="title">자기소개</p>
-                <input></input>
+                <input
+                  name="introduction"
+                  placeholder="직접 입력하세요"
+                  onChange={changeValue}
+                />
               </Input3>
             </Flex1>
             <button type="submit" className="submitBtnInModal">
