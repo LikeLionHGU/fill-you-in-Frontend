@@ -4,6 +4,7 @@ import styled from "styled-components";
 import FirstVisitModal from "./FirstVisitModal";
 import ModifyProfile from "./ModifyProfile";
 import PictureSelect from "./PictureSelect";
+import profileSample from "../img/profileSample.png";
 
 const TopBackground = styled.div`
   /* 배너 배경.. */
@@ -69,6 +70,7 @@ const Index = styled.div`
     width: 100vw;
   }
 `;
+
 const ProfilePic = styled.div`
   background-color: #e8e8e8;
   border-radius: 145px;
@@ -83,7 +85,19 @@ const ProfilePic = styled.div`
   height: 210px;
   width: 210px;
   /* border: 2px solid red; */
+
+  > div > img {
+    height: 215px;
+    width: 215px;
+  }
 `;
+const ProfilePicure = ({ src }) => {
+  return (
+    <div>
+      <img src={src} alt="profileSample" />
+    </div>
+  );
+};
 const EditIcon = styled.div`
   img {
     height: 26px;
@@ -143,7 +157,7 @@ const Sidebar = styled.div`
     font-family: "Pretendard-SemiBold", Helvetica;
     font-size: 16px;
     font-weight: 600;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   > .profileInfo > .club-technique > div {
     border: 2px solid black;
@@ -152,12 +166,20 @@ const Sidebar = styled.div`
   > .profile-contents > .club-technique-list {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    /* border: 2px solid black; */
-    margin-right: 10px;
+    justify-content: space-evenly;
+
+    margin-right: 20px;
+    font-size: 14px;
+    font-family: "Pretendard-SemiBold", Helvetica;
   }
   > .profile-contents > .club-technique-list > div {
-    display: flex;
+    display: block;
+    flex-direction: row;
+    /* border: 2px solid orange; */
+  }
+  > .profile-contents > .club-technique-list > div > div {
+    display: block;
+
     flex-direction: row;
     /* border: 2px solid orange; */
   }
@@ -436,7 +458,18 @@ export const MyPage = () => {
                 <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
               </NavBar>
             </TopBackground>
-            <ProfilePic>프로필 이미지</ProfilePic>
+            <ProfilePic>
+              {profile?.profileImageUrl === null ? (
+                <>
+                  {console.log("no profile", profile?.profileImageUrl)}
+                  <ProfilePicure src={profileSample} />
+                </>
+              ) : (
+                <>
+                  <ProfilePicure src={profile?.profileImageUrl} />
+                </>
+              )}
+            </ProfilePic>
             <EditIcon
               onClick={() => {
                 setIsPicModalOpen(true);
@@ -499,15 +532,11 @@ export const MyPage = () => {
                             <None>없음</None>
                           ) : (
                             <>
-                              {/* {profile.fields.map((field) => (
-                            <div>{field}</div>
-                          ))} */}
-                              <div>field 1</div>
-                              <div>field 2</div>
+                              {profile?.fields &&
+                                profile?.fields?.map((field) => (
+                                  <div>{field.name}</div>
+                                ))}
                             </>
-
-                            // <div>여러개 반환 필요</div>
-                            // <div>{profile.fields}</div>
                           )}
                         </div>
                       </TableCol>
@@ -517,17 +546,12 @@ export const MyPage = () => {
                           {profile?.jobs?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
                             <None>없음</None>
                           ) : (
-                            // {var step;
-                            //   for (step = 0; step < 5; step++) {
-                            //     // Runs 5 times, with values of step 0 through 4.
-                            //     console.log("Walking east one step");
-                            //   }
-                            // }
                             <>
-                              <div>jobs 1</div>
-                              <div>jobs 2</div>
+                              {profile?.jobs &&
+                                profile?.jobs?.map((job) => (
+                                  <div>{job.name}</div>
+                                ))}
                             </>
-                            // <div>{profile.jobs}</div>
                           )}
                         </div>
                       </TableCol>
@@ -540,31 +564,34 @@ export const MyPage = () => {
                     <div className="club-technique-list">
                       <div>
                         {profile?.affiliations?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                          <None>없음</None>
+                          <None> 없음</None>
                         ) : (
-                          <div>
-                            {/* map 써서 배열 출력하기,,,,, */}
-                            <div> {profile?.affiliations?.length}개 데이터</div>
-                            <div> {profile?.affiliations?.[0]}</div>
-                            <div> {profile?.affiliations?.[1]}</div>
-                            <div> {profile?.affiliations?.[2]}</div>
-                          </div>
+                          <>
+                            {profile?.affiliations &&
+                              profile?.affiliations?.map((affiliation) => (
+                                <div>{affiliation.name}</div>
+                              ))}
+                          </>
+                          // <> // 그냥 배열일 때는 이렇게 써줌(객체처럼 . 써서 접근 안해도됨)
+                          //   {profile?.affiliations &&
+                          //     profile?.affiliations?.map((affiliation) => (
+                          //       <div>{affiliation}</div>
+                          //     ))}
+                          // </>
                         )}
                       </div>
                       <div>
                         {profile?.skills?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
                           <None>없음</None>
                         ) : (
-                          <div>
-                            <div> [{profile?.skills?.length}개 데이터] </div>
-                            <div>{profile.skills?.[0].name}</div>
-                            <div>{profile.skills?.[1].name}</div>
-
-                            {profile?.skills?.map((it) => {
-                              // maps로 데이터 가져오는 부분,,,, 보류
-                              <div> 1. {it}</div>;
-                            })}
-                          </div>
+                          <>
+                            {profile?.skills &&
+                              profile?.skills?.map((skill) => (
+                                <div>
+                                  <div>{skill.name}</div>
+                                </div>
+                              ))}
+                          </>
                         )}
                       </div>
                     </div>

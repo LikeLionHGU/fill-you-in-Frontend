@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const ModalBackground = styled.div`
   z-index: 1000; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
@@ -164,6 +164,47 @@ const CancelButton = styled.div`
 `;
 
 function PictureSelect({ isOpen, closeModal }) {
+  const [profileImg, setProfileImg] = useState([]);
+  const getProfileImg = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL +
+      "/api/fillyouin/my-profile/profile-image"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+    try {
+      const response = await fetch(url, {
+        method: "POST", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+        body: {},
+      });
+      // console.log("AAARG");
+      if (!response.ok) {
+        throw new Error(`에러 Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+      setProfileImg(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getProfileImg();
+  }, []);
+  //
+  //
+  // {profile?.profileImageUrl === null ? (
+  //   <>
+  //     {console.log("no profile", profile?.profileImageUrl)}
+  //     <ProfilePicure src={profileSample} />
+  //   </>
+  // ) : (
+  //   <>
+  //     <ProfilePicure src={profile?.profileImageUrl} />
+  //   </>
+  // )}
   return (
     <ModalBackground style={{ display: isOpen ? "flex" : "none" }}>
       <ModalExitBackground onClick={closeModal}></ModalExitBackground>
