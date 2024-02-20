@@ -25,7 +25,9 @@ function MainPage() {
           <img src="/img/fill-you-in-logo.png" alt="logo" />
           <NavBar>
             <NavButton>활동 찾기</NavButton>
-            <NavButton>팀원 라운지</NavButton>
+            <NavButton onClick={() => navigate("/TeamLounge/Search")}>
+              팀원 라운지
+            </NavButton>
             <NavButton>팀 관리</NavButton>
             <NavButton onClick={() => navigate("/Mypage")}>
               마이페이지
