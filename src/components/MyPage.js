@@ -331,6 +331,7 @@ export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
 
+  const [loading, setLoading] = useState(false);
   //
   //
   // 프로파일 설정하고 받아오는 부분
@@ -353,6 +354,7 @@ export const MyPage = () => {
       console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
 
       setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      setLoading(false); // 정보 받아오기 전까지는 페이지에 loading...이라는 텍스트만 화면에 보여줌
     } catch (error) {
       console.error("error", error);
     }
@@ -390,192 +392,207 @@ export const MyPage = () => {
 
   return (
     <Index>
-      {
-        profile?.isFirstProfileVisit === true ? ( // 첫방문이 맞으면 FirstVisitModal 띄움
-          <FirstVisitModal
-            isOpen={isModalOpen}
-            closeModal={closeModal}
-            setIsModalOpen
-          />
-        ) : null // 첫방문이 아니면 FirstVisitModal 띄우지 않기
-      }
-      <div className="div1">
-        <TopBackground>
-          <Header>
-            <img
-              onClick={handleGoMainPage}
-              alt="LogoImage"
-              src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/--@2x.png"
-            />
-          </Header>
-          <NavBar>
-            <NavButton>활동 찾기</NavButton>
-            <NavButton
+      {loading ? (
+        <div>
+          <span>Loading...</span>
+        </div>
+      ) : (
+        <div>
+          {
+            profile?.isFirstProfileVisit === true ? ( // 첫방문이 맞으면 FirstVisitModal 띄움
+              <FirstVisitModal
+                isOpen={isModalOpen}
+                closeModal={closeModal}
+                setIsModalOpen
+              />
+            ) : null // 첫방문이 아니면 FirstVisitModal 띄우지 않기
+          }
+          <div className="div1">
+            <TopBackground>
+              <Header>
+                <img
+                  onClick={handleGoMainPage}
+                  alt="LogoImage"
+                  src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/--@2x.png"
+                />
+              </Header>
+              <NavBar>
+                <NavButton>활동 찾기</NavButton>
+                <NavButton
+                  onClick={() => {
+                    navigate("/TeamLounge/Search");
+                  }}
+                >
+                  팀원 라운지
+                </NavButton>
+                <NavButton>팀 관리</NavButton>
+                <NavButton
+                  onClick={() => {
+                    window.location.reload("/MyPage");
+                  }}
+                >
+                  마이페이지
+                </NavButton>
+                <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
+              </NavBar>
+            </TopBackground>
+            <ProfilePic>프로필 이미지</ProfilePic>
+            <EditIcon
               onClick={() => {
-                navigate("/TeamLounge/Search");
+                setIsPicModalOpen(true);
               }}
             >
-              팀원 라운지
-            </NavButton>
-            <NavButton>팀 관리</NavButton>
-            <NavButton
-              onClick={() => {
-                window.location.reload("/MyPage");
-              }}
-            >
-              마이페이지
-            </NavButton>
-            <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
-          </NavBar>
-        </TopBackground>
-        <ProfilePic>프로필 이미지</ProfilePic>
-        <EditIcon
-          onClick={() => {
-            setIsPicModalOpen(true);
-          }}
-        >
-          <img
-            className="edit-icon-profile-pic"
-            alt="editIcon"
-            src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
-          />
-        </EditIcon>
-        {isPicModalOpen === true ? (
-          <PictureSelect isOpen={isPicModalOpen} closeModal={closePicModal} />
-        ) : null}
-        <BottomBackground>
-          <ContentContainer>
-            <Sidebar>
-              <div className="profile-contents">
-                <div className="profile-contents-name">
-                  <EditIconImg
-                    className="edit-icon-content"
-                    alt="editIcon"
-                    src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
-                    onClick={showModal}
-                  />
-                  {modalOpen === true ? <ModifyProfile /> : null}
-                  <Username>
-                    {profile?.firstName} {profile?.lastName}
-                  </Username>
-                </div>
-                <SchoolMajor>
-                  한동대학교{" "}
-                  {profile?.department == null ? (
-                    <div> (학부) </div> // 아무 값도 없을 때 기본으로 들어가는 부분
-                  ) : (
-                    <span> {profile?.department}</span>
-                  )}
-                  {profile?.semester == null ? (
-                    <div> (학기수)</div>
-                  ) : (
-                    <span> {profile?.semester}학기</span>
-                  )}
-                </SchoolMajor>
-                <div className="profileInfo">
-                  <TableCol>
-                    <span>메일</span>
-                    <div className="table-email">{profile?.email}</div>
-                  </TableCol>
-                  <TableCol>
-                    <span>희망분야</span>
-                    <div className="table-list">
-                      {profile?.fields?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                        <None>없음</None>
+              <img
+                className="edit-icon-profile-pic"
+                alt="editIcon"
+                src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
+              />
+            </EditIcon>
+            {isPicModalOpen === true ? (
+              <PictureSelect
+                isOpen={isPicModalOpen}
+                closeModal={closePicModal}
+              />
+            ) : null}
+            <BottomBackground>
+              <ContentContainer>
+                <Sidebar>
+                  <div className="profile-contents">
+                    <div className="profile-contents-name">
+                      <EditIconImg
+                        className="edit-icon-content"
+                        alt="editIcon"
+                        src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
+                        onClick={showModal}
+                      />
+                      {/* {modalOpen === true ? <ModifyProfile /> : null} */}
+
+                      {modalOpen && (
+                        <ModifyProfile setModalOpen={setModalOpen} />
+                      )}
+                      <Username>
+                        {profile?.firstName} {profile?.lastName}
+                      </Username>
+                    </div>
+                    <SchoolMajor>
+                      한동대학교{" "}
+                      {profile?.department == null ? (
+                        <div> (학부) </div> // 아무 값도 없을 때 기본으로 들어가는 부분
                       ) : (
-                        <>
-                          {/* {profile.fields.map((field) => (
+                        <span> {profile?.department}</span>
+                      )}
+                      {profile?.semester == null ? (
+                        <div> (학기수)</div>
+                      ) : (
+                        <span> {profile?.semester}학기</span>
+                      )}
+                    </SchoolMajor>
+                    <div className="profileInfo">
+                      <TableCol>
+                        <span>메일</span>
+                        <div className="table-email">{profile?.email}</div>
+                      </TableCol>
+                      <TableCol>
+                        <span>희망분야</span>
+                        <div className="table-list">
+                          {profile?.fields?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                            <None>없음</None>
+                          ) : (
+                            <>
+                              {/* {profile.fields.map((field) => (
                             <div>{field}</div>
                           ))} */}
-                          <div>field 1</div>
-                          <div>field 2</div>
-                        </>
+                              <div>field 1</div>
+                              <div>field 2</div>
+                            </>
 
-                        // <div>여러개 반환 필요</div>
-                        // <div>{profile.fields}</div>
-                      )}
+                            // <div>여러개 반환 필요</div>
+                            // <div>{profile.fields}</div>
+                          )}
+                        </div>
+                      </TableCol>
+                      <TableCol>
+                        <span>관심직무</span>
+                        <div className="table-list">
+                          {profile?.jobs?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                            <None>없음</None>
+                          ) : (
+                            // {var step;
+                            //   for (step = 0; step < 5; step++) {
+                            //     // Runs 5 times, with values of step 0 through 4.
+                            //     console.log("Walking east one step");
+                            //   }
+                            // }
+                            <>
+                              <div>jobs 1</div>
+                              <div>jobs 2</div>
+                            </>
+                            // <div>{profile.jobs}</div>
+                          )}
+                        </div>
+                      </TableCol>
                     </div>
-                  </TableCol>
-                  <TableCol>
-                    <span>관심직무</span>
-                    <div className="table-list">
-                      {profile?.jobs?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                        <None>없음</None>
-                      ) : (
-                        // {var step;
-                        //   for (step = 0; step < 5; step++) {
-                        //     // Runs 5 times, with values of step 0 through 4.
-                        //     console.log("Walking east one step");
-                        //   }
-                        // }
-                        <>
-                          <div>jobs 1</div>
-                          <div>jobs 2</div>
-                        </>
-                        // <div>{profile.jobs}</div>
-                      )}
+
+                    <div className="club-technique">
+                      <div>소속 학회 및 동아리</div>
+                      <div>보유 기술</div>
                     </div>
-                  </TableCol>
-                </div>
-
-                <div className="club-technique">
-                  <div>소속 학회 및 동아리</div>
-                  <div>보유 기술</div>
-                </div>
-                <div className="club-technique-list">
-                  <div>
-                    {profile?.affiliations?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                      <None>없음</None>
-                    ) : (
+                    <div className="club-technique-list">
                       <div>
-                        {/* map 써서 배열 출력하기,,,,, */}
-                        <div> {profile?.affiliations?.length}개 데이터</div>
-                        <div> {profile?.affiliations?.[0]}</div>
-                        <div> {profile?.affiliations?.[1]}</div>
-                        <div> {profile?.affiliations?.[2]}</div>
+                        {profile?.affiliations?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                          <None>없음</None>
+                        ) : (
+                          <div>
+                            {/* map 써서 배열 출력하기,,,,, */}
+                            <div> {profile?.affiliations?.length}개 데이터</div>
+                            <div> {profile?.affiliations?.[0]}</div>
+                            <div> {profile?.affiliations?.[1]}</div>
+                            <div> {profile?.affiliations?.[2]}</div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div>
-                    {profile?.skills?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
-                      <None>없음</None>
-                    ) : (
                       <div>
-                        <div> [{profile?.skills?.length}개 데이터] </div>
-                        <div>{profile.skills?.[0].name}</div>
-                        <div>{profile.skills?.[1].name}</div>
+                        {profile?.skills?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                          <None>없음</None>
+                        ) : (
+                          <div>
+                            <div> [{profile?.skills?.length}개 데이터] </div>
+                            <div>{profile.skills?.[0].name}</div>
+                            <div>{profile.skills?.[1].name}</div>
 
-                        {profile?.skills?.map((it) => {
-                          // maps로 데이터 가져오는 부분,,,, 보류
-                          <div> 1. {it}</div>;
-                        })}
+                            {profile?.skills?.map((it) => {
+                              // maps로 데이터 가져오는 부분,,,, 보류
+                              <div> 1. {it}</div>;
+                            })}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
-              </div>
-            </Sidebar>
-            <PageContent>
-              {/* 화면 오른쪽 콘텐츠 */}
+                </Sidebar>
+                <PageContent>
+                  {/* 화면 오른쪽 콘텐츠 */}
 
-              <IntroduceBox>
-                {profile?.introduction == null ? (
-                  <p>자기소개란</p>
-                ) : (
-                  profile?.introduction
-                )}
-              </IntroduceBox>
+                  <IntroduceBox>
+                    {profile?.introduction == null ? (
+                      <p>자기소개란</p>
+                    ) : (
+                      profile?.introduction
+                    )}
+                  </IntroduceBox>
 
-              <ContentBar>
-                <BarTitle>수업 수강내역</BarTitle>
-                <BarTitle>활동 내역</BarTitle>
-                <BarTitle>수상 내역</BarTitle>
-              </ContentBar>
-              <CareerBox> 이력을 관리해보세요.</CareerBox>
-            </PageContent>
-          </ContentContainer>
-        </BottomBackground>
-      </div>
+                  <ContentBar>
+                    <BarTitle>수업 수강내역</BarTitle>
+                    <BarTitle>활동 내역</BarTitle>
+                    <BarTitle>수상 내역</BarTitle>
+                  </ContentBar>
+                  <CareerBox> 이력을 관리해보세요.</CareerBox>
+                </PageContent>
+              </ContentContainer>
+            </BottomBackground>
+          </div>
+        </div>
+      )}
     </Index>
   );
 };
