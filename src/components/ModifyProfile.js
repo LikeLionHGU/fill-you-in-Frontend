@@ -172,7 +172,6 @@ function ModifyProfile({ setModalOpen }) {
 
   const submitPost = async (event) => {
     event.preventDefault();
-    // const formData = new FormData();
     const semesterInt = parseInt(post.semester);
 
     const modifyProfileInfo = {
@@ -194,7 +193,7 @@ function ModifyProfile({ setModalOpen }) {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
         },
-        // body: JSON.stringify(formData),
+
         body: JSON.stringify(modifyProfileInfo),
       }).then((json) => {
         console.log(json.ok);
@@ -206,8 +205,6 @@ function ModifyProfile({ setModalOpen }) {
       if (!response.ok) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
-      // const responseData = await response.json();
-      // console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
     } catch (error) {
       console.error("error", error);
     }
