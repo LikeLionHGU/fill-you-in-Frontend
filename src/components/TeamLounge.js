@@ -3,36 +3,46 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WhiteNavBtns from "./WhiteNavBtns";
 
-const DEPARTMENT_OPTION = [
-  // dummy data
-  { value: "1", name: "" },
-  { value: "2", name: "전산전자공학부" },
-  { value: "3", name: "ICT 창업학부" },
-  { value: "4", name: "콘텐츠융합디자인학부" },
-];
-//
-
-const SelectBox = ({ departmentData, inputValue }) => {
-  console.log("DepartmentDATA", departmentData);
+function SelectBox({
+  name,
+  inputValue,
+  handleInputChange,
+  handleSelectChange,
+  showSelect,
+  options,
+}) {
   return (
-    <select>
-      {/* {departmentData &&
-        departmentData
-          .filter((option) =>
-            option.toLowerCase().includes(inputValue.toLowerCase())
-          )
-          .map((option) => (
-            <>
-              <option key={option} value={option}>
-                {option.name}
-              </option>
-            </>
-          ))} */}
-      {/* {departmentData &&
-        departmentData.map((option) => <option value={option?.name} />)} */}
-    </select>
+    <div>
+      <input
+        name={name}
+        value={inputValue}
+        onChange={(event) => handleInputChange(event, name)}
+      ></input>
+      {showSelect && inputValue && (
+        <select
+          id="search"
+          size={3}
+          onChange={(event) => {
+            handleSelectChange(event, name);
+          }}
+        >
+          {options &&
+            options
+              .filter((option) =>
+                option.toLowerCase().includes(inputValue.toLowerCase())
+              )
+              .map((option) => (
+                <>
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                </>
+              ))}
+        </select>
+      )}
+    </div>
   );
-};
+}
 
 function TeamLounge() {
   const navigate = useNavigate();
@@ -43,7 +53,6 @@ function TeamLounge() {
   //
   //
   // 프로파일 설정하고 받아오는 부분
-  const [profile, setProfile] = useState([]);
 
   const [departments, setDepartments] = useState([]); // 타입 ?
   const [fields, setFields] = useState([]);
@@ -69,8 +78,8 @@ function TeamLounge() {
         throw new Error(`에러 Status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Server Response(departments): ", responseData); // 받아온 데이터를 콘솔로 확인
-      setDepartments(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      const variable = responseData.departments.map((item) => item.name);
+      setDepartments(variable);
     } catch (error) {
       console.error("error", error);
     }
@@ -89,8 +98,8 @@ function TeamLounge() {
         throw new Error(`에러 Status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Server Response(fields): ", responseData); // 받아온 데이터를 콘솔로 확인
-      setFields(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      const variable = responseData.fields.map((itm) => itm.name);
+      setFields(variable);
     } catch (error) {
       console.error("error", error);
     }
@@ -108,8 +117,8 @@ function TeamLounge() {
         throw new Error(`에러 Status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Server Response(jobs): ", responseData); // 받아온 데이터를 콘솔로 확인
-      setJobs(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      const variable = responseData.jobs.map((itm) => itm.name);
+      setJobs(variable);
     } catch (error) {
       console.error("error", error);
     }
@@ -126,8 +135,8 @@ function TeamLounge() {
         throw new Error(`에러 Status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Server Response(skills): ", responseData); // 받아온 데이터를 콘솔로 확인
-      setSkills(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      const variable = responseData.skills.map((itm) => itm.name);
+      setSkills(variable);
     } catch (error) {
       console.error("error", error);
     }
@@ -175,7 +184,7 @@ function TeamLounge() {
             <WhiteNavBtns /> {/* 흰색 nav 버튼들 */}
             <Content>
               {/* 팀원검색 or 스크랩한 프로필. 디폴트를 팀원검색으로 두고, 상태 변환해서 스크랩 프로필 내용 보여주기..  */}
-              <SearchTeammates // props로 정보 넘겨줌
+              <SearchTeammates
                 departments={departments}
                 fields={fields}
                 jobs={jobs}
@@ -194,6 +203,95 @@ function TeamLounge() {
 }
 
 const SearchTeammates = ({ departments, fields, jobs, skills }) => {
+  const [post, setPost] = useState({
+    name: "",
+    department: "",
+    semester: "",
+    skill: "",
+    job: "",
+    field: "",
+  });
+
+  const [showSelect, setShowSelect] = useState(false);
+
+  const [inputValue, setInputValue] = useState({
+    department: "",
+    skill: "",
+    job: "",
+    field: "",
+  });
+
+  const { Department, Skill, Job, Field } = inputValue;
+
+  const handleInputChange = (event, Name) => {
+    const { name, value } = event.target;
+    console.log(event);
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+    setShowSelect(value.trim() !== "");
+    setPost({ ...post, department: event.target.value });
+
+    if (Name === "Department")
+      setPost({ ...post, department: event.target.value });
+    if (Name === "Skill") setPost({ ...post, skill: event.target.value });
+    if (Name === "Job") setPost({ ...post, job: event.target.value });
+    if (Name === "Field") setPost({ ...post, field: event.target.value });
+  };
+
+  const handleSelectChange = (event, Name) => {
+    let name;
+    switch (Name) {
+      case "Skill":
+        name = "skill";
+        break;
+
+      case "Job":
+        name = "job";
+        break;
+      case "Field":
+        name = "field";
+        break;
+
+      case "Department":
+        name = "department";
+        break;
+      default:
+        break;
+    }
+    setInputValue({ ...inputValue, [Name]: event.target.value });
+    setPost({ ...post, [name]: event.target.value });
+    setShowSelect(false);
+  };
+
+  const submitInfo = async (e) => {
+    e.preventDefault();
+    // JSON.stringify(post);
+
+    console.log(post);
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/profile-card?name=${post.name}&department=${post.department}&semester=${post.semester}&field=${post.field}&job=${post.job}&skill=${post.skill}`,
+        {
+          method: "GET", //(+ GET인지 POST인지 명세 확인)
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("성공");
+      console.log(responseData);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
   return (
     <ContentWrapoer>
       <ContentText>000님, 팀원을 찾아보세요 !</ContentText>
@@ -207,8 +305,14 @@ const SearchTeammates = ({ departments, fields, jobs, skills }) => {
             </NameSearch>
             <DepartmentSearch>
               <div>학부</div>
-
-              <SelectBox departmentData={departments}></SelectBox>
+              <SelectBox
+                name="Department"
+                inputValue={Department}
+                handleInputChange={handleInputChange}
+                handleSelectChange={handleSelectChange}
+                showSelect={showSelect}
+                options={departments}
+              ></SelectBox>
             </DepartmentSearch>
             <SemesterSearch>
               <div>학기 수</div>
@@ -219,20 +323,40 @@ const SearchTeammates = ({ departments, fields, jobs, skills }) => {
             {/* 아래부분 나중에 고치기  */}
             <SearchItems>
               <div>희망활동분야</div>
-              <input placeholder="검색어 입력"></input>
-              {/* <img src="../img/searchImg.png" /> */}
+              <SelectBox
+                name="Field"
+                inputValue={Field}
+                handleInputChange={handleInputChange}
+                handleSelectChange={handleSelectChange}
+                showSelect={showSelect}
+                options={fields}
+              ></SelectBox>
             </SearchItems>
             <SearchItems>
               <div>관심직무</div>
-              <input placeholder="검색어 입력" />
+              <SelectBox
+                name="Job"
+                inputValue={Job}
+                handleInputChange={handleInputChange}
+                handleSelectChange={handleSelectChange}
+                showSelect={showSelect}
+                options={jobs}
+              ></SelectBox>
             </SearchItems>
             <SearchItems>
               <div>보유 기술</div>
-              <input placeholder="검색어 입력" />
+              <SelectBox
+                name="Skill"
+                inputValue={Skill}
+                handleInputChange={handleInputChange}
+                handleSelectChange={handleSelectChange}
+                showSelect={showSelect}
+                options={skills}
+              ></SelectBox>
             </SearchItems>
           </SearchIcons>
           <SearchButton>
-            <button>검색</button>
+            <button onClick={submitInfo}>검색</button>
           </SearchButton>
         </SearchContainer>
       </ProfileSearch>
@@ -389,7 +513,7 @@ const NoSearchIcons = styled.div`
   padding-left: 25px;
   height: 100%;
   width: 35%;
-  /* border: 2px solid red; */
+  position: relative; /* border: 2px solid red; */
   > div {
     /* justify-content: left; */
   }
@@ -401,18 +525,20 @@ const NoSearchIcons = styled.div`
     margin-right: 20px;
   }
 
-  > div > input {
+  > div > div > input {
     background-color: #f4f3f1;
     border: none;
     border-radius: 4px;
     height: 30px;
   }
-  > div > select {
+  > div > div > select {
     width: 150px;
-    background-color: #f4f3f1;
+    background-color: #ffffff;
     border: none;
     border-radius: 4px;
     height: 30px;
+    z-index: 400;
+    position: absolute;
   }
 `;
 const NameSearch = styled.div`
