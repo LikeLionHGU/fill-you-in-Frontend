@@ -2,6 +2,8 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { isRouteErrorResponse, useNavigate } from "react-router-dom";
+import profileImgCharacters from "../img/ProfileUploadCharacters.png";
+
 const ModalBackground = styled.div`
   z-index: 1000; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
   width: 100%;
@@ -109,7 +111,7 @@ const ImgSelectBtn = styled.label`
   cursor: pointer;
   border-radius: 0.25em;
   &:hover {
-    color: #04b1b1;
+    color: black;
   }
   font-family: "Pretendard", Helvetica;
 `;
@@ -160,9 +162,18 @@ const ModalInfoText = styled.div`
   height: 100%;
   width: 100%;
   /* border: 2px solid red; */
-
+  > .chara-img {
+    display: flex;
+    width: 100%;
+  }
   > div {
-    margin-top: 10%;
+    margin-top: 5%;
+  }
+
+  > .file-upload-text {
+    /* background-color: black; */
+    font-size: 15px;
+    font-family: "Pretendard-SemiBold", Helvetica;
   }
   > div > .file-name {
     font-weight: 500;
@@ -194,7 +205,7 @@ const ModalButtons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  padding: 20px 20px;
+  padding: 30px 30px;
   align-items: flex-end;
   /* border: 1px solid blue; */
   height: 50%;
@@ -322,6 +333,14 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
           </ModalText>
           <ModalInfo>
             <ModalInfoText>
+              <img
+                className="chara-img"
+                src={profileImgCharacters}
+                alt="characters"
+              />
+              <span className="file-upload-text">
+                " 프로필을 업로드해보세요 ! "
+              </span>
               <div>
                 <span className="file-name">파일 이름 </span>
                 <ImgFileName
@@ -349,15 +368,7 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
               {/* <div className="choose-pic-button">다른 사진 선택</div> */}
             </ModalInfoText>
             <ModalButtons>
-              <SaveProfile
-                type="submit"
-                onClick={handleSubmit}
-
-                // onClick={() => {
-                //   console.log("AAA");
-                //   // 프로필 수정 모달이랑 연결....안되는중
-                // }}
-              >
+              <SaveProfile type="submit" onClick={handleSubmit}>
                 저장
               </SaveProfile>
               <CancelButton onClick={closeModal}>취소</CancelButton>
