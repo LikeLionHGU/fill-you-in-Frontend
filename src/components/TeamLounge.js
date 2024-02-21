@@ -16,7 +16,7 @@ function SelectBox({
       <input
         name={name}
         value={inputValue}
-        onChange={handleInputChange}
+        onChange={(event) => handleInputChange(event, name)}
       ></input>
       {showSelect && inputValue && (
         <select
@@ -223,14 +223,21 @@ const SearchTeammates = ({ departments, fields, jobs, skills }) => {
 
   const { Department, Skill, Job, Field } = inputValue;
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event, Name) => {
     const { name, value } = event.target;
+    console.log(event);
     setInputValue({
       ...inputValue,
       [name]: value,
     });
-    console.log(departments);
     setShowSelect(value.trim() !== "");
+    setPost({ ...post, department: event.target.value });
+
+    if (Name === "Department")
+      setPost({ ...post, department: event.target.value });
+    if (Name === "Skill") setPost({ ...post, skill: event.target.value });
+    if (Name === "Job") setPost({ ...post, job: event.target.value });
+    if (Name === "Field") setPost({ ...post, field: event.target.value });
   };
 
   const handleSelectChange = (event, Name) => {
@@ -261,6 +268,8 @@ const SearchTeammates = ({ departments, fields, jobs, skills }) => {
   const submitInfo = async (e) => {
     e.preventDefault();
     // JSON.stringify(post);
+
+    console.log(post);
 
     try {
       const response = await fetch(
