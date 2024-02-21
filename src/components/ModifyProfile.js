@@ -139,10 +139,15 @@ function ModifyProfile({ setModalOpen }) {
   };
 
   const changeValue = (e) => {
-    setPost({
-      ...post,
-      [e.target.name]: e.target.value,
-    });
+    if (!isNaN(e.target.value)) {
+      setPost({
+        ...post,
+        [e.target.name]: e.target.value,
+      });
+    } else {
+      alert("숫자만 입력 가능합니다");
+      e.target.value = "";
+    }
   };
 
   const changeValue2 = (e) => {
@@ -158,7 +163,7 @@ function ModifyProfile({ setModalOpen }) {
     if (Name !== "Affiliations") {
       setArrays([...arrays, { name: event.target.value, isPinned: false }]);
     } else {
-      setArrays([...arrays, event.target.value]);
+      setArrays([...arrays, { name: event.target.value }]);
     }
   };
 
@@ -187,7 +192,7 @@ function ModifyProfile({ setModalOpen }) {
       introduction: post.introduction,
     };
 
-    const url = "/api/fillyouin/my-profile";
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile";
     console.log("Bearer " + localStorage.getItem("loginToken"));
     try {
       const response = await fetch(url, {
@@ -253,6 +258,7 @@ function ModifyProfile({ setModalOpen }) {
       const responseData = await response.json();
       const variable = responseData.departments.map((item) => item.name);
       setDepartmentsOption(variable);
+      console.log(responseData);
       setPost({ ...post, departments: variable[0] });
     } catch (error) {
       console.error("error", error);
