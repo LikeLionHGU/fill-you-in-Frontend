@@ -139,14 +139,21 @@ function ModifyProfile({ setModalOpen }) {
   };
 
   const changeValue = (e) => {
-    if (!isNaN(e.target.value)) {
+    if (e.target.name === "semester") {
+      if (!isNaN(e.target.value)) {
+        setPost({
+          ...post,
+          [e.target.name]: e.target.value,
+        });
+      } else {
+        alert("숫자만 입력 가능합니다");
+        e.target.value = "";
+      }
+    } else {
       setPost({
         ...post,
         [e.target.name]: e.target.value,
       });
-    } else {
-      alert("숫자만 입력 가능합니다");
-      e.target.value = "";
     }
   };
 
