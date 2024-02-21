@@ -99,7 +99,7 @@ const ContentWrapper = styled.div`
   /* border: 2px solid black; */
   flex-direction: column;
   width: 100%; // 위에서 좌우에 padding 7% 넣어서 너비를 100%해도 빈칸 생김.
-  border: 0.5px solid red;
+  /* border: 0.5px solid red; */
 `;
 const ContentText = styled.div`
   // 팀원 찾아보세요 text //
@@ -107,7 +107,7 @@ const ContentText = styled.div`
   align-items: center;
   height: 80px;
   font-size: 20px;
-  border: 0.5px solid red;
+  /* border: 0.5px solid red; */
 `;
 
 function ScrappedProfile() {
