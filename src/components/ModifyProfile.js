@@ -54,6 +54,9 @@ function InputBox({
                 {name !== "Affiliations" ? (
                   <button
                     className="pinBtn"
+                    type="button"
+                    // type 명시하지 않을시 button 클릭하면 submit
+                    // type을 button으로 해야 클릭 시 submit 되지 않음
                     onClick={() => {
                       const newArray = arrays.map((item) => ({
                         ...item,
