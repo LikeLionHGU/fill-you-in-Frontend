@@ -258,10 +258,13 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
     formData.append("image", file); // 백엔드로 넘겨주는 이름이 image임.
 
     data.preventDefault();
-
+    console.log("에러!!!! 이미지 너무 큼");
     // 만약 여기서 기존 이미지 파일이 있으면 에러메시지 X
     if (!file.name) {
       setFileError("* 파일을 선택해주세요");
+      return;
+    } else if (file.size >= 2 * 10e5) {
+      setFileError("* 파일이 너무 큽니다");
       return;
     } else {
       setFileError("");
@@ -278,20 +281,18 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
       },
     };
     try {
-      const response = await axios
-        .post(url, formData, config)
-        .then((response) => {
-          console.log("서버 응답:", response.data);
-          // onClick(); // 여기 있어야 이름 없을 때, 안넘어감
-        });
+      const response = await axios.post(url, formData, config);
+      // .then((response) => {
+      //   console.log("서버 응답:", response.data);
+      //   // onClick(); // 여기 있어야 이름 없을 때, 안넘어감
+      // });
       console.log("파일 업로드 완료");
       window.location.reload("/");
     } catch (error) {
       console.log("파일업로드 에러 발생: ", error);
+      alert("파일 업로드 중 에러 발생. 다시 시도해주세요.");
     }
   };
-
-  // console.log("AXIOSS");
 
   return (
     <ModalBackground style={{ display: isOpen ? "flex" : "none" }}>
@@ -339,6 +340,7 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
                 {fileError && <Error>{fileError}</Error>}
                 <RealBtn
                   type="file"
+                  accept="image/*" // 이미지만 선택할 수 있도록
                   id="ex_filename"
                   onChange={imageUpload}
                   required

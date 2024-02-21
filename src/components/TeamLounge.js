@@ -421,14 +421,7 @@ const SideBarButtons = styled.div`
     /* background-color: black; */
     &:hover {
       background-color: rgb(28, 28, 28, 0.15);
-      /* color: #04b1b1; */
       cursor: pointer;
-      /* > .scrap-icon {
-
-        //아이콘이 이미지 파일이어서 이미지 자체를 필터링해서 비슷한 색으로 바꿔줌...
-        filter: invert(18%) sepia(95%) saturate(839%) hue-rotate(144deg)
-          brightness(69%) contrast(97%);
-      } */
     }
   }
   > .scrapped-nav-button > .scrap-icon {
