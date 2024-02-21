@@ -459,7 +459,7 @@ export const MyPage = () => {
               </NavBar>
             </TopBackground>
             <ProfilePic>
-              {profile?.profileImageUrl === null ? (
+              {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
                 <>
                   {console.log("no profile", profile?.profileImageUrl)}
                   <ProfilePicure src={profileSample} />
@@ -481,12 +481,32 @@ export const MyPage = () => {
                 src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
               />
             </EditIcon>
+
+            {/* {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
+              <>
+                {console.log("no profile", profile?.profileImageUrl)}
+                <PictureSelect
+                  isOpen={isPicModalOpen}
+                  closeModal={closePicModal}
+                  src={profileSample}
+                />
+              </>
+            ) : (
+              <>
+                <ProfilePicure
+                  isOpen={isPicModalOpen}
+                  closeModal={closePicModal}
+                  src={profile?.profileImageUrl}
+                />
+              </>
+            )} */}
             {isPicModalOpen === true ? (
               <PictureSelect
                 isOpen={isPicModalOpen}
                 closeModal={closePicModal}
               />
             ) : null}
+
             <BottomBackground>
               <ContentContainer>
                 <Sidebar>
