@@ -2,7 +2,144 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WhiteNavBtns from "./WhiteNavBtns";
+import profileImg from "../img/profileSample.png";
 
+function ProfileCardExample({ name, department, semester, field, job, skill }) {
+  return (
+    <ProfileCard>
+      <CardContainer>
+        <ProfileNScrap>
+          <img src={profileImg} alt="profileImg" />
+        </ProfileNScrap>
+        <Name>{name}</Name>
+        <SchoolInfo>
+          한동대학교 {department} {semester}학기
+        </SchoolInfo>
+        <ContentContainer>
+          <div className="content-row">
+            <div className="content-row-title">희망분야</div>
+            <div className="content-row-content">{field}</div>
+          </div>
+          <div className="content-row">
+            <div className="content-row-title">관심직무</div>
+            <div className="content-row-content">{job}</div>
+          </div>
+          <div className="content-row">
+            <div className="content-row-title">보유기술</div>
+            <div className="content-row-content">{skill}</div>
+          </div>
+        </ContentContainer>
+        <CardButtons>
+          <button className="invite-button">팀 초대</button>
+          <button className="visit-button">프로필 방문</button>
+        </CardButtons>
+      </CardContainer>
+    </ProfileCard>
+  );
+}
+
+const ProfileCard = styled.div`
+  display: flex;
+
+  /* border: 2px solid goldenrod; */
+  box-shadow: 0 0 8px 1px #0000002a; // drop-down shadow 모달 그림자
+  padding: 15px;
+  width: 200px;
+  height: 290px;
+  font-family: "Pretendard-SemiBold", Helvetica;
+  margin-right: 30px;
+  margin-bottom: 30px;
+`;
+
+const CardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  /* border: 2px solid black; */
+`;
+
+const ProfileNScrap = styled.div`
+  display: flex;
+  > img {
+    // 프로필 이미지
+    width: 100px;
+    height: 100px;
+  }
+  padding: 5px;
+`;
+
+const Name = styled.div`
+  display: flex;
+  padding: 5px;
+`;
+
+const SchoolInfo = styled.div`
+  display: flex;
+  font-size: 12px;
+  padding: 5px;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  padding: 5px;
+  width: 100%;
+
+  > .content-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+
+    padding-left: 30px;
+
+    /* border: 2px solid gold; */
+  }
+  > .content-row > .content-row-title {
+    color: lightgray;
+    font-size: 13px;
+    margin-right: 20px;
+    /* border: 2px solid blue; */
+  }
+
+  > .content-row > .content-row-content {
+    /* border: 2px solid green; */
+  }
+`;
+
+const CardButtons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  /* border: 2px solid blue; */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  > .invite-button {
+    background-color: #04b1b1;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    /* padding: 2px 5px; */
+
+    height: 30px;
+    width: 90px;
+  }
+  > .visit-button {
+    background-color: white;
+    border: 2px solid #04b1b1;
+    color: #04b1b1;
+    border-radius: 20px;
+    /* padding: 2px 5px; */
+
+    /* padding: 5px 10px; */
+    height: 30px;
+    width: 90px;
+  }
+`;
 function SelectBox({
   name,
   inputValue,
@@ -59,7 +196,184 @@ function TeamLounge() {
   const [jobs, setJobs] = useState([]);
   const [skills, setSkills] = useState([]);
 
-  //
+  const [searchInfo, setSearchInfo] = useState([]);
+  const [variable, setVariable] = useState(false);
+
+  const SearchTeammates = ({ departments, fields, jobs, skills }) => {
+    const [post, setPost] = useState({
+      name: "",
+      department: "",
+      semester: "",
+      skill: "",
+      job: "",
+      field: "",
+    });
+
+    const [showSelect, setShowSelect] = useState(false);
+
+    const [inputValue, setInputValue] = useState({
+      department: "",
+      skill: "",
+      job: "",
+      field: "",
+    });
+
+    const { Department, Skill, Job, Field } = inputValue;
+
+    const handleInputChange = (event, Name) => {
+      const { name, value } = event.target;
+      console.log(event);
+      setInputValue({
+        ...inputValue,
+        [name]: value,
+      });
+      setShowSelect(value.trim() !== "");
+
+      if (Name === "Name") setPost({ ...post, name: event.target.value });
+      if (Name === "Department")
+        setPost({ ...post, department: event.target.value });
+      if (Name === "Semester")
+        setPost({ ...post, semester: event.target.value });
+      if (Name === "Skill") setPost({ ...post, skill: event.target.value });
+      if (Name === "Job") setPost({ ...post, job: event.target.value });
+      if (Name === "Field") setPost({ ...post, field: event.target.value });
+    };
+
+    const handleSelectChange = (event, Name) => {
+      let name;
+      switch (Name) {
+        case "Skill":
+          name = "skill";
+          break;
+
+        case "Job":
+          name = "job";
+          break;
+        case "Field":
+          name = "field";
+          break;
+
+        case "Department":
+          name = "department";
+          break;
+        default:
+          break;
+      }
+      setInputValue({ ...inputValue, [Name]: event.target.value });
+      setPost({ ...post, [name]: event.target.value });
+      setShowSelect(false);
+    };
+
+    const submitInfo = async (e) => {
+      e.preventDefault();
+      // JSON.stringify(post);
+
+      console.log(post);
+
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/profile-card?name=${post.name}&department=${post.department}&semester=${post.semester}&field=${post.field}&job=${post.job}&skill=${post.skill}`,
+          {
+            method: "GET", //(+ GET인지 POST인지 명세 확인)
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        console.log("성공");
+        console.log(responseData.profileCards);
+        setSearchInfo(responseData.profileCards);
+        setVariable(true);
+      } catch (error) {
+        console.error("error", error);
+      }
+    };
+    return (
+      <ContentWrapper>
+        <ContentText>000님, 팀원을 찾아보세요 !</ContentText>
+        <ProfileSearch>
+          <SearchContainer>
+            {/* <SearchFilterForm /> */}
+            <NoSearchIcons>
+              <NameSearch>
+                <div>이름</div>
+                <input
+                  className={"name-search-box"}
+                  placeholder="검색어 입력"
+                  name="Name"
+                  onChange={(e) => handleInputChange(e, "Name")}
+                />
+              </NameSearch>
+              <DepartmentSearch>
+                <div>학부</div>
+                <SelectBox
+                  name="Department"
+                  inputValue={Department}
+                  handleInputChange={handleInputChange}
+                  handleSelectChange={handleSelectChange}
+                  showSelect={showSelect}
+                  options={departments}
+                ></SelectBox>
+              </DepartmentSearch>
+              <SemesterSearch>
+                <div>학기 수</div>
+                <input
+                  placeholder="검색어 입력"
+                  name="Semester"
+                  onChange={(e) => handleInputChange(e, "Semester")}
+                />
+              </SemesterSearch>
+            </NoSearchIcons>
+            <SearchIcons>
+              {/* 아래부분 나중에 고치기  */}
+              <SearchItems>
+                <div>희망활동분야</div>
+                <SelectBox
+                  name="Field"
+                  inputValue={Field}
+                  handleInputChange={handleInputChange}
+                  handleSelectChange={handleSelectChange}
+                  showSelect={showSelect}
+                  options={fields}
+                ></SelectBox>
+              </SearchItems>
+              <SearchItems>
+                <div>관심직무</div>
+                <SelectBox
+                  name="Job"
+                  inputValue={Job}
+                  handleInputChange={handleInputChange}
+                  handleSelectChange={handleSelectChange}
+                  showSelect={showSelect}
+                  options={jobs}
+                ></SelectBox>
+              </SearchItems>
+              <SearchItems>
+                <div>보유 기술</div>
+                <SelectBox
+                  name="Skill"
+                  inputValue={Skill}
+                  handleInputChange={handleInputChange}
+                  handleSelectChange={handleSelectChange}
+                  showSelect={showSelect}
+                  options={skills}
+                ></SelectBox>
+              </SearchItems>
+            </SearchIcons>
+            <SearchButton>
+              <button onClick={submitInfo}>검색</button>
+            </SearchButton>
+          </SearchContainer>
+        </ProfileSearch>
+        <Profiles></Profiles>
+      </ContentWrapper>
+    );
+  };
 
   const getSearchInfo = async () => {
     const url = process.env.REACT_APP_BACK_URL;
@@ -191,9 +505,25 @@ function TeamLounge() {
                 skills={skills}
               />
               {""}
-              {/* <ScrappedTeammates /> */}
-
               {/*팀원검색 Or 스크랩한 프로필*/}
+
+              <ContentWrapper>
+                <ContentText>000님, 스크랩한 프로필이에요 !</ContentText>
+                <Profiles>
+                  <div className="profiles-container">
+                    {searchInfo.map((item) => (
+                      <ProfileCardExample
+                        name={item.lastName}
+                        department={item.department}
+                        semester={item.semester}
+                        field={item.field}
+                        job={item.job}
+                        skill={item.skill}
+                      />
+                    ))}
+                  </div>
+                </Profiles>
+              </ContentWrapper>
             </Content>
           </MainContainer>
         </MainContents>
@@ -201,179 +531,6 @@ function TeamLounge() {
     </div>
   );
 }
-
-const SearchTeammates = ({ departments, fields, jobs, skills }) => {
-  const [post, setPost] = useState({
-    name: "",
-    department: "",
-    semester: "",
-    skill: "",
-    job: "",
-    field: "",
-  });
-
-  const [showSelect, setShowSelect] = useState(false);
-
-  const [inputValue, setInputValue] = useState({
-    department: "",
-    skill: "",
-    job: "",
-    field: "",
-  });
-
-  const { Department, Skill, Job, Field } = inputValue;
-
-  const handleInputChange = (event, Name) => {
-    const { name, value } = event.target;
-    console.log(event);
-    setInputValue({
-      ...inputValue,
-      [name]: value,
-    });
-    setShowSelect(value.trim() !== "");
-
-    if (Name === "Name") setPost({ ...post, name: event.target.value });
-    if (Name === "Department")
-      setPost({ ...post, department: event.target.value });
-    if (Name === "Semester") setPost({ ...post, semester: event.target.value });
-    if (Name === "Skill") setPost({ ...post, skill: event.target.value });
-    if (Name === "Job") setPost({ ...post, job: event.target.value });
-    if (Name === "Field") setPost({ ...post, field: event.target.value });
-  };
-
-  const handleSelectChange = (event, Name) => {
-    let name;
-    switch (Name) {
-      case "Skill":
-        name = "skill";
-        break;
-
-      case "Job":
-        name = "job";
-        break;
-      case "Field":
-        name = "field";
-        break;
-
-      case "Department":
-        name = "department";
-        break;
-      default:
-        break;
-    }
-    setInputValue({ ...inputValue, [Name]: event.target.value });
-    setPost({ ...post, [name]: event.target.value });
-    setShowSelect(false);
-  };
-
-  const submitInfo = async (e) => {
-    e.preventDefault();
-    // JSON.stringify(post);
-
-    console.log(post);
-
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/profile-card?name=${post.name}&department=${post.department}&semester=${post.semester}&field=${post.field}&job=${post.job}&skill=${post.skill}`,
-        {
-          method: "GET", //(+ GET인지 POST인지 명세 확인)
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
-      const responseData = await response.json();
-      console.log("성공");
-      console.log(responseData);
-    } catch (error) {
-      console.error("error", error);
-    }
-  };
-  return (
-    <ContentWrapoer>
-      <ContentText>000님, 팀원을 찾아보세요 !</ContentText>
-      <ProfileSearch>
-        <SearchContainer>
-          {/* <SearchFilterForm /> */}
-          <NoSearchIcons>
-            <NameSearch>
-              <div>이름</div>
-              <input
-                className={"name-search-box"}
-                placeholder="검색어 입력"
-                name="Name"
-                onChange={(e) => handleInputChange(e, "Name")}
-              />
-            </NameSearch>
-            <DepartmentSearch>
-              <div>학부</div>
-              <SelectBox
-                name="Department"
-                inputValue={Department}
-                handleInputChange={handleInputChange}
-                handleSelectChange={handleSelectChange}
-                showSelect={showSelect}
-                options={departments}
-              ></SelectBox>
-            </DepartmentSearch>
-            <SemesterSearch>
-              <div>학기 수</div>
-              <input
-                placeholder="검색어 입력"
-                name="Semester"
-                onChange={(e) => handleInputChange(e, "Semester")}
-              />
-            </SemesterSearch>
-          </NoSearchIcons>
-          <SearchIcons>
-            {/* 아래부분 나중에 고치기  */}
-            <SearchItems>
-              <div>희망활동분야</div>
-              <SelectBox
-                name="Field"
-                inputValue={Field}
-                handleInputChange={handleInputChange}
-                handleSelectChange={handleSelectChange}
-                showSelect={showSelect}
-                options={fields}
-              ></SelectBox>
-            </SearchItems>
-            <SearchItems>
-              <div>관심직무</div>
-              <SelectBox
-                name="Job"
-                inputValue={Job}
-                handleInputChange={handleInputChange}
-                handleSelectChange={handleSelectChange}
-                showSelect={showSelect}
-                options={jobs}
-              ></SelectBox>
-            </SearchItems>
-            <SearchItems>
-              <div>보유 기술</div>
-              <SelectBox
-                name="Skill"
-                inputValue={Skill}
-                handleInputChange={handleInputChange}
-                handleSelectChange={handleSelectChange}
-                showSelect={showSelect}
-                options={skills}
-              ></SelectBox>
-            </SearchItems>
-          </SearchIcons>
-          <SearchButton>
-            <button onClick={submitInfo}>검색</button>
-          </SearchButton>
-        </SearchContainer>
-      </ProfileSearch>
-      <Profiles></Profiles>
-    </ContentWrapoer>
-  );
-};
 
 const Container = styled.div`
   display: flex;
@@ -465,7 +622,7 @@ const Content = styled.div`
   padding-right: 7%;
 `;
 
-const ContentWrapoer = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
   /* border: 2px solid black; */
   flex-direction: column;
