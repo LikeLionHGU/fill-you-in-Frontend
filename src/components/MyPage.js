@@ -94,7 +94,7 @@ const ProfilePic = styled.div`
 const ProfilePicure = ({ src }) => {
   return (
     <div>
-      <img src={src} alt="profileSample" />
+      <img src={profileSample} alt="profileSample" />
     </div>
   );
 };
