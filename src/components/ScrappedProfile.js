@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WhiteNavBtns from "./WhiteNavBtns";
-import profileImg from "../img/profileSample.png";
+import sampleProfileImg from "../img/profileSample.png";
 //
 
 const Container = styled.div`
@@ -86,12 +86,11 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-
   margin-left: 240px; // 전체화면에서 퍼센트.. 왼쪽 사이드바 부분을 margin으로 처리
   /* border: 3px solid limegreen; */
   padding-top: 20px;
   padding-left: 7%;
-  padding-right: 4%;
+  padding-right: 7%;
 `;
 
 const ContentWrapper = styled.div`
@@ -99,7 +98,6 @@ const ContentWrapper = styled.div`
   /* border: 2px solid black; */
   flex-direction: column;
   width: 100%; // 위에서 좌우에 padding 7% 넣어서 너비를 100%해도 빈칸 생김.
-  /* border: 0.5px solid red; */
 `;
 const ContentText = styled.div`
   // 팀원 찾아보세요 text //
@@ -107,45 +105,25 @@ const ContentText = styled.div`
   align-items: center;
   height: 80px;
   font-size: 20px;
-  /* border: 0.5px solid red; */
+  /* border: 2px solid red; */
 `;
+
+// const ProfileSearch = styled.div`
+//   //검색창
+//   display: flex;
+//   height: 200px;
+//   border: 2px solid pink;
+// `;
+
+// const Profiles = styled.div`
+//   //프로필 넣기
+//   display: flex;
+//   height: 20px; // 임시
+//   border: 2px solid blue;
+// `;
 
 function ScrappedProfile() {
   const navigate = useNavigate();
-
-  // 프로파일 설정하고 받아오는 부분
-  const [scrapProfiles, setScrapProfiles] = useState([]);
-  const getScrapProfile = async () => {
-    const url =
-      process.env.REACT_APP_BACK_URL +
-      "/api/fillyouin/members/scrap-profile-card"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
-
-    try {
-      const response = await fetch(url, {
-        method: "GET", //(+ GET인지 POST인지 명세 확인)
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
-      const responseData = await response.json();
-      console.log("Server Response(scrapcard): ", responseData); // 받아온 데이터를 콘솔로 확인
-
-      setScrapProfiles(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
-    } catch (error) {
-      console.error("error", error);
-    }
-  };
-
-  useEffect(() => {
-    getScrapProfile();
-  }, []);
-  //
-  //
-  //
 
   return (
     <div>
@@ -188,6 +166,10 @@ function ScrappedProfile() {
             <Content>
               {/* 팀원검색 or 스크랩한 프로필. 디폴트를 팀원검색으로 두고, 상태 변환해서 스크랩 프로필 내용 보여주기..  */}
               <ScrappedTeammates />
+
+              {/* <ScrappedTeammates /> */}
+
+              {/*팀원검색 Or 스크랩한 프로필*/}
             </Content>
           </MainContainer>
         </MainContents>
@@ -223,12 +205,26 @@ const ProfileCard = styled.div`
   box-shadow: 0 0 8px 1px #0000002a; // drop-down shadow 모달 그림자
   padding: 15px;
   width: 200px;
-  height: 290px;
+  height: 310px;
   font-family: "Pretendard-SemiBold", Helvetica;
   margin-right: 30px;
   margin-bottom: 30px;
 `;
-
+const ScrapIcon = styled.div`
+  /* z-index: 3000; */
+  position: absolute; // 스크랩 아이콘 고정...
+  > .scrap-Btn {
+    > img {
+      position: relative;
+      top: 5px;
+      left: 180px;
+      z-index: 3500;
+      width: 20px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+  }
+`;
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -236,10 +232,14 @@ const CardContainer = styled.div`
   justify-content: space-evenly;
   width: 100%;
   /* border: 2px solid black; */
+  position: relative;
 `;
 
 const ProfileNScrap = styled.div`
   display: flex;
+  width: 100px;
+  height: 100px;
+  border: 2px solid green;
   > img {
     // 프로필 이미지
     width: 100px;
@@ -300,9 +300,12 @@ const CardButtons = styled.div`
     border: none;
     border-radius: 20px;
     /* padding: 2px 5px; */
-
     height: 30px;
     width: 90px;
+    cursor: pointer;
+    &:hover {
+      background-color: #008888;
+    }
   }
   > .visit-button {
     background-color: white;
@@ -310,56 +313,195 @@ const CardButtons = styled.div`
     color: #04b1b1;
     border-radius: 20px;
     /* padding: 2px 5px; */
-
-    /* padding: 5px 10px; */
     height: 30px;
     width: 90px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(28, 28, 28, 0.15);
+    }
   }
 `;
 
 const ScrappedTeammates = () => {
+  // 프로파일 설정하고 받아오는 부분
+  const [profile, setProfile] = useState([]);
+  const [userName, setUserName] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const getProfiles = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL +
+      "/api/fillyouin/members/scrap-profile-card"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response 스크랩 카드:", responseData); // 받아온 데이터를 콘솔로 확인
+
+      setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const getUserName = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response 유저이름:", responseData); // 받아온 데이터를 콘솔로 확인
+      setUserName(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      setLoading(false);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getProfiles();
+  }, []);
+
+  useEffect(() => {
+    getUserName();
+  }, []);
+  //
+  //
+  //
+
   return (
-    <ContentWrapper>
-      <ContentText>000님, 스크랩한 프로필이에요 !</ContentText>
-      {/* <ProfileSearch>검색창</ProfileSearch> */}
-      <Profiles>
-        <div className="profiles-container">
-          <ProfileCardExample /> {/*예시 카드*/}
-          <ProfileCardExample /> {/*예시 카드*/}
-          <ProfileCardExample /> {/*예시 카드*/}
-          <ProfileCardExample /> {/*예시 카드*/}
-          <ProfileCardExample /> {/*예시 카드*/}
-          <ProfileCardExample /> {/*예시 카드*/}
-          {/* // */}
-        </div>
-      </Profiles>
-    </ContentWrapper>
+    <>
+      {loading === true ? (
+        <Loading>로딩중....</Loading>
+      ) : (
+        <ContentWrapper>
+          <ContentText>
+            {userName.lastName} {userName.firstName}님, 스크랩한 프로필이에요 !
+          </ContentText>
+          {/* <ProfileSearch>검색창</ProfileSearch> */}
+          <Profiles>
+            <div className="profiles-container">
+              <div> {profile?.profileCards?.firstName}</div>
+              <>
+                {profile?.profileCards &&
+                  profile?.profileCards?.map((card) => (
+                    <ProfileCardExample
+                      lastName={card.lastName}
+                      firstName={card.firstName}
+                      department={card.department}
+                      semester={card.semester}
+                      field={card.field}
+                      job={card.job}
+                      skill={card.skill}
+                      isScrapped={card.isScrapped}
+                      profilePic={card.profileImageUrl}
+                    />
+                  ))}
+              </>
+            </div>
+          </Profiles>
+        </ContentWrapper>
+      )}
+    </>
   );
 };
 
 export default ScrappedProfile;
 
-const ProfileCardExample = () => {
+const ProfileCardExample = ({
+  lastName,
+  firstName,
+  department,
+  semester,
+  field,
+  job,
+  skill,
+  isScrapped,
+  profilePic,
+}) => {
   return (
     <ProfileCard>
+      <ScrapIcon>
+        <div
+          className="scrap-Btn"
+          type="button"
+          // type 명시하지 않을시 button 클릭하면 submit
+          // type을 button으로 해야 클릭 시 submit 되지 않음
+          onClick={() => {
+            console.log("버튼 누르기 전: ", isScrapped);
+            isScrapped = !isScrapped;
+            console.log("버튼 누른 후: ", isScrapped);
+          }}
+        >
+          {isScrapped === true ? (
+            <>
+              <img
+                src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d632d0ac491d2252e1292a/img/---@2x.png"
+                alt="scrapIcon"
+                className="scrap"
+              />
+            </>
+          ) : (
+            <>
+              <img
+                src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/vector-19.svg"
+                alt="scrapIcon"
+                className="scrap"
+              />
+            </>
+          )}
+        </div>
+
+        {/* <img
+          className="scrap-icon" // 초록색 스크랩 아이콘
+          alt="Vector"
+          src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d632d0ac491d2252e1292a/img/---@2x.png"
+          // src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/vector-19.svg"
+        /> */}
+      </ScrapIcon>
       <CardContainer>
         <ProfileNScrap>
-          <img src={profileImg} alt="profileImg" />
+          {profilePic === null ? (
+            <img src={sampleProfileImg} alt="profileImg" />
+          ) : (
+            <img src={profilePic} alt="profileImg" />
+          )}
         </ProfileNScrap>
-        <Name>석예슬</Name>
-        <SchoolInfo>한동대학교 (학부) (학번) </SchoolInfo>
+        <Name>
+          {lastName} {firstName}
+        </Name>
+        <SchoolInfo>
+          한동대학교 {department} {semester}학기
+        </SchoolInfo>
         <ContentContainer>
           <div className="content-row">
             <div className="content-row-title">희망분야</div>
-            <div className="content-row-content">UX/UI 디자인</div>
+            <div className="content-row-content">{field}</div>
           </div>
           <div className="content-row">
             <div className="content-row-title">관심직무</div>
-            <div className="content-row-content">프로덕트</div>
+            <div className="content-row-content">{job}</div>
           </div>
           <div className="content-row">
             <div className="content-row-title">보유기술</div>
-            <div className="content-row-content">피그마</div>
+            <div className="content-row-content">{skill}</div>
           </div>
         </ContentContainer>
         <CardButtons>
@@ -370,3 +512,8 @@ const ProfileCardExample = () => {
     </ProfileCard>
   );
 };
+
+const Loading = styled.div`
+  font-family: "Pretendard-SemiBold", Helvetica;
+  font-size: 30px;
+`;
