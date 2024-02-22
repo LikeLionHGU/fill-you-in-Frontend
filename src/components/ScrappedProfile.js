@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WhiteNavBtns from "./WhiteNavBtns";
 import sampleProfileImg from "../img/profileSample.png";
+import scrap from "../img/Scrap.png";
+import noScrap from "../img/noScrap.png";
+import axios from "axios";
 //
 
 const Container = styled.div`
@@ -107,20 +110,6 @@ const ContentText = styled.div`
   font-size: 20px;
   /* border: 2px solid red; */
 `;
-
-// const ProfileSearch = styled.div`
-//   //검색창
-//   display: flex;
-//   height: 200px;
-//   border: 2px solid pink;
-// `;
-
-// const Profiles = styled.div`
-//   //프로필 넣기
-//   display: flex;
-//   height: 20px; // 임시
-//   border: 2px solid blue;
-// `;
 
 function ScrappedProfile() {
   const navigate = useNavigate();
@@ -234,16 +223,23 @@ const ProfileCard = styled.div`
 `;
 const ScrapIcon = styled.div`
   /* z-index: 3000; */
-  position: absolute; // 스크랩 아이콘 고정...
+  position: relative; // 스크랩 아이콘 고정...
   > .scrap-Btn {
+    padding-left: 2px;
+    margin-right: 5px;
+  }
+  > button {
+    border: none;
+    background-color: white;
+    position: absolute; // 스크랩 아이콘 고정...
+    top: 3px;
+    left: 180px;
+    z-index: 3500;
+    width: 25px;
+    transition: 0.3s;
+    cursor: pointer;
     > img {
-      position: relative;
-      top: 5px;
-      left: 180px;
-      z-index: 3500;
       width: 20px;
-      transition: 0.3s;
-      cursor: pointer;
     }
   }
 `;
@@ -282,6 +278,9 @@ const SchoolInfo = styled.div`
   display: flex;
   font-size: 12px;
   padding: 5px;
+  > span {
+    color: lightgray;
+  }
 `;
 const ContentContainer = styled.div`
   display: flex;
@@ -309,6 +308,9 @@ const ContentContainer = styled.div`
 
   > .content-row > .content-row-content {
     /* border: 2px solid green; */
+    > span {
+      color: lightgray;
+    }
   }
 `;
 
@@ -384,9 +386,8 @@ const ScrappedTeammates = ({ loading, userName }) => {
   }, []);
 
   //
+  /////////스크랩 delete
   //
-  //
-
   return (
     <>
       {loading === true ? (
@@ -405,8 +406,9 @@ const ScrappedTeammates = ({ loading, userName }) => {
                 <>
                   {profile?.profileCards &&
                     profile?.profileCards?.map((card) => (
-                      <ProfileCardExample
+                      <EachProfileCard
                         key={card.id}
+                        id={card.id}
                         lastName={card.lastName}
                         firstName={card.firstName}
                         department={card.department}
@@ -430,7 +432,8 @@ const ScrappedTeammates = ({ loading, userName }) => {
 
 export default ScrappedProfile;
 
-const ProfileCardExample = ({
+const EachProfileCard = ({
+  id,
   lastName,
   firstName,
   department,
@@ -441,24 +444,45 @@ const ProfileCardExample = ({
   isScrapped,
   profilePic,
 }) => {
+  const [isOn, setIsOn] = useState(true); // 스크랩 버튼 클릭 여부 state
+  const deleteScrap = (id) => {
+    const scrapUrl =
+      process.env.REACT_APP_BACK_URL + "/api/fillyouin/scrap-member";
+    axios
+      .delete(scrapUrl, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+          // "Content-Type": `application/json`,
+        },
+        // delete 함..
+        params: {
+          scrapMemberId: id,
+        },
+      })
+      //성공시 then 실행
+      .then(function (response) {
+        console.log(response);
+      })
+      //실패 시 catch 실행
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   return (
     <ProfileCard>
       <ScrapIcon>
-        <div
+        <button
           className="scrap-Btn"
-          type="button"
-          // type 명시하지 않을시 button 클릭하면 submit
-          // type을 button으로 해야 클릭 시 submit 되지 않음
+          type="button" // type을 button으로 해야 클릭 시 submit 되지 않음
           onClick={() => {
-            console.log("버튼 누르기 전: ", isScrapped);
-            isScrapped = !isScrapped;
-            console.log("버튼 누른 후: ", isScrapped);
+            setIsOn(!isOn);
           }}
         >
-          {isScrapped === true ? (
+          {/* {isScrapped ? ( */}
+          {isOn ? (
             <>
               <img // scrapped가 되어있다면 초록색 채워진 스크랩 아이콘
-                src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d632d0ac491d2252e1292a/img/---@2x.png"
+                src={scrap}
                 alt="scrapIcon"
                 className="scrap"
               />
@@ -466,13 +490,14 @@ const ProfileCardExample = ({
           ) : (
             <>
               <img // 스크랩 안 되어있으면 초록색 테두리 스크랩 아이콘
-                src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/vector-19.svg"
-                alt="scrapIcon"
+                src={noScrap}
+                alt="noScrapIcon"
                 className="scrap"
               />
+              {deleteScrap(id)}
             </>
           )}
-        </div>
+        </button>
       </ScrapIcon>
       <CardContainer>
         <ProfileNScrap>
@@ -486,20 +511,52 @@ const ProfileCardExample = ({
           {lastName} {firstName}
         </Name>
         <SchoolInfo>
-          한동대학교 {department} {semester}학기
+          한동대학교
+          {department ? (
+            <> {department}</>
+          ) : (
+            <>
+              <span> (학부)</span>
+            </>
+          )}
+          {semester ? (
+            <> {semester}학기</>
+          ) : (
+            <>
+              <span> (학기)</span>
+            </>
+          )}
         </SchoolInfo>
         <ContentContainer>
           <div className="content-row">
             <div className="content-row-title">희망분야</div>
-            <div className="content-row-content">{field}</div>
+            {field ? (
+              <div className="content-row-content">{field}</div>
+            ) : (
+              <div className="content-row-content">
+                <span>(없음)</span>
+              </div>
+            )}
           </div>
           <div className="content-row">
             <div className="content-row-title">관심직무</div>
-            <div className="content-row-content">{job}</div>
+            {job ? (
+              <div className="content-row-content">{job}</div>
+            ) : (
+              <div className="content-row-content">
+                <span>(없음)</span>
+              </div>
+            )}
           </div>
           <div className="content-row">
             <div className="content-row-title">보유기술</div>
-            <div className="content-row-content">{skill}</div>
+            {skill ? (
+              <div className="content-row-content">{skill}</div>
+            ) : (
+              <div className="content-row-content">
+                <span>(없음)</span>
+              </div>
+            )}
           </div>
         </ContentContainer>
         <CardButtons>

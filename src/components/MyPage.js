@@ -589,7 +589,9 @@ export const MyPage = () => {
                           <>
                             {profile?.affiliations &&
                               profile?.affiliations?.map((affiliation) => (
-                                <div>{affiliation.name}</div>
+                                <div key={affiliation.name}>
+                                  {affiliation.name}
+                                </div>
                               ))}
                           </>
                         )}
