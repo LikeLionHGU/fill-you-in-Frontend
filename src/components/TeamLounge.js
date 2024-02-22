@@ -507,8 +507,7 @@ function TeamLounge() {
               {""}
               {/*팀원검색 Or 스크랩한 프로필*/}
 
-              <ContentWrapper>
-                <ContentText>000님, 스크랩한 프로필이에요 !</ContentText>
+              <ScrapWrapper>
                 <Profiles>
                   <div className="profiles-container">
                     {searchInfo.map((item) => (
@@ -523,7 +522,7 @@ function TeamLounge() {
                     ))}
                   </div>
                 </Profiles>
-              </ContentWrapper>
+              </ScrapWrapper>
             </Content>
           </MainContainer>
         </MainContents>
@@ -613,6 +612,7 @@ const MainContainer = styled.div`
 
 const Content = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   height: 100%;
   margin-left: 240px; // 전체화면에서 퍼센트.. 왼쪽 사이드바 부분을 margin으로 처리
@@ -627,6 +627,13 @@ const ContentWrapper = styled.div`
   /* border: 2px solid black; */
   flex-direction: column;
   width: 100%; // 위에서 좌우에 padding 7% 넣어서 너비를 100%해도 빈칸 생김.
+`;
+const ScrapWrapper = styled.div`
+  display: flex;
+  /* border: 2px solid red; */
+  flex-direction: row;
+  width: 100%; // 위에서 좌우에 padding 7% 넣어서 너비를 100%해도 빈칸 생김.
+  min-height: 500px;
 `;
 const ContentText = styled.div`
   // 팀원 찾아보세요 text //
@@ -651,6 +658,12 @@ const Profiles = styled.div`
   height: 20px; // 임시
   margin-top: 20px;
   /* border: 2px solid blue; */
+  width: 100%;
+  > .profiles-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
 `;
 
 const SearchContainer = styled.div`
