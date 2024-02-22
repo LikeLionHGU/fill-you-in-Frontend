@@ -5,7 +5,7 @@ import FirstVisitModal from "./FirstVisitModal";
 import ModifyProfile from "./ModifyProfile";
 import PictureSelect from "./PictureSelect";
 import profileSample from "../img/profileSample.png";
-
+import pinImg from "../img/pinned.png";
 const TopBackground = styled.div`
   /* 배너 배경.. */
   background-color: #04b1b1;
@@ -178,10 +178,18 @@ const Sidebar = styled.div`
     /* border: 2px solid orange; */
   }
   > .profile-contents > .club-technique-list > div > div {
-    display: block;
+    display: flex;
 
     flex-direction: row;
+    font-size: 16px;
+    margin-bottom: 4px;
     /* border: 2px solid orange; */
+  }
+  > .profile-contents > .club-technique-list > div > .skill-pinned > img {
+    margin-right: 5px;
+  }
+  > .profile-contents > .club-technique-list > div > .skills-not-pinned {
+    margin-left: 15px;
   }
 
   > .profile-contents > .profile-contents-name {
@@ -310,6 +318,14 @@ const TableCol = styled.div`
     margin-bottom: 5px;
 
     /* border: 2px solid red; */
+  }
+  > .table-list > .ispinned > img {
+    margin-right: 5px;
+    /* text-decoration: underline; */
+  }
+  > .table-list > .notPinned {
+    margin-left: 15px;
+    /* text-decoration: underline; */
   }
 `;
 const SchoolMajor = styled.div`
@@ -500,6 +516,8 @@ export const MyPage = () => {
                 />
               </>
             )} */}
+
+            {/* map으로 출력하는데, 핀이 있으면 출력,,,, */}
             {isPicModalOpen === true ? (
               <PictureSelect
                 isOpen={isPicModalOpen}
@@ -553,9 +571,23 @@ export const MyPage = () => {
                           ) : (
                             <>
                               {profile?.fields &&
-                                profile?.fields?.map((field) => (
-                                  <div>{field.name}</div>
-                                ))}
+                                profile?.fields?.map((field) =>
+                                  field?.isPinned === true ? (
+                                    <div className="ispinned" key={field.name}>
+                                      <img src={pinImg} alt="pinImg" />
+                                      {field.name}{" "}
+                                    </div>
+                                  ) : null
+                                )}
+
+                              {profile?.fields &&
+                                profile?.fields?.map((field) =>
+                                  field?.isPinned === false ? (
+                                    <div className="notPinned" key={field.name}>
+                                      {field.name}
+                                    </div>
+                                  ) : null
+                                )}
                             </>
                           )}
                         </div>
@@ -568,9 +600,23 @@ export const MyPage = () => {
                           ) : (
                             <>
                               {profile?.jobs &&
-                                profile?.jobs?.map((job) => (
-                                  <div>{job.name}</div>
-                                ))}
+                                profile?.jobs?.map((job) =>
+                                  job?.isPinned === true ? (
+                                    <div className="ispinned" key={job.name}>
+                                      <img src={pinImg} alt="pinImg" />
+                                      {job.name}{" "}
+                                    </div>
+                                  ) : null
+                                )}
+
+                              {profile?.jobs &&
+                                profile?.jobs?.map((job) =>
+                                  job?.isPinned === false ? (
+                                    <div className="notPinned" key={job.name}>
+                                      {job.name}
+                                    </div>
+                                  ) : null
+                                )}
                             </>
                           )}
                         </div>
@@ -602,11 +648,29 @@ export const MyPage = () => {
                         ) : (
                           <>
                             {profile?.skills &&
-                              profile?.skills?.map((skill) => (
-                                <div>
-                                  <div>{skill.name}</div>
-                                </div>
-                              ))}
+                              profile?.skills?.map((skill) =>
+                                skill?.isPinned === true ? (
+                                  <div
+                                    className="skill-pinned"
+                                    key={skill.name}
+                                  >
+                                    <img src={pinImg} alt="pinImg" />{" "}
+                                    {skill.name}
+                                  </div>
+                                ) : null
+                              )}
+
+                            {profile?.skills &&
+                              profile?.skills?.map((skill) =>
+                                skill?.isPinned === false ? (
+                                  <div
+                                    className="skills-not-pinned"
+                                    key={skill.name}
+                                  >
+                                    {skill.name}
+                                  </div>
+                                ) : null
+                              )}
                           </>
                         )}
                       </div>
