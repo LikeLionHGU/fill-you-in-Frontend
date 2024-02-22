@@ -479,7 +479,7 @@ const EachProfileCard = ({
     axios
       .post(
         scrapUrl,
-        {},
+        {}, // post 방법에서는 중간에 data가 들어가므로, 아무것도 안 들어갈 땐 이렇게 {}로 빈칸 넣어주면 해결됨. axios.post(url[, data[, config]])
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
