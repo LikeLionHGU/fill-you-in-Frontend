@@ -40,11 +40,9 @@ const LogoImg = styled.div`
   position: absolute;
   top: 3%;
   padding: 2px;
+  cursor: pointer;
   > img {
     width: 37.9%;
-  }
-  &:hover {
-    cursor: pointer;
   }
 `;
 function WhiteNavBtns() {

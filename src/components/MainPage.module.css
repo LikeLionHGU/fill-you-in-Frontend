@@ -46,7 +46,6 @@ body {
 /* section1 css */
 .section1 {
   position: relative;
-  border: solid 1px white;
   background-color: #04b1b1;
   width: 100vw;
   height: 65vh;

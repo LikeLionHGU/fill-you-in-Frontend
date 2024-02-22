@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { isRouteErrorResponse, useNavigate } from "react-router-dom";
+import profileImgCharacters from "../img/ProfileUploadCharacters.png";
 
 const ModalBackground = styled.div`
   z-index: 1000; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
@@ -48,7 +51,6 @@ const ModalContents = styled.div`
 `;
 const ModalText = styled.div`
   display: flex;
-
   justify-content: center;
   align-items: center;
   color: #005f5f;
@@ -67,14 +69,84 @@ const ModalText = styled.div`
     justify-content: center;
     align-items: center;
 
-    width: 100%;
-    height: 100%;
+    width: 350px;
+    height: 350px;
     background-color: #e8e8e8;
+    border: 2px solid #005f5f;
     border-radius: 400px;
-    overflow: hidden; // 이 동그라미 넘어가면 숨겨짐
+    overflow: hidden; // 이 동그라미 넘어가면 이미지 가려짐
+  }
+  > div > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
   }
 `;
 
+const InputImg = styled.div`
+  /* object-fit: cover; */
+`;
+
+const ImgFileName = styled.input`
+  width: 235px;
+  margin-right: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  background-color: #e8e8e8;
+
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  color: #999;
+  /* text-decoration: underline; */
+  font-family: "Pretendard-SemiBold", Helvetica;
+`;
+const ImgSelectBtn = styled.label`
+  font-size: 17px;
+  padding: 3px 10px;
+  /* background: #ff9800; */
+  color: gray;
+  text-decoration: underline;
+  cursor: pointer;
+  border-radius: 0.25em;
+  &:hover {
+    color: black;
+  }
+  font-family: "Pretendard", Helvetica;
+`;
+
+const RealBtn = styled.input`
+  // 화면에서 보이지 않도록 함
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  font-family: TheJamsilThin;
+`;
+const Preview = styled.div`
+  color: #d3d3d3;
+  background-color: #ebebeb77;
+  /* height: 400px; */
+  width: 400px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  border-radius: 23px;
+
+  /* border: 1px solid gray; */
+`;
+const Error = styled.p`
+  font-size: 9px;
+  font-family: TheJamsilThin;
+  color: red;
+  margin: 0;
+  padding: 0;
+  margin-bottom: -10px;
+`;
 const ModalInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -90,9 +162,18 @@ const ModalInfoText = styled.div`
   height: 100%;
   width: 100%;
   /* border: 2px solid red; */
-
+  > .chara-img {
+    display: flex;
+    width: 100%;
+  }
   > div {
-    margin-top: 10%;
+    margin-top: 5%;
+  }
+
+  > .file-upload-text {
+    /* background-color: black; */
+    font-size: 15px;
+    font-family: "Pretendard-SemiBold", Helvetica;
   }
   > div > .file-name {
     font-weight: 500;
@@ -124,12 +205,12 @@ const ModalButtons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  padding: 20px 20px;
+  padding: 30px 30px;
   align-items: flex-end;
   /* border: 1px solid blue; */
   height: 50%;
 `;
-const SaveProfile = styled.div`
+const SaveProfile = styled.form`
   /* border: 1px solid green; */
   padding: 10px 60px;
   border-radius: 25px;
@@ -163,78 +244,131 @@ const CancelButton = styled.div`
   }
 `;
 
-function PictureSelect({ isOpen, closeModal }) {
-  const [profileImg, setProfileImg] = useState([]);
-  const getProfileImg = async () => {
+function PictureSelect({ isOpen, closeModal, ImgUrl }) {
+  const [file, setFile] = useState({});
+  const [fileUrl, setFileUrl] = useState({});
+
+  const imageUpload = (e) => {
+    if (e.target.files.length !== 0) {
+      setFile(e.target.files[0]);
+      setFileUrl(e.target.files[0]);
+      const imageTpye = e.target.files[0].type.includes("image");
+
+      setFileUrl({
+        url: URL.createObjectURL(e.target.files[0]),
+        name: e.target.files[0].name,
+        image: imageTpye,
+      });
+    }
+  };
+  const [fileError, setFileError] = useState("");
+
+  const handleSubmit = async (data) => {
+    // Form Data
+    const formData = new FormData();
+    formData.append("image", file); // 백엔드로 넘겨주는 이름이 image임.
+
+    data.preventDefault();
+    console.log("에러!!!! 이미지 너무 큼");
+    // 만약 여기서 기존 이미지 파일이 있으면 에러메시지 X
+    if (!file.name) {
+      setFileError("* 파일을 선택해주세요");
+      return;
+    } else if (file.size >= 2 * 10e5) {
+      setFileError("* 파일이 너무 큽니다");
+      return;
+    } else {
+      setFileError("");
+    }
+
     const url =
       process.env.REACT_APP_BACK_URL +
-      "/api/fillyouin/my-profile/profile-image"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+      "/api/fillyouin/my-profile/profile-image";
 
+    const config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        "Content-Type": "multipart/form-data",
+      },
+    };
     try {
-      const response = await fetch(url, {
-        method: "POST", //(+ GET인지 POST인지 명세 확인)
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
-        },
-        body: {},
-      });
-      // console.log("AAARG");
-      if (!response.ok) {
-        throw new Error(`에러 Status: ${response.status}`);
-      }
-      const responseData = await response.json();
-      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
-      setProfileImg(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      const response = await axios.post(url, formData, config);
+      // .then((response) => {
+      //   console.log("서버 응답:", response.data);
+      //   // onClick(); // 여기 있어야 이름 없을 때, 안넘어감
+      // });
+      console.log("파일 업로드 완료");
+      window.location.reload("/");
     } catch (error) {
-      console.error("error", error);
+      console.log("파일업로드 에러 발생: ", error);
+      alert("파일 업로드 중 에러 발생. 다시 시도해주세요.");
     }
   };
 
-  useEffect(() => {
-    getProfileImg();
-  }, []);
-  //
-  //
-  // {profile?.profileImageUrl === null ? (
-  //   <>
-  //     {console.log("no profile", profile?.profileImageUrl)}
-  //     <ProfilePicure src={profileSample} />
-  //   </>
-  // ) : (
-  //   <>
-  //     <ProfilePicure src={profile?.profileImageUrl} />
-  //   </>
-  // )}
   return (
     <ModalBackground style={{ display: isOpen ? "flex" : "none" }}>
       <ModalExitBackground onClick={closeModal}></ModalExitBackground>
       <Modal>
         <ModalContents>
           <ModalText>
-            <div
-              onClick={() => {
-                console.log("사진 선택하기 클릭됨");
-              }}
-            >
-              사진 선택하기
+            <div>
+              {fileUrl?.image ? (
+                <Preview>
+                  {fileUrl &&
+                    fileUrl?.image && ( // 이미지가 존재하면 실행
+                      <img
+                        src={fileUrl.url}
+                        alt="previewimage"
+                        style={{
+                          width: "110%",
+                          height: "110%",
+                        }}
+                      />
+                    )}
+                </Preview>
+              ) : (
+                <div>(프로필 사진)</div>
+              )}
             </div>
           </ModalText>
           <ModalInfo>
             <ModalInfoText>
+              <img
+                className="chara-img"
+                src={profileImgCharacters}
+                alt="characters"
+              />
+              <span className="file-upload-text">
+                " 프로필을 업로드해보세요 ! "
+              </span>
               <div>
-                <span className="file-name">파일 이름 </span>:{" "}
-                <span>__________________________</span>
+                <span className="file-name">파일 이름 </span>
+                <ImgFileName
+                  placeholder="file name"
+                  value={fileUrl.name}
+                  disabled="disabled"
+                />
               </div>
-
-              <div className="choose-pic-button">다른 사진 선택</div>
+              <InputImg>
+                <ImgSelectBtn
+                  className="choose-pic-button"
+                  htmlFor="ex_filename"
+                >
+                  다른 사진 선택
+                </ImgSelectBtn>
+                {fileError && <Error>{fileError}</Error>}
+                <RealBtn
+                  type="file"
+                  accept="image/*" // 이미지만 선택할 수 있도록
+                  id="ex_filename"
+                  onChange={imageUpload}
+                  required
+                />
+              </InputImg>
+              {/* <div className="choose-pic-button">다른 사진 선택</div> */}
             </ModalInfoText>
             <ModalButtons>
-              <SaveProfile
-                onClick={() => {
-                  console.log("AAA");
-                  // 프로필 수정 모달이랑 연결....안되는중
-                }}
-              >
+              <SaveProfile type="submit" onClick={handleSubmit}>
                 저장
               </SaveProfile>
               <CancelButton onClick={closeModal}>취소</CancelButton>

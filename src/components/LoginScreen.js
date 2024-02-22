@@ -212,6 +212,7 @@ export const LoginScreen = () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/auth/login"; // 백엔드 api url
 
     const token = credentialIdToken;
+    console.log("credential: ", token);
     const data = {
       googleIdToken: token, // 백으로 넘겨줄 credential 토큰
     };
