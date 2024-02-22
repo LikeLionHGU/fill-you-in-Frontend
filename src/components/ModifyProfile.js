@@ -179,7 +179,6 @@ function ModifyProfile({ setModalOpen }) {
   };
 
   const onRemove = (club, arrays, setArrays) => {
-    console.log(arrays);
     setArrays((prev) => {
       return prev.filter((index) => index !== club);
     });
@@ -188,6 +187,8 @@ function ModifyProfile({ setModalOpen }) {
   const submitPost = async (event) => {
     event.preventDefault();
     const semesterInt = parseInt(post.semester);
+
+    console.log(affiliations);
 
     const modifyProfileInfo = {
       semester: semesterInt,
@@ -210,12 +211,13 @@ function ModifyProfile({ setModalOpen }) {
         },
 
         body: JSON.stringify(modifyProfileInfo),
-      }).then((json) => {
-        console.log(json.ok);
-        if (!!json.ok) {
-          window.location.reload();
-        }
       });
+      // .then((json) => {
+      //   console.log(json.ok);
+      //   if (!!json.ok) {
+      //     window.location.reload();
+      //   }
+      // });
 
       if (!response.ok) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
@@ -240,7 +242,7 @@ function ModifyProfile({ setModalOpen }) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+      console.log("Server Response12", responseData); // 받아온 데이터를 콘솔로 확인
 
       setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
 
@@ -253,13 +255,10 @@ function ModifyProfile({ setModalOpen }) {
       setFields(responseData.fields);
       setJobs(responseData.jobs);
       setSkills(responseData.skills);
-      console.log(affiliations);
     } catch (error) {
       console.error("error", error);
     }
   };
-
-  console.log("pppp", post);
 
   const getDepartmentsOption = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/departments";
@@ -304,7 +303,6 @@ function ModifyProfile({ setModalOpen }) {
       const responseData = await response.json();
       const variable = responseData.affiliations.map((item) => item.name);
       setAffiliationsOption(variable);
-      console.log(affiliationsOption);
     } catch (error) {
       console.error("error", error);
     }
@@ -348,7 +346,6 @@ function ModifyProfile({ setModalOpen }) {
       }
       const responseData = await response.json();
       const variable = responseData.jobs.map((item) => item.name);
-      console.log("Jobs" + responseData);
       setJobsOption(variable);
     } catch (error) {
       console.error("error", error);
