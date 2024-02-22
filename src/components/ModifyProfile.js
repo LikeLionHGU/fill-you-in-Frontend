@@ -101,7 +101,7 @@ function ModifyProfile({ setModalOpen }) {
     introduction: "",
   });
 
-  const [departmentsOption, setDepartmentsOption] = useState([" "]); // 받아올 학부 정보
+  const [departmentsOption, setDepartmentsOption] = useState([]); // 받아올 학부 정보
 
   const [affiliations, setAffiliations] = useState([]); //백에게 전달할 소속 학회 및 동아리
   const [affiliationsOption, setAffiliationsOption] = useState([]); //받아올 동아리 정보
@@ -243,10 +243,23 @@ function ModifyProfile({ setModalOpen }) {
       console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
 
       setProfile(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+
+      setPost({
+        semester: responseData.semester,
+        departments: responseData.department,
+        introduction: responseData.introduction,
+      });
+      setAffiliations(responseData.affiliations);
+      setFields(responseData.fields);
+      setJobs(responseData.jobs);
+      setSkills(responseData.skills);
+      console.log(affiliations);
     } catch (error) {
       console.error("error", error);
     }
   };
+
+  console.log("pppp", post);
 
   const getDepartmentsOption = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/departments";
@@ -264,9 +277,11 @@ function ModifyProfile({ setModalOpen }) {
       }
       const responseData = await response.json();
       const variable = responseData.departments.map((item) => item.name);
+      console.log(variable);
       setDepartmentsOption(variable);
       console.log(responseData);
-      setPost({ ...post, departments: variable[0] });
+      // setPost({ ...post, departments: variable[0] });
+      // setPost((prev) => ({ ...prev, departments: variable[0] }));
     } catch (error) {
       console.error("error", error);
     }
@@ -371,10 +386,8 @@ function ModifyProfile({ setModalOpen }) {
     getSkillsOption();
   }, []);
   return (
-    <>
-      <Background></Background>
-      <ModalBackground></ModalBackground>
-      <ModalWrapper>
+    <ModalBackground>
+      <ModalBox>
         <Container>
           <Title>프로필 수정</Title>
           <button onClick={closeModal} className="closeModalBtn">
@@ -395,12 +408,13 @@ function ModifyProfile({ setModalOpen }) {
                   <input
                     name="semester"
                     placeholder="ex) 7"
+                    value={post.semester}
                     onChange={changeValue}
                   />
                 </Input1>
                 <Input1>
                   <p className="title">학부</p>
-                  <select onChange={changeValue2}>
+                  <select onChange={changeValue2} value={post.departments}>
                     {departmentsOption.map((option, index) => (
                       <option key={index} value={option}>
                         {option}
@@ -476,6 +490,7 @@ function ModifyProfile({ setModalOpen }) {
                 <input
                   name="introduction"
                   placeholder="직접 입력하세요"
+                  value={post.introduction}
                   onChange={changeValue}
                 />
               </Input3>
@@ -485,49 +500,46 @@ function ModifyProfile({ setModalOpen }) {
             </button>
           </form>
         </Container>
-      </ModalWrapper>
-    </>
+      </ModalBox>
+    </ModalBackground>
   );
 }
 
 export default ModifyProfile;
 
-const Background = styled.div`
-  /* 화면에 꽉 차게 하는 코드 */
-  position: fixed;
-  width: 100%;
-  height: 100%;
-
-  background: #ffffff; // 흰색 도화지로 덮어 씌우기
-  z-index: 200; // 헤더 위로 올라갈 수 있게 헤더 이상으로 z-index를 준다.
-`;
-
 const ModalBackground = styled.div`
-  position: fixed;
+  z-index: 1000; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
   width: 100%;
   height: 100%;
-
-  background: rgba(0, 0, 0, 0.35); // 어두운 배경색
-  z-index: 250; // 위에서 만든 도화지보다 높게 준다.
-  cursor: pointer; // 누르면 홈으로 이동
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2); // 검은배경에 20% 투명도
+  /* border: 2px solid red; */
+  position: fixed; //모달 위치 fix
+  bottom: 0; // 모달 위치 - 바닥으로 내림
+  left: 0; // 모달 위치 - 왼쪽에 붙임 */
+  top: 0;
+  right: 0;
 `;
 
-const ModalWrapper = styled.div`
+const ModalBox = styled.div`
+  box-shadow: 0 0 30px 1px #0000002a; // drop-down shadow 모달 그림자
+  z-index: 2000; // 배경 보다 위에 있도록 함
   position: fixed;
-  top: 50%;
-  left: 50%;
-
-  /* 위아래 너비를 준 상태에서 가로 50%, 세로 50%를 이동시킬 수 있다 (= 한가운데 배치) */
-  z-index: 300;
-  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 60%;
+  height: 60%;
+  border-radius: 50px;
 `;
 
 const Container = styled.div`
   width: 67vw;
   height: 65vh;
-  z-index: 400; //원래 100이었음
   background-color: white;
-  border: 1px solid black;
   border-radius: 80px;
   overflow-y: scroll;
 
