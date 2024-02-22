@@ -47,7 +47,7 @@ const ContainerImg = styled.div`
 const LoginImg = styled.div`
   display: flex;
 
-  border: 2px solid green;
+  /* border: 2px solid green; */
   > img {
     width: 100%;
   }
