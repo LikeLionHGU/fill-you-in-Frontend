@@ -231,10 +231,11 @@ const SearchTeammates = ({ departments, fields, jobs, skills }) => {
       [name]: value,
     });
     setShowSelect(value.trim() !== "");
-    setPost({ ...post, department: event.target.value });
 
+    if (Name === "Name") setPost({ ...post, name: event.target.value });
     if (Name === "Department")
       setPost({ ...post, department: event.target.value });
+    if (Name === "Semester") setPost({ ...post, semester: event.target.value });
     if (Name === "Skill") setPost({ ...post, skill: event.target.value });
     if (Name === "Job") setPost({ ...post, job: event.target.value });
     if (Name === "Field") setPost({ ...post, field: event.target.value });
@@ -301,7 +302,12 @@ const SearchTeammates = ({ departments, fields, jobs, skills }) => {
           <NoSearchIcons>
             <NameSearch>
               <div>이름</div>
-              <input className={"name-search-box"} placeholder="검색어 입력" />
+              <input
+                className={"name-search-box"}
+                placeholder="검색어 입력"
+                name="Name"
+                onChange={(e) => handleInputChange(e, "Name")}
+              />
             </NameSearch>
             <DepartmentSearch>
               <div>학부</div>
@@ -316,7 +322,11 @@ const SearchTeammates = ({ departments, fields, jobs, skills }) => {
             </DepartmentSearch>
             <SemesterSearch>
               <div>학기 수</div>
-              <input placeholder="검색어 입력" />
+              <input
+                placeholder="검색어 입력"
+                name="Semester"
+                onChange={(e) => handleInputChange(e, "Semester")}
+              />
             </SemesterSearch>
           </NoSearchIcons>
           <SearchIcons>
