@@ -237,13 +237,17 @@ const CardContainer = styled.div`
 
 const ProfileNScrap = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100px;
   height: 100px;
-  border: 2px solid green;
+  border-radius: 100px;
+  overflow: hidden;
   > img {
     // 프로필 이미지
-    width: 100px;
-    height: 100px;
+
+    width: 110px;
+    height: 110px;
   }
   padding: 5px;
 `;
