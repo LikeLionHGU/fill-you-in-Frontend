@@ -125,6 +125,33 @@ const ContentText = styled.div`
 function ScrappedProfile() {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState([]);
+  const getUserName = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("Server Response 유저이름:", responseData); // 받아온 데이터를 콘솔로 확인
+      setUserName(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
+      setLoading(false);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+  useEffect(() => {
+    getUserName();
+  }, []);
+
   return (
     <div>
       <Container>
@@ -164,12 +191,7 @@ function ScrappedProfile() {
             {/* 흰색 nav 버튼들 */}
 
             <Content>
-              {/* 팀원검색 or 스크랩한 프로필. 디폴트를 팀원검색으로 두고, 상태 변환해서 스크랩 프로필 내용 보여주기..  */}
-              <ScrappedTeammates />
-
-              {/* <ScrappedTeammates /> */}
-
-              {/*팀원검색 Or 스크랩한 프로필*/}
+              <ScrappedTeammates loading={loading} userName={userName} />
             </Content>
           </MainContainer>
         </MainContents>
@@ -327,11 +349,11 @@ const CardButtons = styled.div`
   }
 `;
 
-const ScrappedTeammates = () => {
+const ScrappedTeammates = ({ loading, userName }) => {
   // 프로파일 설정하고 받아오는 부분
   const [profile, setProfile] = useState([]);
-  const [userName, setUserName] = useState([]);
-  const [loading, setLoading] = useState(false);
+
+  // const [loading, setLoading] = useState(false);
   const getProfiles = async () => {
     const url =
       process.env.REACT_APP_BACK_URL +
@@ -357,35 +379,10 @@ const ScrappedTeammates = () => {
     }
   };
 
-  const getUserName = async () => {
-    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/my-profile"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
-    try {
-      const response = await fetch(url, {
-        method: "GET", //(+ GET인지 POST인지 명세 확인)
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
-      const responseData = await response.json();
-      console.log("Server Response 유저이름:", responseData); // 받아온 데이터를 콘솔로 확인
-      setUserName(responseData); // useState로 쓰기 위해서 받아온 데이터를 profile에 설정
-      setLoading(false);
-    } catch (error) {
-      console.error("error", error);
-    }
-  };
-
   useEffect(() => {
     getProfiles();
   }, []);
 
-  useEffect(() => {
-    getUserName();
-  }, []);
   //
   //
   //
@@ -395,33 +392,37 @@ const ScrappedTeammates = () => {
       {loading === true ? (
         <Loading>로딩중....</Loading>
       ) : (
-        <ContentWrapper>
-          <ContentText>
-            {userName.lastName} {userName.firstName}님, 스크랩한 프로필이에요 !
-          </ContentText>
-          {/* <ProfileSearch>검색창</ProfileSearch> */}
-          <Profiles>
-            <div className="profiles-container">
-              <div> {profile?.profileCards?.firstName}</div>
-              <>
-                {profile?.profileCards &&
-                  profile?.profileCards?.map((card) => (
-                    <ProfileCardExample
-                      lastName={card.lastName}
-                      firstName={card.firstName}
-                      department={card.department}
-                      semester={card.semester}
-                      field={card.field}
-                      job={card.job}
-                      skill={card.skill}
-                      isScrapped={card.isScrapped}
-                      profilePic={card.profileImageUrl}
-                    />
-                  ))}
-              </>
-            </div>
-          </Profiles>
-        </ContentWrapper>
+        <>
+          <ContentWrapper>
+            <ContentText>
+              {userName.lastName} {userName.firstName}님, 스크랩한 프로필이에요
+              !
+            </ContentText>
+            {/* <ProfileSearch>검색창</ProfileSearch> */}
+            <Profiles>
+              <div className="profiles-container">
+                <div> {profile?.profileCards?.firstName}</div>
+                <>
+                  {profile?.profileCards &&
+                    profile?.profileCards?.map((card) => (
+                      <ProfileCardExample
+                        key={card.id}
+                        lastName={card.lastName}
+                        firstName={card.firstName}
+                        department={card.department}
+                        semester={card.semester}
+                        field={card.field}
+                        job={card.job}
+                        skill={card.skill}
+                        isScrapped={card.isScrapped}
+                        profilePic={card.profileImageUrl}
+                      />
+                    ))}
+                </>
+              </div>
+            </Profiles>
+          </ContentWrapper>
+        </>
       )}
     </>
   );
@@ -456,7 +457,7 @@ const ProfileCardExample = ({
         >
           {isScrapped === true ? (
             <>
-              <img
+              <img // scrapped가 되어있다면 초록색 채워진 스크랩 아이콘
                 src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d632d0ac491d2252e1292a/img/---@2x.png"
                 alt="scrapIcon"
                 className="scrap"
@@ -464,7 +465,7 @@ const ProfileCardExample = ({
             </>
           ) : (
             <>
-              <img
+              <img // 스크랩 안 되어있으면 초록색 테두리 스크랩 아이콘
                 src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/vector-19.svg"
                 alt="scrapIcon"
                 className="scrap"
@@ -472,13 +473,6 @@ const ProfileCardExample = ({
             </>
           )}
         </div>
-
-        {/* <img
-          className="scrap-icon" // 초록색 스크랩 아이콘
-          alt="Vector"
-          src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d632d0ac491d2252e1292a/img/---@2x.png"
-          // src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/vector-19.svg"
-        /> */}
       </ScrapIcon>
       <CardContainer>
         <ProfileNScrap>

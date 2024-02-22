@@ -94,7 +94,7 @@ const ProfilePic = styled.div`
 const ProfilePicure = ({ src }) => {
   return (
     <div>
-      <img src={profileSample} alt="profileSample" />
+      <img src={src} alt="profileSample" />
     </div>
   );
 };
@@ -524,7 +524,7 @@ export const MyPage = () => {
                         <ModifyProfile setModalOpen={setModalOpen} />
                       )}
                       <Username>
-                        {profile?.firstName} {profile?.lastName}
+                        {profile?.lastName} {profile?.firstName}
                       </Username>
                     </div>
                     <SchoolMajor>
@@ -592,12 +592,6 @@ export const MyPage = () => {
                                 <div>{affiliation.name}</div>
                               ))}
                           </>
-                          // <> // 그냥 배열일 때는 이렇게 써줌(객체처럼 . 써서 접근 안해도됨)
-                          //   {profile?.affiliations &&
-                          //     profile?.affiliations?.map((affiliation) => (
-                          //       <div>{affiliation}</div>
-                          //     ))}
-                          // </>
                         )}
                       </div>
                       <div>
@@ -618,8 +612,6 @@ export const MyPage = () => {
                   </div>
                 </Sidebar>
                 <PageContent>
-                  {/* 화면 오른쪽 콘텐츠 */}
-
                   <IntroduceBox>
                     {profile?.introduction == null ? (
                       <p>자기소개란</p>
