@@ -1,9 +1,9 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./MainPage.module.css";
-import ModifyProfile from "./ModifyProfile";
 
 import styled from "styled-components";
+import { Link } from "react-scroll";
+import { useEffect, useState } from "react";
 
 function MainPage() {
   const handleLogoutMsg = () => {
@@ -13,11 +13,51 @@ function MainPage() {
       navigate("/");
     }
   };
-  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-  const showModal = () => {
-    setModalOpen(true);
+  const [post, setPost] = useState({
+    firstName: "",
+    lastName: "",
+    semester: "",
+    department: "",
+    profileImageUrl: "",
+    email: "kevin000606@handong.ac.kr",
+  });
+
+  const getProfile = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL +
+      "/api/fillyouin/members/my-simple-profile-card"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      setPost({
+        firstName: responseData.firstName,
+        lastName: responseData.lastName,
+        semester: responseData.semester,
+        department: responseData.department,
+        profileImageUrl: responseData.profileImageUrl,
+        email: responseData.email,
+      });
+      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
+    } catch (error) {
+      console.error("error", error);
+    }
   };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   return (
     <div className={styles.mainpage2}>
       <div className={styles.section1}>
@@ -45,17 +85,24 @@ function MainPage() {
         </div>
         <input placeholder="원하는 공모전, 대회 등을 입력해보세요" />
         <div className={styles.profile}>
-          <img src="img/profileImgSample.jpeg" alt="profileImg" />
-          <p className={styles.name}>석예슬</p>
-          <p className={styles.academicInfo}>
-            한동대학교 콘텐츠융합디자인 학부 8학기
+          <ImageWrapper>
+            <img src={post.profileImageUrl} alt="img" />
+          </ImageWrapper>
+          <p className={styles.name}>
+            {post.firstName} {post.lastName}
           </p>
-          <p className={styles.academicInfo}>tjsrb439@handong.ac.kr</p>
+          <p className={styles.academicInfo}>
+            한동대학교 {post.department} {post.semester}학기
+          </p>
+          <p className={styles.academicInfo}>{post.email}</p>
         </div>
+        <Link to="mainImg" spy={true} smooth={true}>
+          <button className={styles.move}>이동</button>
+        </Link>
       </div>
 
       <div className={styles.grid}>
-        {/* <div className={styles.announcement}>
+        <div className={styles.announcement}>
           <h4>교내공지</h4>
           <ol className={styles.flex2}>
             <div>
@@ -76,8 +123,7 @@ function MainPage() {
             </div>
           </ol>
         </div>
-        <div></div> */}
-        <img src="img/mainImg.png" alt="img" />
+        <img src="img/mainImg.png" alt="img" id="mainImg" />
       </div>
     </div>
   );
@@ -115,5 +161,20 @@ const NavButton = styled.div`
     font-weight: 500;
     cursor: pointer;
     border-radius: 5px;
+  }
+`;
+
+const ImageWrapper = styled.div`
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin: 30px 0 30px 0;
+  background-color: #e8e8e8;
+  overflow: hidden;
+  > img {
+    width: 140px;
+    height: 140px;
+    border-radius: 145px;
+    margin: 0;
   }
 `;
