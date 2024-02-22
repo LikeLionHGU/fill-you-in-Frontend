@@ -445,6 +445,8 @@ const EachProfileCard = ({
   profilePic,
 }) => {
   const [isOn, setIsOn] = useState(true); // 스크랩 버튼 클릭 여부 state
+
+  //////// 스크랩 취소 기능
   const deleteScrap = (id) => {
     const scrapUrl =
       process.env.REACT_APP_BACK_URL + "/api/fillyouin/scrap-member";
@@ -452,8 +454,8 @@ const EachProfileCard = ({
       .delete(scrapUrl, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
-          // "Content-Type": `application/json`,
         },
+
         // delete 함..
         params: {
           scrapMemberId: id,
@@ -468,6 +470,38 @@ const EachProfileCard = ({
         console.log(error);
       });
   };
+  //스크랩 취소 기능
+
+  //스크랩 적용 기능
+  const applyScrap = (id) => {
+    const scrapUrl =
+      process.env.REACT_APP_BACK_URL + "/api/fillyouin/scrap-member";
+    axios
+      .post(
+        scrapUrl,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+          },
+
+          params: {
+            scrapMemberId: id,
+          },
+        }
+      )
+      //성공시 then 실행
+      .then(function (response) {
+        console.log(response);
+      })
+      //실패 시 catch 실행
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    console.log("스크랩 완료");
+  };
+
   return (
     <ProfileCard>
       <ScrapIcon>
@@ -476,16 +510,26 @@ const EachProfileCard = ({
           type="button" // type을 button으로 해야 클릭 시 submit 되지 않음
           onClick={() => {
             setIsOn(!isOn);
+
+            if (isOn === false) {
+              deleteScrap(id);
+            }
           }}
         >
           {/* {isScrapped ? ( */}
           {isOn ? (
             <>
-              <img // scrapped가 되어있다면 초록색 채워진 스크랩 아이콘
-                src={scrap}
-                alt="scrapIcon"
-                className="scrap"
-              />
+              {
+                <img // scrapped가 되어있다면 초록색 채워진 스크랩 아이콘
+                  src={scrap}
+                  alt="scrapIcon"
+                  className="scrap"
+                  onClick={() => {
+                    deleteScrap(id);
+                    console.log("delete");
+                  }}
+                />
+              }
             </>
           ) : (
             <>
@@ -493,8 +537,12 @@ const EachProfileCard = ({
                 src={noScrap}
                 alt="noScrapIcon"
                 className="scrap"
+                onClick={() => {
+                  applyScrap(id);
+                  console.log("apply");
+                }}
               />
-              {deleteScrap(id)}
+              {/* {deleteScrap(id)} */}
             </>
           )}
         </button>
