@@ -538,15 +538,22 @@ const Container = styled.div`
   background-color: white;
   border-radius: 40px;
   overflow-y: scroll;
+  padding-bottom: 30px;
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 
   > .closeModalBtn {
     border: none;
     background: none;
 
+    position: relative;
+
+    left: 53vw;
+
     > img {
       width: 26px;
-      position: absolute;
-      right: 50px;
     }
   }
 
@@ -573,6 +580,7 @@ const Title = styled.p`
   font-size: 21px;
   text-align: center;
   color: #005f5f;
+  margin-top: 45px;
 `;
 
 const Input1 = styled.div`
