@@ -151,15 +151,20 @@ body {
 }
 
 .profile img {
-  width: 12vw;
-  margin-top: 12%;
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  margin-top: 30px;
+  margin-bottom: 20px;
   margin-left: 0;
+  font-size: 5px;
 }
+
 .name {
   font-family: "Pretendard-SemiBold";
   font-size: 20px;
   margin: 0;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .academicInfo {
   font-family: "Pretendard-Thin";

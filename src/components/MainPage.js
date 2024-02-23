@@ -2,8 +2,18 @@ import { useNavigate } from "react-router-dom";
 import styles from "./MainPage.module.css";
 
 import styled from "styled-components";
+
+import profileSample from "../img/profileSample.png";
 import { Link } from "react-scroll";
 import { useEffect, useState } from "react";
+
+const ProfilePicture = ({ src }) => {
+  return (
+    <>
+      <img src={src} alt="profImg" />
+    </>
+  );
+};
 
 function MainPage() {
   const handleLogoutMsg = () => {
@@ -85,16 +95,31 @@ function MainPage() {
         </div>
         <input placeholder="원하는 공모전, 대회 등을 입력해보세요" />
         <div className={styles.profile}>
-          <ImageWrapper>
-            <img src={post.profileImageUrl} alt="img" />
-          </ImageWrapper>
-          <p className={styles.name}>
-            {post.firstName} {post.lastName}
-          </p>
-          <p className={styles.academicInfo}>
-            한동대학교 {post.department} {post.semester}학기
-          </p>
-          <p className={styles.academicInfo}>{post.email}</p>
+          <>
+            <>
+              {(!post?.profileImageUrl && post?.profileImageUrl === null) ||
+              post?.profileImageUrl === undefined ? (
+                <>
+                  {console.log("no profile", post?.profileImageUrl)}
+                  <ProfilePicture src={profileSample} />
+                </>
+              ) : (
+                <>
+                  <ProfilePicture src={post?.profileImageUrl} />
+                </>
+              )}
+              {/* <img src={post.profileImageUrl} alt="img" /> */}
+            </>
+          </>
+          <TextWrapper>
+            <p className={styles.name}>
+              {post.firstName} {post.lastName}
+            </p>
+            <p className={styles.academicInfo}>
+              한동대학교 {post.department} {post.semester}학기
+            </p>
+            <p className={styles.academicInfo}>{post.email}</p>
+          </TextWrapper>
         </div>
         <Link to="mainImg" spy={true} smooth={true}>
           <button className={styles.move}>
@@ -166,17 +191,48 @@ const NavButton = styled.div`
   }
 `;
 
+const ImgContainer = styled.div`
+  display: flex;
+
+  justify-content: center;
+  width: 25.2vw;
+  height: 47vh;
+  position: absolute;
+  top: 22%;
+  left: 4%;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+
+  box-shadow: 0px 0px 10px gray;
+`;
 const ImageWrapper = styled.div`
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  margin: 30px 0 30px 0;
+  display: flex;
+  width: 160px;
+  height: 160px;
+  margin-top: 50px;
+  border: 2px solid red;
   background-color: #e8e8e8;
-  overflow: hidden;
+  border-radius: 145px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; //
+
   > img {
-    width: 140px;
-    height: 140px;
-    border-radius: 145px;
-    margin: 0;
+    width: 150px;
+    height: 150px;
+    border-radius: 150px;
+    margin: 0px;
   }
+`;
+
+const TextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
