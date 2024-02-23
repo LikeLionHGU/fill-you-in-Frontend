@@ -6,6 +6,8 @@ import ModifyProfile from "./ModifyProfile";
 import PictureSelect from "./PictureSelect";
 import profileSample from "../img/profileSample.png";
 import pinImg from "../img/pinned.png";
+// import editImgIcon from "../img/file-upload.jpeg";
+// import editImgIcon from "../img/fileupload.png";
 const TopBackground = styled.div`
   /* 배너 배경.. */
   background-color: #04b1b1;
@@ -106,7 +108,10 @@ const EditIcon = styled.div`
   > .edit-icon-profile-pic {
     position: absolute;
     /* border: 2px solid green; */
-    left: 22vw;
+    border-radius: 5px;
+
+    left: 23vw;
+    /* left: 325px; */
     top: 38vh;
   }
   > .edit-icon-profile-pic:hover {
@@ -131,10 +136,13 @@ const Sidebar = styled.div`
   /* border: 2px solid purple; */
   padding-bottom: 20px;
   border-right: 2px solid #e1e1e1;
+
+  /* border: 2px solid black; */
+
   width: 500px;
   padding-top: 10px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
   height: auto;
 
   > .profile-contents {
@@ -167,20 +175,43 @@ const Sidebar = styled.div`
   > .profile-contents > .club-technique-list {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-
-    margin-right: 20px;
+    justify-content: right;
+    /* border: 2px solid red; */
+    /* margin-right: 20px; */
     font-size: 14px;
     font-family: "Pretendard-SemiBold", Helvetica;
   }
-  > .profile-contents > .club-technique-list > div {
+  > .profile-contents > .club-technique-list > .affiliation-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    border-right: 1px solid #00000000;
+    margin-left: 30px;
+    padding-left: 10px;
+    font-size: 14px;
+    width: 45%;
+    font-family: "Pretendard-SemiBold", Helvetica;
+  }
+
+  /* > .profile-contents > .club-technique-list > div {
+    border: 2px solid gold;
     display: block;
     flex-direction: row;
+    width: 40%;}
+    /* border: 2px solid orange; */
+
+  > .profile-contents > .club-technique-list > .skill-list {
+    /* border: 2px solid gold; */
+    display: block;
+    flex-direction: row;
+    width: 50%;
+    padding-left: 10px;
     /* border: 2px solid orange; */
   }
+
   > .profile-contents > .club-technique-list > div > div {
     display: flex;
-
+    justify-content: start;
     flex-direction: row;
     font-size: 16px;
     margin-bottom: 4px;
@@ -268,24 +299,28 @@ const IntroduceBox = styled.div`
 const ContentBar = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 
   background-color: #f4f4f4;
   /* border: 2px solid purple; */
-  border-radius: 39.5px;
+  border-radius: 40px;
   width: 100%;
   height: 40px;
   padding: 5px 10px;
   position: relative;
 `;
 const BarTitle = styled.div`
+  display: flex;
+  justify-content: center;
   /* border: 2px solid brown; */
   color: #1b1b1b;
   font-family: "Pretendard-SemiBold", Helvetica;
   font-size: 17px;
   font-weight: 600;
-  width: 30%;
+  /* width: 26%; */
+  width: 200px;
+  margin-left: 20px;
 `;
 const TableCol = styled.div`
   display: flex;
@@ -346,14 +381,19 @@ const TableCol = styled.div`
 `;
 const SchoolMajor = styled.div`
   /* border: 2px solid red; */
+  display: flex;
+  justify-content: center;
+
   padding: 5px 5px;
   font-family: "Pretendard-SemiBold", Helvetica;
 
   font-weight: 600;
   margin-bottom: 5px;
-
+  width: 100%;
   > span {
     color: #1b1b1b;
+    margin-left: 5px;
+    margin-right: 5px;
   }
   > div {
     display: inline;
@@ -512,6 +552,7 @@ export const MyPage = () => {
               <img
                 className="edit-icon-profile-pic"
                 alt="editIcon"
+                // src={editImgIcon}
                 src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
               />
             </EditIcon>
@@ -544,12 +585,12 @@ export const MyPage = () => {
                       </Username>
                     </div>
                     <SchoolMajor>
-                      한동대학교{" "}
+                      <span>한동대학교 </span>
                       {profile?.department == null ||
                       profile?.profileImageUrl === undefined ? (
                         <div> (학부) </div> // 아무 값도 없을 때 기본으로 들어가는 부분
                       ) : (
-                        <span> {profile?.department}</span>
+                        <span>{profile?.department}</span>
                       )}
                       {profile?.semester == null ||
                       profile?.profileImageUrl === undefined ? (
@@ -628,8 +669,9 @@ export const MyPage = () => {
                       <div>보유 기술</div>
                     </div>
                     <div className="club-technique-list">
-                      <div>
-                        {profile?.affiliations?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
+                      <div className="affiliation-list">
+                        {profile?.affiliations &&
+                        profile?.affiliations?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
                           <None> 없음</None>
                         ) : (
                           <>
@@ -642,7 +684,7 @@ export const MyPage = () => {
                           </>
                         )}
                       </div>
-                      <div>
+                      <div className="skill-list">
                         {profile?.skills?.length === 0 ? ( // **** profile과 fields 옆에 물음표 꼭 붙여야 함
                           <None>없음</None>
                         ) : (
