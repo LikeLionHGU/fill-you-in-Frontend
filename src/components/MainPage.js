@@ -106,24 +106,48 @@ function MainPage() {
       <div className={styles.grid}>
         <div className={styles.announcement}>
           <h4>교내공지</h4>
-          <ol className={styles.flex2}>
+          <div className={styles.flex2}>
             <div>
-              <li>2024 SW 페스티벌 개최 안내</li>
-              <li>2024 SW 창업 경진 대회 안내</li>
+              <div className={styles.news}>
+                <p>01</p>
+                <p>2024 SW 페스티벌 개최 안내</p>
+              </div>
+              <div className={styles.news}>
+                <p>02</p>
+                <p>2024 SW 창업 경진 대회 안내</p>
+              </div>
             </div>
             <div>
-              <li>THE CEO 공모전 안내</li>
-              <li>제 2회 학생 주도형 SW 해커톤 경진 대회</li>
+              <div className={styles.news}>
+                <p>03</p>
+                <p>THE CEO 공모전 안내</p>
+              </div>
+              <div className={styles.news}>
+                <p>04</p>
+                <p>제 2회 학생 주도형 SW 해커톤 경진 대회</p>
+              </div>
             </div>
             <div>
-              <li>KT AIVLE School 4기 교육학교 추천</li>
-              <li>대경권 SW 산학 프로젝트 경진대회</li>
+              <div className={styles.news}>
+                <p>05</p>
+                <p>KT AIVLE School 4기 교육학교 추천</p>
+              </div>
+              <div className={styles.news}>
+                <p>06</p>
+                <p>대경권 SW 산학 프로젝트 경진대회</p>
+              </div>
             </div>
             <div>
-              <li>제 10회 소개딩 안내</li>
-              <li>트레이딩 머신 프로젝트</li>
+              <div className={styles.news}>
+                <p>07</p>
+                <p>제 10회 소개딩 안내</p>
+              </div>
+              <div className={styles.news}>
+                <p>08</p>
+                <p>트레이딩 머신 프로젝트</p>
+              </div>
             </div>
-          </ol>
+          </div>
         </div>
         <img src="img/mainImg.png" alt="img" id="mainImg" />
       </div>
@@ -167,15 +191,15 @@ const NavButton = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 140px;
-  height: 140px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   margin: 30px 0 30px 0;
   background-color: #e8e8e8;
   overflow: hidden;
   > img {
-    width: 140px;
-    height: 140px;
+    width: 180px;
+    height: 180px;
     border-radius: 145px;
     margin: 0;
   }
