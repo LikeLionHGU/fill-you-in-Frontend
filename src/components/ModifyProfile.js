@@ -536,7 +536,7 @@ const Container = styled.div`
   width: 67vw;
   height: 65vh;
   background-color: white;
-  border-radius: 80px;
+  border-radius: 40px;
   overflow-y: scroll;
 
   > .closeModalBtn {
