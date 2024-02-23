@@ -119,25 +119,26 @@ function ProfileCardExample({
           {profilePic === null || profilePic === undefined ? (
             <img src={sampleProfileImg} alt="profileImg" />
           ) : (
-            <img src={profilePic} alt="profileImg" />
+            <>
+              <img className="img-exist" src={profilePic} alt="profileImg" />
+            </>
           )}
-          {/* <img src={profileImg} alt="profileImg" /> */}
         </ProfileNScrap>
         <Name>{name}</Name>
         <SchoolInfo>
-          한동대학교{" "}
+          한동대학교
           {department ? (
             <> {department}</>
           ) : (
             <>
-              <span> (학부)</span>
+              <span> (학부) </span>
             </>
           )}
           {semester ? (
             <> {semester}학기</>
           ) : (
             <>
-              <span> (학기)</span>
+              <span> (학기) </span>
             </>
           )}
         </SchoolInfo>
@@ -262,6 +263,7 @@ const SchoolInfo = styled.div`
   padding: 5px;
   > span {
     margin-left: 5px;
+    margin-right: 5px;
     color: lightgray;
   }
 `;
@@ -342,6 +344,8 @@ function SelectBox({
   handleSelectChange,
   showSelect,
   options,
+  isFocus,
+  setIsFocus,
 }) {
   return (
     <div>
@@ -349,8 +353,9 @@ function SelectBox({
         name={name}
         value={inputValue}
         onChange={(event) => handleInputChange(event, name)}
+        onFocus={() => setIsFocus({ ...isFocus, name: true })}
       ></input>
-      {showSelect && inputValue && (
+      {showSelect && inputValue && isFocus && (
         <select
           id="search"
           size={5}
@@ -382,9 +387,12 @@ function TeamLounge() {
   //     navigate("/MainPage");
   //   };
 
-  //
-  //
-  // 프로파일 설정하고 받아오는 부분
+  const [isFocus, setIsFocus] = useState({
+    Department: false,
+    Field: false,
+    Job: false,
+    Skill: false,
+  });
 
   const [departments, setDepartments] = useState([]); // 타입 ?
   const [fields, setFields] = useState([]);
@@ -457,6 +465,7 @@ function TeamLounge() {
       }
       setInputValue({ ...inputValue, [Name]: event.target.value });
       setPost({ ...post, [name]: event.target.value });
+      setIsFocus({ ...isFocus, Name: false });
       setShowSelect(false);
     };
 
@@ -516,6 +525,8 @@ function TeamLounge() {
                   handleSelectChange={handleSelectChange}
                   showSelect={showSelect}
                   options={departments}
+                  isFocus={isFocus}
+                  setIsFocus={setIsFocus}
                 ></SelectBox>
               </DepartmentSearch>
               <SemesterSearch>
@@ -540,6 +551,8 @@ function TeamLounge() {
                   handleSelectChange={handleSelectChange}
                   showSelect={showSelect}
                   options={fields}
+                  isFocus={isFocus}
+                  setIsFocus={setIsFocus}
                 ></SelectBox>
               </SearchItems>
               <SearchItems>
@@ -551,6 +564,8 @@ function TeamLounge() {
                   handleSelectChange={handleSelectChange}
                   showSelect={showSelect}
                   options={jobs}
+                  isFocus={isFocus}
+                  setIsFocus={setIsFocus}
                 ></SelectBox>
               </SearchItems>
               <SearchItems>
@@ -562,6 +577,8 @@ function TeamLounge() {
                   handleSelectChange={handleSelectChange}
                   showSelect={showSelect}
                   options={skills}
+                  isFocus={isFocus}
+                  setIsFocus={setIsFocus}
                 ></SelectBox>
               </SearchItems>
             </SearchIcons>
