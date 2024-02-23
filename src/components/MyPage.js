@@ -94,7 +94,7 @@ const ProfilePic = styled.div`
 const ProfilePicure = ({ src }) => {
   return (
     <div>
-      <img src={src} alt="profileSample" />
+      <img src={src} alt="profile" />
     </div>
   );
 };
@@ -129,6 +129,7 @@ const Sidebar = styled.div`
   flex-direction: column;
 
   /* border: 2px solid purple; */
+  padding-bottom: 20px;
   border-right: 2px solid #e1e1e1;
   width: 500px;
   padding-top: 10px;
@@ -186,7 +187,13 @@ const Sidebar = styled.div`
     /* border: 2px solid orange; */
   }
   > .profile-contents > .club-technique-list > div > .skill-pinned > img {
+    display: flex;
+    border-top: 2px solid #00000000;
+    align-items: end;
     margin-right: 5px;
+
+    width: 10px;
+    height: 15px;
   }
   > .profile-contents > .club-technique-list > div > .skills-not-pinned {
     margin-left: 15px;
@@ -251,6 +258,12 @@ const IntroduceBox = styled.div`
   width: 100%;
 
   margin-bottom: 45px;
+
+  > .introduction-text {
+    font-family: "Pretendard-SemiBold", Helvetica;
+    font-size: 15px;
+    padding-left: 5px;
+  }
 `;
 const ContentBar = styled.div`
   display: flex;
@@ -321,6 +334,9 @@ const TableCol = styled.div`
   }
   > .table-list > .ispinned > img {
     margin-right: 5px;
+    width: 10px;
+    height: 16px;
+    border-top: 2px solid #00000000;
     /* text-decoration: underline; */
   }
   > .table-list > .notPinned {
@@ -679,11 +695,13 @@ export const MyPage = () => {
                 </Sidebar>
                 <PageContent>
                   <IntroduceBox>
-                    {profile?.introduction == null ? (
-                      <p>자기소개란</p>
-                    ) : (
-                      profile?.introduction
-                    )}
+                    <p className="introduction-text">
+                      {profile?.introduction == null ? (
+                        <>자기소개란</>
+                      ) : (
+                        profile?.introduction
+                      )}
+                    </p>
                   </IntroduceBox>
 
                   <ContentBar>

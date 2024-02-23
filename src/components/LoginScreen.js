@@ -4,8 +4,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google"; // login    버튼
-// import loginScreen from "../img/loginScreenImg.png";
-import loginScreen from "../img/Maskgroup.svg";
+import loginScreen from "../img/loginPageChara.svg";
 
 const Container = styled.div`
   display: flex;
