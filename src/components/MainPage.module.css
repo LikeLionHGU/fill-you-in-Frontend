@@ -1,39 +1,4 @@
-@font-face {
-  font-family: "Pretendard-Black";
-  src: url("../font/Pretendard-Black.woff");
-}
-@font-face {
-  font-family: "Pretendard-Bold";
-  src: url("../font/Pretendard-Bold.woff");
-}
-@font-face {
-  font-family: "Pretendard-ExtraBold";
-  src: url("../font/Pretendard-ExtraBold.woff");
-}
-@font-face {
-  font-family: "Pretendard-ExtraLight";
-  src: url("../font/Pretendard-ExtraLight.woff");
-}
-@font-face {
-  font-family: "Pretendard-Light";
-  src: url("../font/Pretendard-Light.woff");
-}
-@font-face {
-  font-family: "Pretendard-Medium";
-  src: url("../font/Pretendard-Medium.woff");
-}
-@font-face {
-  font-family: "Pretendard-Regular";
-  src: url("../font/Pretendard-Regular.woff");
-}
-@font-face {
-  font-family: "Pretendard-SemiBold";
-  src: url("../font/Pretendard-SemiBold.woff");
-}
-@font-face {
-  font-family: "Pretendard-Thin";
-  src: url("../font/Pretendard-Thin.woff");
-}
+font-family: "Pretendard-SemiBold", Helvetica;
 
 .mainpage2 {
   position: relative;
@@ -53,8 +18,17 @@ body {
 
 .section1 .move {
   position: absolute;
-  top: 62vh;
+  top: 60vh;
   left: 50vw;
+  padding-left: 1px;
+  padding-right: 1px;
+  border: none;
+  background: none;
+}
+
+.section1 .move img {
+  margin-left: 0px;
+  width: 30px;
 }
 
 /* flex1 css */
