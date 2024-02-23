@@ -4,8 +4,6 @@ import styled from "styled-components";
 import WhiteNavBtns from "./WhiteNavBtns";
 import profileImg from "../img/profileSample.png";
 
-import OtherPersonProfile from "./OtherPersonProfile";
-
 function ProfileCardExample({
   name,
   department,
@@ -44,7 +42,7 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate(OtherPersonProfile(id))}
+            onClick={() => navigate("/OtherPage", { memberId: id })}
           >
             프로필 방문
           </button>
