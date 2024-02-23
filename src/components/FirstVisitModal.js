@@ -104,10 +104,10 @@ const FirstVisitModal = ({ isOpen, closeModal }) => {
     setModalOpen(true);
   };
 
-  const handleFirstVisit = () => {
-    // 처음 방문한건지 아닌지...
-    localStorage.setItem("notFirst", true);
-  };
+  // const handleFirstVisit = () => {
+  //   // 처음 방문한건지 아닌지...
+  //   localStorage.setItem("notFirst", true);
+  // };
 
   return (
     <>

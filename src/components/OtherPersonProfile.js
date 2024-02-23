@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import FirstVisitModal from "./FirstVisitModal";
-import ModifyProfile from "./ModifyProfile";
-import PictureSelect from "./PictureSelect";
 import profileSample from "../img/profileSample.png";
+import scrap from "../img/Scrap.png";
+import noScrap from "../img/noScrap.png";
+import axios from "axios";
 
 const TopBackground = styled.div`
   /* 배너 배경.. */
@@ -335,15 +335,24 @@ const None = styled.span`
   font-family: "Pretendard-SemiBold", Helvetica;
 `;
 export const OtherPersonProfile = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
-
   const [loading, setLoading] = useState(false);
-  //
+
   const { id } = useParams();
-  console.log("state " + id);
+  const { isScrapped } = useParams();
+
+  const [isOn, setIsOn] = useState(isScrapped === "true" ? true : false); // 스크랩 버튼 클릭 여부 state
 
   const [profile, setProfile] = useState([]);
+
+  const handleScrappBtn = (id) => {
+    if (isOn) {
+      deleteScrap(id);
+    } else {
+      applyScrap(id);
+    }
+    setIsOn((c) => !c);
+  };
+
   const getProfile = async () => {
     try {
       const response = await fetch(
@@ -369,19 +378,66 @@ export const OtherPersonProfile = () => {
     }
   };
 
+  const deleteScrap = (id) => {
+    const scrapUrl =
+      process.env.REACT_APP_BACK_URL + "/api/fillyouin/scrap-member";
+    axios
+      .delete(scrapUrl, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+
+        // delete 함..
+        params: {
+          scrapMemberId: id,
+        },
+      })
+      //성공시 then 실행
+      .then(function (response) {
+        console.log(response);
+      })
+      //실패 시 catch 실행
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  //스크랩 취소 기능
+
+  //스크랩 적용 기능
+  const applyScrap = (id) => {
+    const scrapUrl =
+      process.env.REACT_APP_BACK_URL + "/api/fillyouin/scrap-member";
+    axios
+      .post(
+        scrapUrl,
+        {}, // post 방법에서는 중간에 data가 들어가므로, 아무것도 안 들어갈 땐 이렇게 {}로 빈칸 넣어주면 해결됨. axios.post(url[, data[, config]])
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+          },
+
+          params: {
+            scrapMemberId: id,
+          },
+        }
+      )
+      //성공시 then 실행
+      .then(function (response) {
+        console.log(response);
+      })
+      //실패 시 catch 실행
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     getProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //
   //
   //프로파일 설정하고 받아오는 부분
-
-  // const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  const closePicModal = () => setIsPicModalOpen(false);
-
-  const [modalOpen, setModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const handleGoMainPage = () => {
@@ -403,15 +459,6 @@ export const OtherPersonProfile = () => {
         </div>
       ) : (
         <div>
-          {
-            profile?.isFirstProfileVisit === true ? ( // 첫방문이 맞으면 FirstVisitModal 띄움
-              <FirstVisitModal
-                isOpen={isModalOpen}
-                closeModal={closeModal}
-                setIsModalOpen
-              />
-            ) : null // 첫방문이 아니면 FirstVisitModal 띄우지 않기
-          }
           <div className="div1">
             <TopBackground>
               <Header>
@@ -453,53 +500,20 @@ export const OtherPersonProfile = () => {
                 </>
               )}
             </ProfilePic>
-            {/* <EditIcon
-              onClick={() => {
-                setIsPicModalOpen(true);
-              }}
-            >
-              <img
-                className="edit-icon-profile-pic"
-                alt="editIcon"
-                src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
-              />
-            </EditIcon> */}
-
-            {/* {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
-              <>
-                {console.log("no profile", profile?.profileImageUrl)}
-                <PictureSelect
-                  isOpen={isPicModalOpen}
-                  closeModal={closePicModal}
-                  src={profileSample}
-                />
-              </>
-            ) : (
-              <>
-                <ProfilePicure
-                  isOpen={isPicModalOpen}
-                  closeModal={closePicModal}
-                  src={profile?.profileImageUrl}
-                />
-              </>
-            )} */}
-            {isPicModalOpen === true ? (
-              <PictureSelect
-                isOpen={isPicModalOpen}
-                closeModal={closePicModal}
-              />
-            ) : null}
-
             <BottomBackground>
               <ContentContainer>
                 <Sidebar>
+                  <ScrapIcon>
+                    <button onClick={() => handleScrappBtn(id)}>
+                      {isOn ? (
+                        <img src={scrap} alt="scrapImg" />
+                      ) : (
+                        <img src={noScrap} alt="noScrapImg" />
+                      )}
+                    </button>
+                  </ScrapIcon>
                   <div className="profile-contents">
                     <div className="profile-contents-name">
-                      {/* {modalOpen === true ? <ModifyProfile /> : null} */}
-
-                      {modalOpen && (
-                        <ModifyProfile setModalOpen={setModalOpen} />
-                      )}
                       <Username>
                         {profile?.firstName} {profile?.lastName}
                       </Username>
@@ -622,3 +636,27 @@ export const OtherPersonProfile = () => {
 };
 
 export default OtherPersonProfile;
+
+const ScrapIcon = styled.div`
+  /* z-index: 3000; */
+  position: relative; // 스크랩 아이콘 고정...
+  left: 38%;
+  > .scrap-Btn {
+    padding-left: 2px;
+    margin-right: 5px;
+  }
+  > button {
+    border: none;
+    background-color: white;
+    position: absolute; // 스크랩 아이콘 고정...
+    top: 3px;
+    left: 180px;
+    z-index: 3500;
+    width: 25px;
+    transition: 0.3s;
+    cursor: pointer;
+    > img {
+      width: 20px;
+    }
+  }
+`;

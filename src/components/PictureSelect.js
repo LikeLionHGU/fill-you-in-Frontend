@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { isRouteErrorResponse, useNavigate } from "react-router-dom";
 import profileImgCharacters from "../img/ProfileUploadCharacters.png";
 
 const ModalBackground = styled.div`
@@ -292,6 +291,7 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
       },
     };
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formData, config);
       // .then((response) => {
       //   console.log("서버 응답:", response.data);

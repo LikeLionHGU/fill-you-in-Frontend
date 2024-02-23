@@ -5,9 +5,7 @@ import WhiteNavBtns from "./WhiteNavBtns";
 import sampleProfileImg from "../img/profileSample.png";
 import scrap from "../img/Scrap.png";
 import noScrap from "../img/noScrap.png";
-import OtherPersonProfile from "./OtherPersonProfile";
 import axios from "axios";
-import profileImg from "../img/profileSample.png";
 
 function ProfileCardExample({
   name,
@@ -181,7 +179,8 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate(`/OtherPage/${id}`)}
+
+            onClick={() => navigate(`/OtherPage/${id}/${isScrapped}`)}
           >
             프로필 방문
           </button>
@@ -393,6 +392,7 @@ function TeamLounge() {
   const [skills, setSkills] = useState([]);
 
   const [searchInfo, setSearchInfo] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [variable, setVariable] = useState(false);
 
   const SearchTeammates = ({ departments, fields, jobs, skills }) => {
@@ -716,7 +716,7 @@ function TeamLounge() {
                         job={item.job}
                         skill={item.skill}
                         navigate={navigate}
-                        id={item.id}
+                        memberId={item.id}
                         profilePic={item.profileImageUrl}
                         isScrapped={item.isScrapped}
                       />
@@ -982,9 +982,9 @@ const SearchItems = styled.div`
     margin-right: 20px;
   }
 `;
-const SearchField = styled.div``;
-const SearchJobs = styled.div``;
-const SearchSkills = styled.div``;
+// const SearchField = styled.div``;
+// const SearchJobs = styled.div``;
+// const SearchSkills = styled.div``;
 const SearchButton = styled.div`
   display: flex;
   justify-content: end;

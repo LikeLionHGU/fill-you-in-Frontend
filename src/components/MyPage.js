@@ -424,7 +424,7 @@ export const MyPage = () => {
   // const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const openPicModal = () => setIsPicModalOpen(true);
+  // const openPicModal = () => setIsPicModalOpen(true);
   const closePicModal = () => setIsPicModalOpen(false);
 
   const [modalOpen, setModalOpen] = useState(false);
