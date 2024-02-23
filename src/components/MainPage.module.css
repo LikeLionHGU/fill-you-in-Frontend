@@ -55,7 +55,7 @@ body {
 
 .section1 .move {
   position: absolute;
-  top: 60vh;
+  top: 55vh;
   left: 63vw;
   padding-left: 1px;
   padding-right: 1px;
@@ -177,7 +177,7 @@ body {
   margin-bottom: 10px;
 }
 .academicInfo {
-  font-family: "Pretendard-SemiBold";
+  font-family: "Pretendard-ExtraThin";
   font-size: 15px;
   margin: 0;
   margin-top: 5px;
