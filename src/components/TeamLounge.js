@@ -392,10 +392,30 @@ function TeamLounge() {
   //   const handleGoMainPage = () => {
   //     navigate("/MainPage");
   //   };
+  const [name, setName] = useState("");
 
-  //
-  //
-  // 프로파일 설정하고 받아오는 부분
+  const getProfile = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL +
+      "/api/fillyouin/members/my-simple-profile-card"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP 에러 Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      setName(responseData.lastName);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
 
   const [departments, setDepartments] = useState([]); // 타입 ?
   const [fields, setFields] = useState([]);
@@ -426,6 +446,7 @@ function TeamLounge() {
         if (currentEl.tagName !== "SELECT")
           setShowSelect(document.activeElement?.getAttribute("name"));
       };
+      getProfile();
       window.addEventListener("focusin", fn);
       // window.addEventListener("focusout", fn);
       return () => {
@@ -519,7 +540,7 @@ function TeamLounge() {
     };
     return (
       <ContentWrapper>
-        <ContentText>000님, 팀원을 찾아보세요 !</ContentText>
+        <ContentText>{name}님, 팀원을 찾아보세요 !</ContentText>
         <ProfileSearch>
           <SearchContainer>
             {/* <SearchFilterForm /> */}

@@ -620,6 +620,7 @@ const Flex1 = styled.div`
 
 const Title = styled.p`
   font-weight: bold;
+  font-family: "Pretendard-Bold";
   font-size: 21px;
   text-align: center;
   color: #005f5f;
