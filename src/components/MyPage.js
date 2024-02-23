@@ -491,7 +491,9 @@ export const MyPage = () => {
               </NavBar>
             </TopBackground>
             <ProfilePic>
-              {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
+              {(profile?.profileImageUrl &&
+                profile?.profileImageUrl === null) ||
+              profile?.profileImageUrl === undefined ? (
                 <>
                   {console.log("no profile", profile?.profileImageUrl)}
                   <ProfilePicure src={profileSample} />
@@ -514,26 +516,6 @@ export const MyPage = () => {
               />
             </EditIcon>
 
-            {/* {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
-              <>
-                {console.log("no profile", profile?.profileImageUrl)}
-                <PictureSelect
-                  isOpen={isPicModalOpen}
-                  closeModal={closePicModal}
-                  src={profileSample}
-                />
-              </>
-            ) : (
-              <>
-                <ProfilePicure
-                  isOpen={isPicModalOpen}
-                  closeModal={closePicModal}
-                  src={profile?.profileImageUrl}
-                />
-              </>
-            )} */}
-
-            {/* map으로 출력하는데, 핀이 있으면 출력,,,, */}
             {isPicModalOpen === true ? (
               <PictureSelect
                 isOpen={isPicModalOpen}
@@ -563,12 +545,14 @@ export const MyPage = () => {
                     </div>
                     <SchoolMajor>
                       한동대학교{" "}
-                      {profile?.department == null ? (
+                      {profile?.department == null ||
+                      profile?.profileImageUrl === undefined ? (
                         <div> (학부) </div> // 아무 값도 없을 때 기본으로 들어가는 부분
                       ) : (
                         <span> {profile?.department}</span>
                       )}
-                      {profile?.semester == null ? (
+                      {profile?.semester == null ||
+                      profile?.profileImageUrl === undefined ? (
                         <div> (학기수)</div>
                       ) : (
                         <span> {profile?.semester}학기</span>

@@ -327,7 +327,7 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
                     )}
                 </Preview>
               ) : (
-                <div>(프로필 사진)</div>
+                <div>프로필 사진</div>
               )}
             </div>
           </ModalText>
