@@ -20,7 +20,7 @@ function MainPage() {
     semester: "",
     department: "",
     profileImageUrl: "",
-    email: "kevin000606@handong.ac.kr",
+    email: "",
   });
 
   const getProfile = async () => {
@@ -97,7 +97,9 @@ function MainPage() {
           <p className={styles.academicInfo}>{post.email}</p>
         </div>
         <Link to="mainImg" spy={true} smooth={true}>
-          <button className={styles.move}>이동</button>
+          <button className={styles.move}>
+            <img src="img/move.png" alt="img" />
+          </button>
         </Link>
       </div>
 
