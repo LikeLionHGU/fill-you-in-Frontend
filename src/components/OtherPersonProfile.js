@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import FirstVisitModal from "./FirstVisitModal";
 import ModifyProfile from "./ModifyProfile";
@@ -98,22 +98,7 @@ const ProfilePicure = ({ src }) => {
     </div>
   );
 };
-const EditIcon = styled.div`
-  img {
-    height: 26px;
-    width: 26px;
-  }
-  > .edit-icon-profile-pic {
-    position: absolute;
-    /* border: 2px solid green; */
-    left: 22vw;
-    top: 38vh;
-  }
-  > .edit-icon-profile-pic:hover {
-    cursor: pointer;
-  }
-`;
-const EditIconImg = styled.img``;
+
 const BottomBackground = styled.div`
   // 화면의 아래쪽 흰색 배경 container
   display: block;
@@ -352,16 +337,17 @@ const None = styled.span`
 export const OtherPersonProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
-  const { memberId } = useLocation();
 
   const [loading, setLoading] = useState(false);
   //
-  // 프로파일 설정하고 받아오는 부분
+  const { id } = useParams();
+  console.log("state " + id);
+
   const [profile, setProfile] = useState([]);
   const getProfile = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/${memberId}/profile`,
+        `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/${id}/profile`,
         {
           method: "GET", //(+ GET인지 POST인지 명세 확인)
           headers: {
@@ -393,13 +379,9 @@ export const OtherPersonProfile = () => {
   // const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const openPicModal = () => setIsPicModalOpen(true);
   const closePicModal = () => setIsPicModalOpen(false);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const showModal = () => {
-    setModalOpen(true);
-  };
 
   const navigate = useNavigate();
   const handleGoMainPage = () => {
@@ -471,7 +453,7 @@ export const OtherPersonProfile = () => {
                 </>
               )}
             </ProfilePic>
-            <EditIcon
+            {/* <EditIcon
               onClick={() => {
                 setIsPicModalOpen(true);
               }}
@@ -481,7 +463,7 @@ export const OtherPersonProfile = () => {
                 alt="editIcon"
                 src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
               />
-            </EditIcon>
+            </EditIcon> */}
 
             {/* {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
               <>
@@ -513,12 +495,6 @@ export const OtherPersonProfile = () => {
                 <Sidebar>
                   <div className="profile-contents">
                     <div className="profile-contents-name">
-                      <EditIconImg
-                        className="edit-icon-content"
-                        alt="editIcon"
-                        src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
-                        onClick={showModal}
-                      />
                       {/* {modalOpen === true ? <ModifyProfile /> : null} */}
 
                       {modalOpen && (

@@ -12,7 +12,7 @@ function ProfileCardExample({
   job,
   skill,
   navigate,
-  id,
+  memberId,
 }) {
   return (
     <ProfileCard>
@@ -42,7 +42,7 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate("/OtherPage", { memberId: id })}
+            onClick={() => navigate(`/OtherPage/${memberId}`)}
           >
             프로필 방문
           </button>
