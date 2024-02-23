@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 const SecondContainer = styled.div`
-  background-color: #ffffff;
+  backgroㅌ-color: #ffffff;
   display: flex;
   flex-direction: row;
   justify-content: center;

@@ -542,14 +542,13 @@ const EachProfileCard = ({
                   console.log("apply");
                 }}
               />
-              {/* {deleteScrap(id)} */}
             </>
           )}
         </button>
       </ScrapIcon>
       <CardContainer>
         <ProfileNScrap>
-          {profilePic === null ? (
+          {profilePic === null || profilePic === undefined ? (
             <img src={sampleProfileImg} alt="profileImg" />
           ) : (
             <img src={profilePic} alt="profileImg" />
