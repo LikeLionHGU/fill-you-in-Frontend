@@ -2,8 +2,18 @@ import { useNavigate } from "react-router-dom";
 import styles from "./MainPage.module.css";
 
 import styled from "styled-components";
+
+import profileSample from "../img/profileSample.png";
 import { Link } from "react-scroll";
 import { useEffect, useState } from "react";
+
+const ProfilePicture = ({ src }) => {
+  return (
+    <>
+      <img src={src} alt="profImg" />
+    </>
+  );
+};
 
 function MainPage() {
   const handleLogoutMsg = () => {
@@ -58,22 +68,38 @@ function MainPage() {
     getProfile();
   }, []);
 
+  const handleGoMainPage = () => {
+    navigate("/MainPage");
+  };
+
   return (
     <div className={styles.mainpage2}>
       <div className={styles.section1}>
         <div className={styles.flex1}>
-          <img src="/img/fill-you-in-logo.png" alt="logo" />
-          <NavBar>
-            <NavButton>활동 찾기</NavButton>
-            <NavButton onClick={() => navigate("/TeamLounge/Search")}>
-              팀원 라운지
-            </NavButton>
-            <NavButton>팀 관리</NavButton>
-            <NavButton onClick={() => navigate("/Mypage")}>
-              마이페이지
-            </NavButton>
-            <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
-          </NavBar>
+          <div className="div1">
+            <TopBackground>
+              <Header>
+                <img
+                  onClick={() => {
+                    window.location.reload("/MainPage");
+                  }}
+                  alt="LogoImage"
+                  src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/--@2x.png"
+                />
+              </Header>
+              <NavBar>
+                <NavButton>활동 찾기</NavButton>
+                <NavButton onClick={() => navigate("/TeamLounge/Search")}>
+                  팀원 라운지
+                </NavButton>
+                <NavButton>팀 관리</NavButton>
+                <NavButton onClick={() => navigate("/Mypage")}>
+                  마이페이지
+                </NavButton>
+                <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
+              </NavBar>
+            </TopBackground>
+          </div>
         </div>
         <div className={styles.phrases}>
           <p>
@@ -85,16 +111,30 @@ function MainPage() {
         </div>
         <input placeholder="원하는 공모전, 대회 등을 입력해보세요" />
         <div className={styles.profile}>
-          <ImageWrapper>
-            <img src={post.profileImageUrl} alt="img" />
-          </ImageWrapper>
-          <p className={styles.name}>
-            {post.firstName} {post.lastName}
-          </p>
-          <p className={styles.academicInfo}>
-            한동대학교 {post.department} {post.semester}학기
-          </p>
-          <p className={styles.academicInfo}>{post.email}</p>
+          <>
+            <>
+              {(!post?.profileImageUrl && post?.profileImageUrl === null) ||
+              post?.profileImageUrl === undefined ? (
+                <>
+                  {console.log("no profile", post?.profileImageUrl)}
+                  <ProfilePicture src={profileSample} />
+                </>
+              ) : (
+                <>
+                  <ProfilePicture src={post?.profileImageUrl} />
+                </>
+              )}
+            </>
+          </>
+          <TextWrapper>
+            <p className={styles.name}>
+              {post.firstName} {post.lastName}
+            </p>
+            <p className={styles.academicInfo}>
+              한동대학교 {post.department} {post.semester}학기
+            </p>
+            <p className={styles.academicInfo}>{post.email}</p>
+          </TextWrapper>
         </div>
         <Link to="mainImg" spy={true} smooth={true}>
           <button className={styles.move}>
@@ -106,48 +146,24 @@ function MainPage() {
       <div className={styles.grid}>
         <div className={styles.announcement}>
           <h4>교내공지</h4>
-          <div className={styles.flex2}>
+          <ol className={styles.flex2}>
             <div>
-              <div className={styles.news}>
-                <p>01</p>
-                <p>2024 SW 페스티벌 개최 안내</p>
-              </div>
-              <div className={styles.news}>
-                <p>02</p>
-                <p>2024 SW 창업 경진 대회 안내</p>
-              </div>
+              <li>2024 SW 페스티벌 개최 안내</li>
+              <li>2024 SW 창업 경진 대회 안내</li>
             </div>
             <div>
-              <div className={styles.news}>
-                <p>03</p>
-                <p>THE CEO 공모전 안내</p>
-              </div>
-              <div className={styles.news}>
-                <p>04</p>
-                <p>제 2회 학생 주도형 SW 해커톤 경진 대회</p>
-              </div>
+              <li>THE CEO 공모전 안내</li>
+              <li>제 2회 학생 주도형 SW 해커톤 경진 대회</li>
             </div>
             <div>
-              <div className={styles.news}>
-                <p>05</p>
-                <p>KT AIVLE School 4기 교육학교 추천</p>
-              </div>
-              <div className={styles.news}>
-                <p>06</p>
-                <p>대경권 SW 산학 프로젝트 경진대회</p>
-              </div>
+              <li>KT AIVLE School 4기 교육학교 추천</li>
+              <li>대경권 SW 산학 프로젝트 경진대회</li>
             </div>
             <div>
-              <div className={styles.news}>
-                <p>07</p>
-                <p>제 10회 소개딩 안내</p>
-              </div>
-              <div className={styles.news}>
-                <p>08</p>
-                <p>트레이딩 머신 프로젝트</p>
-              </div>
+              <li>제 10회 소개딩 안내</li>
+              <li>트레이딩 머신 프로젝트</li>
             </div>
-          </div>
+          </ol>
         </div>
         <img src="img/mainImg.png" alt="img" id="mainImg" />
       </div>
@@ -156,7 +172,28 @@ function MainPage() {
 }
 
 export default MainPage;
+const TopBackground = styled.div`
+  /* 배너 배경.. */
+  /* background-color: #04b1b1; */
+  height: 43vh;
+  width: 100vw;
+`;
 
+const Header = styled.div`
+  display: flex;
+  left: 2.8%;
+  position: absolute;
+  top: 4.65%;
+  padding: 2px;
+
+  > img {
+    width: 37.9%;
+    margin: 0px;
+  }
+  > img:hover {
+    cursor: pointer;
+  }
+`;
 const NavBar = styled.div`
   //헤더 바
   display: flex;
@@ -190,17 +227,52 @@ const NavButton = styled.div`
   }
 `;
 
+const ImgContainer = styled.div`
+  display: flex;
+
+  justify-content: center;
+  width: 25.2vw;
+  height: 47vh;
+  position: absolute;
+  top: 22%;
+  left: 4%;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+
+  box-shadow: 0px 0px 10px gray;
+`;
 const ImageWrapper = styled.div`
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  margin: 30px 0 30px 0;
+  display: flex;
+  width: 160px;
+  height: 160px;
+  margin-top: 70px;
+  /* border: 2px solid red; */
   background-color: #e8e8e8;
-  overflow: hidden;
+  border-radius: 145px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; //
+
   > img {
-    width: 180px;
-    height: 180px;
-    border-radius: 145px;
-    margin: 0;
+    width: 150px;
+    height: 150px;
+    border-radius: 150px;
+    margin: 0px;
+  }
+`;
+
+const TextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  > p {
+    margin-bottom: 0px;
   }
 `;

@@ -75,6 +75,13 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
+.flex1 > .div1 {
+  background-color: #ffffff;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
 .section1 img {
   margin-left: 54px;
   width: 12vw;
@@ -137,6 +144,9 @@ body {
 
 /* profile css */
 .profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 25.2vw;
   height: 47vh;
   position: absolute;
@@ -151,22 +161,26 @@ body {
 }
 
 .profile img {
-  width: 180px;
-  height: 180px;
-  border-radius: 145px;
-  margin: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-left: 0;
+  font-size: 5px;
 }
+
 .name {
-  font-family: "Pretendard-Medium";
+  font-family: "Pretendard-SemiBold";
   font-size: 20px;
   margin: 0;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 .academicInfo {
-  font-family: "Pretendard-SemiBold";
+  font-family: "Pretendard-Thin";
   font-size: 15px;
   margin: 0;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 /* 공지 css */
@@ -189,24 +203,15 @@ body {
   display: flex;
   justify-content: space-around;
   list-style-type: decimal-leading-zero;
-  margin-left: 60px;
-  margin-right: 60px;
-  margin-bottom: 30px;
 }
 .announcement h4 {
   font-size: 25px;
   font-family: "Pretendard-Bold";
-  margin-left: 80px;
 }
 .announcement ol {
   padding: 0;
 }
-.news {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.news p:last-child {
+.announcement li {
   font-size: 18px;
   font-family: "Pretendard-Thin";
   /* font-weight: 400; */
@@ -214,7 +219,6 @@ body {
   margin-bottom: 18px;
   padding: 5px;
   background-color: #f2f2f2;
-  margin-left: 10px;
 }
 
 .sectionImg {
