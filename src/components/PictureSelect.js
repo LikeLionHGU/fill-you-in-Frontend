@@ -69,8 +69,8 @@ const ModalText = styled.div`
     justify-content: center;
     align-items: center;
 
-    width: 350px;
-    height: 350px;
+    width: 310px;
+    height: 310px;
     background-color: #e8e8e8;
     border: 2px solid #005f5f;
     border-radius: 400px;
@@ -167,7 +167,7 @@ const ModalInfoText = styled.div`
     width: 100%;
   }
   > div {
-    margin-top: 5%;
+    margin-top: 20px;
   }
 
   > .file-upload-text {
@@ -205,10 +205,10 @@ const ModalButtons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  padding: 30px 30px;
-  align-items: flex-end;
+  /* padding: 30px 30px; */
+  align-items: end;
   /* border: 1px solid blue; */
-  height: 50%;
+  height: 25%;
 `;
 const SaveProfile = styled.form`
   /* border: 1px solid green; */
@@ -327,7 +327,7 @@ function PictureSelect({ isOpen, closeModal, ImgUrl }) {
                     )}
                 </Preview>
               ) : (
-                <div>(프로필 사진)</div>
+                <div>프로필 사진</div>
               )}
             </div>
           </ModalText>

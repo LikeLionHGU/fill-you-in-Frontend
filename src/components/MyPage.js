@@ -5,7 +5,7 @@ import FirstVisitModal from "./FirstVisitModal";
 import ModifyProfile from "./ModifyProfile";
 import PictureSelect from "./PictureSelect";
 import profileSample from "../img/profileSample.png";
-
+import pinImg from "../img/pinned.png";
 const TopBackground = styled.div`
   /* 배너 배경.. */
   background-color: #04b1b1;
@@ -94,7 +94,7 @@ const ProfilePic = styled.div`
 const ProfilePicure = ({ src }) => {
   return (
     <div>
-      <img src={src} alt="profileSample" />
+      <img src={src} alt="profile" />
     </div>
   );
 };
@@ -129,6 +129,7 @@ const Sidebar = styled.div`
   flex-direction: column;
 
   /* border: 2px solid purple; */
+  padding-bottom: 20px;
   border-right: 2px solid #e1e1e1;
   width: 500px;
   padding-top: 10px;
@@ -178,10 +179,24 @@ const Sidebar = styled.div`
     /* border: 2px solid orange; */
   }
   > .profile-contents > .club-technique-list > div > div {
-    display: block;
+    display: flex;
 
     flex-direction: row;
+    font-size: 16px;
+    margin-bottom: 4px;
     /* border: 2px solid orange; */
+  }
+  > .profile-contents > .club-technique-list > div > .skill-pinned > img {
+    display: flex;
+    border-top: 2px solid #00000000;
+    align-items: end;
+    margin-right: 5px;
+
+    width: 10px;
+    height: 15px;
+  }
+  > .profile-contents > .club-technique-list > div > .skills-not-pinned {
+    margin-left: 15px;
   }
 
   > .profile-contents > .profile-contents-name {
@@ -243,6 +258,12 @@ const IntroduceBox = styled.div`
   width: 100%;
 
   margin-bottom: 45px;
+
+  > .introduction-text {
+    font-family: "Pretendard-SemiBold", Helvetica;
+    font-size: 15px;
+    padding-left: 5px;
+  }
 `;
 const ContentBar = styled.div`
   display: flex;
@@ -310,6 +331,17 @@ const TableCol = styled.div`
     margin-bottom: 5px;
 
     /* border: 2px solid red; */
+  }
+  > .table-list > .ispinned > img {
+    margin-right: 5px;
+    width: 10px;
+    height: 16px;
+    border-top: 2px solid #00000000;
+    /* text-decoration: underline; */
+  }
+  > .table-list > .notPinned {
+    margin-left: 15px;
+    /* text-decoration: underline; */
   }
 `;
 const SchoolMajor = styled.div`
@@ -459,7 +491,9 @@ export const MyPage = () => {
               </NavBar>
             </TopBackground>
             <ProfilePic>
-              {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
+              {(profile?.profileImageUrl &&
+                profile?.profileImageUrl === null) ||
+              profile?.profileImageUrl === undefined ? (
                 <>
                   {console.log("no profile", profile?.profileImageUrl)}
                   <ProfilePicure src={profileSample} />
@@ -482,24 +516,6 @@ export const MyPage = () => {
               />
             </EditIcon>
 
-            {/* {profile?.profileImageUrl && profile?.profileImageUrl === null ? (
-              <>
-                {console.log("no profile", profile?.profileImageUrl)}
-                <PictureSelect
-                  isOpen={isPicModalOpen}
-                  closeModal={closePicModal}
-                  src={profileSample}
-                />
-              </>
-            ) : (
-              <>
-                <ProfilePicure
-                  isOpen={isPicModalOpen}
-                  closeModal={closePicModal}
-                  src={profile?.profileImageUrl}
-                />
-              </>
-            )} */}
             {isPicModalOpen === true ? (
               <PictureSelect
                 isOpen={isPicModalOpen}
@@ -524,17 +540,19 @@ export const MyPage = () => {
                         <ModifyProfile setModalOpen={setModalOpen} />
                       )}
                       <Username>
-                        {profile?.firstName} {profile?.lastName}
+                        {profile?.lastName} {profile?.firstName}
                       </Username>
                     </div>
                     <SchoolMajor>
                       한동대학교{" "}
-                      {profile?.department == null ? (
+                      {profile?.department == null ||
+                      profile?.profileImageUrl === undefined ? (
                         <div> (학부) </div> // 아무 값도 없을 때 기본으로 들어가는 부분
                       ) : (
                         <span> {profile?.department}</span>
                       )}
-                      {profile?.semester == null ? (
+                      {profile?.semester == null ||
+                      profile?.profileImageUrl === undefined ? (
                         <div> (학기수)</div>
                       ) : (
                         <span> {profile?.semester}학기</span>
@@ -553,9 +571,23 @@ export const MyPage = () => {
                           ) : (
                             <>
                               {profile?.fields &&
-                                profile?.fields?.map((field) => (
-                                  <div>{field.name}</div>
-                                ))}
+                                profile?.fields?.map((field) =>
+                                  field?.isPinned === true ? (
+                                    <div className="ispinned" key={field.name}>
+                                      <img src={pinImg} alt="pinImg" />
+                                      {field.name}{" "}
+                                    </div>
+                                  ) : null
+                                )}
+
+                              {profile?.fields &&
+                                profile?.fields?.map((field) =>
+                                  field?.isPinned === false ? (
+                                    <div className="notPinned" key={field.name}>
+                                      {field.name}
+                                    </div>
+                                  ) : null
+                                )}
                             </>
                           )}
                         </div>
@@ -568,9 +600,23 @@ export const MyPage = () => {
                           ) : (
                             <>
                               {profile?.jobs &&
-                                profile?.jobs?.map((job) => (
-                                  <div>{job.name}</div>
-                                ))}
+                                profile?.jobs?.map((job) =>
+                                  job?.isPinned === true ? (
+                                    <div className="ispinned" key={job.name}>
+                                      <img src={pinImg} alt="pinImg" />
+                                      {job.name}{" "}
+                                    </div>
+                                  ) : null
+                                )}
+
+                              {profile?.jobs &&
+                                profile?.jobs?.map((job) =>
+                                  job?.isPinned === false ? (
+                                    <div className="notPinned" key={job.name}>
+                                      {job.name}
+                                    </div>
+                                  ) : null
+                                )}
                             </>
                           )}
                         </div>
@@ -589,15 +635,11 @@ export const MyPage = () => {
                           <>
                             {profile?.affiliations &&
                               profile?.affiliations?.map((affiliation) => (
-                                <div>{affiliation.name}</div>
+                                <div key={affiliation.name}>
+                                  {affiliation.name}
+                                </div>
                               ))}
                           </>
-                          // <> // 그냥 배열일 때는 이렇게 써줌(객체처럼 . 써서 접근 안해도됨)
-                          //   {profile?.affiliations &&
-                          //     profile?.affiliations?.map((affiliation) => (
-                          //       <div>{affiliation}</div>
-                          //     ))}
-                          // </>
                         )}
                       </div>
                       <div>
@@ -606,11 +648,29 @@ export const MyPage = () => {
                         ) : (
                           <>
                             {profile?.skills &&
-                              profile?.skills?.map((skill) => (
-                                <div>
-                                  <div>{skill.name}</div>
-                                </div>
-                              ))}
+                              profile?.skills?.map((skill) =>
+                                skill?.isPinned === true ? (
+                                  <div
+                                    className="skill-pinned"
+                                    key={skill.name}
+                                  >
+                                    <img src={pinImg} alt="pinImg" />{" "}
+                                    {skill.name}
+                                  </div>
+                                ) : null
+                              )}
+
+                            {profile?.skills &&
+                              profile?.skills?.map((skill) =>
+                                skill?.isPinned === false ? (
+                                  <div
+                                    className="skills-not-pinned"
+                                    key={skill.name}
+                                  >
+                                    {skill.name}
+                                  </div>
+                                ) : null
+                              )}
                           </>
                         )}
                       </div>
@@ -618,14 +678,14 @@ export const MyPage = () => {
                   </div>
                 </Sidebar>
                 <PageContent>
-                  {/* 화면 오른쪽 콘텐츠 */}
-
                   <IntroduceBox>
-                    {profile?.introduction == null ? (
-                      <p>자기소개란</p>
-                    ) : (
-                      profile?.introduction
-                    )}
+                    <p className="introduction-text">
+                      {profile?.introduction == null ? (
+                        <>자기소개란</>
+                      ) : (
+                        profile?.introduction
+                      )}
+                    </p>
                   </IntroduceBox>
 
                   <ContentBar>

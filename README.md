@@ -1,5 +1,19 @@
 ## Fill You In 
 
+### 채움이 있는 대학생활, 필유인 
+🗂 나의 이력을 관리하고, 프로젝트를 함께할 팀원을 찾아보세요!
+
+## 🔥 개발 기간
+1차: 24/02/08/목 - 00/00/00
+
+## 🧑‍💻 개발자들의 깃허브 
+
+|   sungyu0309   |               |    ejPark43     |
+|   :--------:   |    :-------:|   :--------:    |
+
+<a href="https://github.com/sungyu0309"><img src="https://avatars.githubusercontent.com/u/151641474?v=4" width="250" height="230"></a>         <a href="https://github.com/ejPark43"><img src="https://github.com/LikeLionHGU/fill-you-in-Frontend/assets/130718231/057e0c1d-143a-473d-b247-c1c0475eb15a" width="250" height="230"></a>
+
+
 커밋 convention
 
 |  |  |  |
