@@ -396,6 +396,7 @@ function TeamLounge() {
   const [skills, setSkills] = useState([]);
 
   const [searchInfo, setSearchInfo] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [variable, setVariable] = useState(false);
 
   const SearchTeammates = ({ departments, fields, jobs, skills }) => {
@@ -985,9 +986,9 @@ const SearchItems = styled.div`
     margin-right: 20px;
   }
 `;
-const SearchField = styled.div``;
-const SearchJobs = styled.div``;
-const SearchSkills = styled.div``;
+// const SearchField = styled.div``;
+// const SearchJobs = styled.div``;
+// const SearchSkills = styled.div``;
 const SearchButton = styled.div`
   display: flex;
   justify-content: end;
