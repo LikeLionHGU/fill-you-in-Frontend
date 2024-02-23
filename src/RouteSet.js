@@ -18,7 +18,10 @@ function RouteSet() {
         <Route path="/TeamLounge/Search" element={<TeamLounge />}></Route>
         <Route path="/MyPage" element={<MyPage />}></Route>
         <Route path="/" element={<LoginScreen />}></Route>
-        <Route path="/OtherPage/:id" element={<OtherPersonProfile />}></Route>
+        <Route
+          path="/OtherPage/:id/:isScrapped"
+          element={<OtherPersonProfile />}
+        ></Route>
       </Routes>
     </Router>
   );

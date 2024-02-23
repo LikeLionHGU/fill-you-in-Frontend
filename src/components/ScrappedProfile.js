@@ -448,6 +448,8 @@ const EachProfileCard = ({
 }) => {
   const [isOn, setIsOn] = useState(true); // 스크랩 버튼 클릭 여부 state
 
+  const navigate = useNavigate(); //프로필 방문을 위한 useNavigate
+
   //////// 스크랩 취소 기능
   const deleteScrap = (id) => {
     const scrapUrl =
@@ -608,7 +610,12 @@ const EachProfileCard = ({
         </ContentContainer>
         <CardButtons>
           <button className="invite-button">팀 초대</button>
-          <button className="visit-button">프로필 방문</button>
+          <button
+            className="visit-button"
+            onClick={() => navigate(`/OtherPage/${id}/${isScrapped}`)}
+          >
+            프로필 방문
+          </button>
         </CardButtons>
       </CardContainer>
     </ProfileCard>

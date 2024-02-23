@@ -5,9 +5,7 @@ import WhiteNavBtns from "./WhiteNavBtns";
 import sampleProfileImg from "../img/profileSample.png";
 import scrap from "../img/Scrap.png";
 import noScrap from "../img/noScrap.png";
-import OtherPersonProfile from "./OtherPersonProfile";
 import axios from "axios";
-import profileImg from "../img/profileSample.png";
 
 function ProfileCardExample({
   name,
@@ -19,6 +17,7 @@ function ProfileCardExample({
   navigate,
   memberId,
   profilePic,
+  isScrapped,
 }) {
   const [isOn, setIsOn] = useState(true); // 스크랩 버튼 클릭 여부 state
 
@@ -185,7 +184,7 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate(`/OtherPage/${memberId}`)}
+            onClick={() => navigate(`/OtherPage/${memberId}/${isScrapped}`)}
           >
             프로필 방문
           </button>
@@ -720,8 +719,9 @@ function TeamLounge() {
                         job={item.job}
                         skill={item.skill}
                         navigate={navigate}
-                        id={item.id}
+                        memberId={item.id}
                         profilePic={item.profileImageUrl}
+                        isScrapped={item.isScrapped}
                       />
                     ))}
                   </div>
