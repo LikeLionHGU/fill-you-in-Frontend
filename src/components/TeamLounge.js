@@ -345,6 +345,12 @@ function SelectBox({
   showSelect,
   options,
 }) {
+  console.log("AAAAA", {
+    showSelect,
+    name,
+    bool: showSelect === name,
+    options,
+  });
   return (
     <div>
       <input
@@ -352,13 +358,16 @@ function SelectBox({
         value={inputValue}
         onChange={(event) => handleInputChange(event, name)}
       ></input>
-      {showSelect && inputValue && (
+      {/* {showSelect === name && inputValue && ( */}
+      {inputValue && (
         <select
           id="search"
           size={5}
           onChange={(event) => {
             handleSelectChange(event, name);
+            console.log("please change");
           }}
+          style={{ visibility: showSelect === name ? "visible" : "hidden" }}
         >
           {options &&
             options
@@ -366,11 +375,9 @@ function SelectBox({
                 option.toLowerCase().includes(inputValue.toLowerCase())
               )
               .map((option) => (
-                <>
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                </>
+                <option key={option} value={option}>
+                  {option}
+                </option>
               ))}
         </select>
       )}
@@ -407,7 +414,23 @@ function TeamLounge() {
       field: "",
     });
 
-    const [showSelect, setShowSelect] = useState(false);
+    const [showSelect, setShowSelect] = useState("");
+
+    useEffect(() => {
+      const fn = () => {
+        console.log("AAAB", document.activeElement);
+        const currentEl = document.activeElement;
+        console.log("AAAB", currentEl.tagName);
+        if (currentEl.tagName !== "SELECT")
+          setShowSelect(document.activeElement?.getAttribute("name"));
+      };
+      window.addEventListener("focusin", fn);
+      // window.addEventListener("focusout", fn);
+      return () => {
+        window.removeEventListener("focusin", fn);
+        // window.removeEventListener("focusout", fn);
+      };
+    }, []);
 
     const [inputValue, setInputValue] = useState({
       department: "",
@@ -415,17 +438,18 @@ function TeamLounge() {
       job: "",
       field: "",
     });
+    console.log("AAAA Focus", showSelect);
 
     const { Department, Skill, Job, Field } = inputValue;
 
     const handleInputChange = (event, Name) => {
       const { name, value } = event.target;
-      console.log(event);
-      setInputValue({
-        ...inputValue,
+      console.log("BBBBB", event, { Name, value });
+      setInputValue((prev) => ({
+        ...prev,
         [name]: value,
-      });
-      setShowSelect(value.trim() !== "");
+      }));
+      // setShowSelect(value.trim() !== "");
 
       if (Name === "Name") setPost({ ...post, name: event.target.value });
       if (Name === "Department")
@@ -459,7 +483,7 @@ function TeamLounge() {
       }
       setInputValue({ ...inputValue, [Name]: event.target.value });
       setPost({ ...post, [name]: event.target.value });
-      setShowSelect(false);
+      setShowSelect("");
     };
 
     const submitInfo = async (e) => {
