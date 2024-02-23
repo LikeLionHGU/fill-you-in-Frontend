@@ -75,6 +75,13 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
+.flex1 > .div1 {
+  background-color: #ffffff;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
 .section1 img {
   margin-left: 54px;
   width: 12vw;
@@ -137,6 +144,9 @@ body {
 
 /* profile css */
 .profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 25.2vw;
   height: 47vh;
   position: absolute;
@@ -151,16 +161,20 @@ body {
 }
 
 .profile img {
-  width: 180px;
-  height: 180px;
-  border-radius: 145px;
-  margin: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-left: 0;
+  font-size: 5px;
 }
+
 .name {
   font-family: "Pretendard-Medium";
   font-size: 20px;
   margin: 0;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 .academicInfo {
   font-family: "Pretendard-SemiBold";
