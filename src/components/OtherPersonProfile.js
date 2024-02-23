@@ -480,7 +480,7 @@ export const OtherPersonProfile = () => {
                 <NavButton>팀 관리</NavButton>
                 <NavButton
                   onClick={() => {
-                    window.location.reload("/MyPage");
+                    navigate("/Mypage");
                   }}
                 >
                   마이페이지

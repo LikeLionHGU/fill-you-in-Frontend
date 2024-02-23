@@ -179,7 +179,6 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-
             onClick={() => navigate(`/OtherPage/${id}/${isScrapped}`)}
           >
             프로필 방문
@@ -716,7 +715,7 @@ function TeamLounge() {
                         job={item.job}
                         skill={item.skill}
                         navigate={navigate}
-                        memberId={item.id}
+                        id={item.id}
                         profilePic={item.profileImageUrl}
                         isScrapped={item.isScrapped}
                       />
