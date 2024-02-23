@@ -7,11 +7,14 @@ function InputBox({
   name,
   handleInputChange,
   showSelect,
+  setShowSelect,
   handleSelectChange,
   arrays,
   onRemove,
   options,
   setArrays,
+  isFocus,
+  setIsFocus,
 }) {
   return (
     <>
@@ -21,10 +24,14 @@ function InputBox({
             name={name}
             value={inputValue}
             onChange={handleInputChange}
+            onFocus={() => {
+              setIsFocus({ ...isFocus, [name]: true });
+              setShowSelect(true);
+            }}
           ></input>
         </div>
       </div>
-      {showSelect && inputValue && (
+      {((inputValue && showSelect) || isFocus[name] === true) && (
         <select
           id="search"
           size={3}
@@ -33,6 +40,16 @@ function InputBox({
           }}
         >
           {options &&
+            isFocus &&
+            options.map((option) => (
+              <>
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              </>
+            ))}
+          {options &&
+            inputValue &&
             options
               .filter((option) =>
                 option.toLowerCase().includes(inputValue.toLowerCase())
@@ -127,7 +144,19 @@ function ModifyProfile({ setModalOpen }) {
 
   const { Affiliations, Fields, Jobs, Skills } = inputValue;
 
+  // const [showSelect, setShowSelect] = useState({
+  //   Affiliations: false,
+  //   Fields: false,
+  //   Jobs: false,
+  //   Skills: false,
+  // });
   const [showSelect, setShowSelect] = useState(false);
+  const [isFocus, setIsFocus] = useState({
+    Affiliations: false,
+    Fields: false,
+    Jobs: false,
+    Skills: false,
+  });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -135,7 +164,8 @@ function ModifyProfile({ setModalOpen }) {
       ...inputValue,
       [name]: value,
     });
-    setShowSelect(value.trim() !== "");
+
+    setIsFocus(false);
   };
 
   const changeValue = (e) => {
@@ -167,6 +197,7 @@ function ModifyProfile({ setModalOpen }) {
   const handleSelectChange = (event, arrays, setArrays, Name) => {
     setInputValue({ ...inputValue, [Name]: "" });
     setShowSelect(false);
+    setIsFocus(false);
     if (Name !== "Affiliations") {
       setArrays([...arrays, { name: event.target.value, isPinned: false }]);
     } else {
@@ -431,11 +462,14 @@ function ModifyProfile({ setModalOpen }) {
                     name="Affiliations"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
+                    setShowSelect={setShowSelect}
                     handleSelectChange={handleSelectChange}
                     arrays={affiliations}
                     onRemove={onRemove}
                     options={affiliationsOption}
                     setArrays={setAffiliations}
+                    isFocus={isFocus}
+                    setIsFocus={setIsFocus}
                   />
                 </Input2>
                 <Input2>
@@ -445,11 +479,14 @@ function ModifyProfile({ setModalOpen }) {
                     name="Fields"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
+                    setShowSelect={setShowSelect}
                     handleSelectChange={handleSelectChange}
                     arrays={fields}
                     onRemove={onRemove}
                     options={fieldsOption}
                     setArrays={setFields}
+                    isFocus={isFocus}
+                    setIsFocus={setIsFocus}
                   />
                 </Input2>
                 <Input2>
@@ -459,11 +496,14 @@ function ModifyProfile({ setModalOpen }) {
                     name="Jobs"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
+                    setShowSelect={setShowSelect}
                     handleSelectChange={handleSelectChange}
                     arrays={jobs}
                     onRemove={onRemove}
                     options={jobsOption}
                     setArrays={setJobs}
+                    isFocus={isFocus}
+                    setIsFocus={setIsFocus}
                   />
                 </Input2>
                 <Input2>
@@ -473,11 +513,14 @@ function ModifyProfile({ setModalOpen }) {
                     name="Skills"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
+                    setShowSelect={setShowSelect}
                     handleSelectChange={handleSelectChange}
                     arrays={skills}
                     onRemove={onRemove}
                     options={skillsOption}
                     setArrays={setSkills}
+                    isFocus={isFocus}
+                    setIsFocus={setIsFocus}
                   />
                 </Input2>
               </div>
@@ -660,6 +703,12 @@ const Input2 = styled.div`
     width: 100%;
     min-height: 2vh;
     border: none;
+    box-shadow: 0 0 8px 1px #0000002a;
+    border-radius: 7px;
+
+    &:focus {
+      outline: none;
+    }
 
     > option {
     }
