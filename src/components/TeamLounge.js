@@ -118,25 +118,26 @@ function ProfileCardExample({
           {profilePic === null || profilePic === undefined ? (
             <img src={sampleProfileImg} alt="profileImg" />
           ) : (
-            <img src={profilePic} alt="profileImg" />
+            <>
+              <img className="img-exist" src={profilePic} alt="profileImg" />
+            </>
           )}
-          {/* <img src={profileImg} alt="profileImg" /> */}
         </ProfileNScrap>
         <Name>{name}</Name>
         <SchoolInfo>
-          한동대학교{" "}
+          한동대학교
           {department ? (
             <> {department}</>
           ) : (
             <>
-              <span> (학부)</span>
+              <span> (학부) </span>
             </>
           )}
           {semester ? (
             <> {semester}학기</>
           ) : (
             <>
-              <span> (학기)</span>
+              <span> (학기) </span>
             </>
           )}
         </SchoolInfo>
@@ -261,6 +262,7 @@ const SchoolInfo = styled.div`
   padding: 5px;
   > span {
     margin-left: 5px;
+    margin-right: 5px;
     color: lightgray;
   }
 `;

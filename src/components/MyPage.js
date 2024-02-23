@@ -91,7 +91,7 @@ const ProfilePic = styled.div`
     width: 215px;
   }
 `;
-const ProfilePicure = ({ src }) => {
+const ProfilePicture = ({ src }) => {
   return (
     <div>
       <img src={src} alt="profile" />
@@ -491,16 +491,16 @@ export const MyPage = () => {
               </NavBar>
             </TopBackground>
             <ProfilePic>
-              {(profile?.profileImageUrl &&
+              {(!profile?.profileImageUrl &&
                 profile?.profileImageUrl === null) ||
               profile?.profileImageUrl === undefined ? (
                 <>
                   {console.log("no profile", profile?.profileImageUrl)}
-                  <ProfilePicure src={profileSample} />
+                  <ProfilePicture src={profileSample} />
                 </>
               ) : (
                 <>
-                  <ProfilePicure src={profile?.profileImageUrl} />
+                  <ProfilePicture src={profile?.profileImageUrl} />
                 </>
               )}
             </ProfilePic>
