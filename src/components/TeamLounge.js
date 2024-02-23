@@ -15,11 +15,12 @@ function ProfileCardExample({
   job,
   skill,
   navigate,
-  memberId,
+  id,
   profilePic,
   isScrapped,
 }) {
-  const [isOn, setIsOn] = useState(true); // 스크랩 버튼 클릭 여부 state
+  const [scrapped, setScrapped] = useState(isScrapped);
+  const [isOn, setIsOn] = useState(scrapped); // 스크랩 버튼 클릭 여부 state
 
   const deleteScrap = (id) => {
     const scrapUrl =
@@ -43,6 +44,8 @@ function ProfileCardExample({
       .catch(function (error) {
         console.log(error);
       });
+    // isOff = !isOff;
+    // console.log("함수 안에서: ", isOff);
   };
   //스크랩 취소 기능
 
@@ -77,46 +80,38 @@ function ProfileCardExample({
   return (
     <ProfileCard>
       <ScrapIcon>
-        <button
-          className="scrap-Btn"
-          type="button" // type을 button으로 해야 클릭 시 submit 되지 않음
-          onClick={() => {
-            setIsOn(!isOn);
-
-            if (isOn === false) {
-              deleteScrap(memberId);
-            }
-          }}
-        >
-          {/* {isScrapped ? ( */}
-          {isOn ? (
-            <>
-              {
-                <img // scrapped가 되어있다면 초록색 채워진 스크랩 아이콘
-                  src={noScrap}
-                  alt="noscrapIcon"
-                  className="noscrap"
-                  onClick={() => {
-                    applyScrap(memberId);
-                    console.log("apply");
-                  }}
-                />
-              }
-            </>
-          ) : (
-            <>
-              <img // 스크랩 안 되어있으면 초록색 테두리 스크랩 아이콘
-                src={scrap}
-                alt="ScrapIcon"
-                className="scrap"
-                onClick={() => {
-                  deleteScrap(memberId);
-                  console.log("delete");
-                }}
-              />
-            </>
-          )}
-        </button>
+        {scrapped ? (
+          <button className="scrap-Btn" type="button">
+            <img // Scrapped
+              src={scrap}
+              alt="ScrapIcon"
+              className="scrap"
+              onClick={() => {
+                deleteScrap(id);
+                console.log("delete");
+                if (isOn === true) {
+                  setIsOn(!isOn);
+                  setScrapped(!scrapped);
+                }
+              }}
+            />
+          </button>
+        ) : (
+          <button className="scrap-Btn" type="button">
+            <img // NO Scrap
+              src={noScrap}
+              alt="noscrapIcon"
+              className="noscrap"
+              onClick={() => {
+                applyScrap(id);
+                if (isOn === false) {
+                  setIsOn(!isOn);
+                  setScrapped(!scrapped);
+                }
+              }}
+            />
+          </button>
+        )}
       </ScrapIcon>
       <CardContainer>
         <ProfileNScrap>
@@ -184,7 +179,8 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate(`/OtherPage/${memberId}/${isScrapped}`)}
+
+            onClick={() => navigate(`/OtherPage/${id}/${isScrapped}`)}
           >
             프로필 방문
           </button>
