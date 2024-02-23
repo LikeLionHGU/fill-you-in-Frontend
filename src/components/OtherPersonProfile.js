@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import FirstVisitModal from "./FirstVisitModal";
 import ModifyProfile from "./ModifyProfile";
@@ -352,16 +352,17 @@ const None = styled.span`
 export const OtherPersonProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isPicModalOpen, setIsPicModalOpen] = useState(false); // 프로필 수정 모달
-  const { memberId } = useLocation();
 
   const [loading, setLoading] = useState(false);
   //
-  // 프로파일 설정하고 받아오는 부분
+  const { id } = useParams();
+  console.log("state " + id);
+
   const [profile, setProfile] = useState([]);
   const getProfile = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/${memberId}/profile`,
+        `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/${id}/profile`,
         {
           method: "GET", //(+ GET인지 POST인지 명세 확인)
           headers: {
