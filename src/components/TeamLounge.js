@@ -7,6 +7,7 @@ import scrap from "../img/Scrap.png";
 import noScrap from "../img/noScrap.png";
 import OtherPersonProfile from "./OtherPersonProfile";
 import axios from "axios";
+import profileImg from "../img/profileSample.png";
 
 function ProfileCardExample({
   name,
@@ -16,7 +17,7 @@ function ProfileCardExample({
   job,
   skill,
   navigate,
-  id,
+  memberId,
   profilePic,
 }) {
   const [isOn, setIsOn] = useState(true); // 스크랩 버튼 클릭 여부 state
@@ -84,7 +85,7 @@ function ProfileCardExample({
             setIsOn(!isOn);
 
             if (isOn === false) {
-              deleteScrap(id);
+              deleteScrap(memberId);
             }
           }}
         >
@@ -97,7 +98,7 @@ function ProfileCardExample({
                   alt="noscrapIcon"
                   className="noscrap"
                   onClick={() => {
-                    applyScrap(id);
+                    applyScrap(memberId);
                     console.log("apply");
                   }}
                 />
@@ -110,7 +111,7 @@ function ProfileCardExample({
                 alt="ScrapIcon"
                 className="scrap"
                 onClick={() => {
-                  deleteScrap(id);
+                  deleteScrap(memberId);
                   console.log("delete");
                 }}
               />
@@ -184,7 +185,7 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate(OtherPersonProfile(id))}
+            onClick={() => navigate(`/OtherPage/${memberId}`)}
           >
             프로필 방문
           </button>
@@ -246,7 +247,6 @@ const ProfileNScrap = styled.div`
   height: 100px;
   border-radius: 100px;
   overflow: hidden;
-  border: 2px solid red;
 
   > img {
     // 프로필 이미지

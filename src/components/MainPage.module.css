@@ -1,3 +1,40 @@
+@font-face {
+  font-family: "Pretendard-Black";
+  src: url("../font/Pretendard-Black.woff");
+}
+@font-face {
+  font-family: "Pretendard-Bold";
+  src: url("../font/Pretendard-Bold.woff");
+}
+@font-face {
+  font-family: "Pretendard-ExtraBold";
+  src: url("../font/Pretendard-ExtraBold.woff");
+}
+@font-face {
+  font-family: "Pretendard-ExtraLight";
+  src: url("../font/Pretendard-ExtraLight.woff");
+}
+@font-face {
+  font-family: "Pretendard-Light";
+  src: url("../font/Pretendard-Light.woff");
+}
+@font-face {
+  font-family: "Pretendard-Medium";
+  src: url("../font/Pretendard-Medium.woff");
+}
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("../font/Pretendard-Regular.woff");
+}
+@font-face {
+  font-family: "Pretendard-SemiBold";
+  src: url("../font/Pretendard-SemiBold.woff");
+}
+@font-face {
+  font-family: "Pretendard-Thin";
+  src: url("../font/Pretendard-Thin.woff");
+}
+
 font-family: "Pretendard-SemiBold", Helvetica;
 
 .mainpage2 {
@@ -94,7 +131,7 @@ body {
 .section1 input::placeholder {
   color: white;
   font-size: 18px;
-  font-family: "Pretendard-Regular";
+  font-family: "Pretendard-Medium";
   padding-left: 30px;
 }
 
@@ -154,13 +191,15 @@ body {
 }
 .announcement h4 {
   font-size: 25px;
+  font-family: "Pretendard-Bold";
 }
 .announcement ol {
   padding: 0;
 }
 .announcement li {
   font-size: 18px;
-  font-weight: 400;
+  font-family: "Pretendard-Thin";
+  /* font-weight: 400; */
   border-radius: 10px;
   margin-bottom: 18px;
   padding: 5px;

@@ -261,7 +261,7 @@ const ProfileNScrap = styled.div`
   height: 100px;
   border-radius: 100px;
   overflow: hidden;
-  border: 2px solid red;
+
   > img {
     // 프로필 이미지
     width: 110px;
