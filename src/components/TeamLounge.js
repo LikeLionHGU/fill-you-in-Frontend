@@ -181,7 +181,7 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate(`/OtherPage/${id}/${isScrapped}`)}
+            onClick={() => navigate(`/OtherPage/${id}/${scrapped}`)}
           >
             프로필 방문
           </button>
