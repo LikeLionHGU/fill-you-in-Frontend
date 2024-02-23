@@ -211,13 +211,12 @@ function ModifyProfile({ setModalOpen }) {
         },
 
         body: JSON.stringify(modifyProfileInfo),
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
       });
-      // .then((json) => {
-      //   console.log(json.ok);
-      //   if (!!json.ok) {
-      //     window.location.reload();
-      //   }
-      // });
 
       if (!response.ok) {
         throw new Error(`HTTP Error! Status: ${response.status}`);
