@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WhiteNavBtns from "./WhiteNavBtns";
-import profileImg from "../img/profileSample.png";
-
+import sampleProfileImg from "../img/profileSample.png";
+import scrap from "../img/Scrap.png";
+import noScrap from "../img/noScrap.png";
 import OtherPersonProfile from "./OtherPersonProfile";
+import axios from "axios";
 
 function ProfileCardExample({
   name,
@@ -15,29 +17,167 @@ function ProfileCardExample({
   skill,
   navigate,
   id,
+  profilePic,
 }) {
+  const [isOn, setIsOn] = useState(true); // 스크랩 버튼 클릭 여부 state
+
+  const deleteScrap = (id) => {
+    const scrapUrl =
+      process.env.REACT_APP_BACK_URL + "/api/fillyouin/scrap-member";
+    axios
+      .delete(scrapUrl, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+
+        // delete 함..
+        params: {
+          scrapMemberId: id,
+        },
+      })
+      //성공시 then 실행
+      .then(function (response) {
+        console.log(response);
+      })
+      //실패 시 catch 실행
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  //스크랩 취소 기능
+
+  //스크랩 적용 기능
+  const applyScrap = (id) => {
+    const scrapUrl =
+      process.env.REACT_APP_BACK_URL + "/api/fillyouin/scrap-member";
+    axios
+      .post(
+        scrapUrl,
+        {}, // post 방법에서는 중간에 data가 들어가므로, 아무것도 안 들어갈 땐 이렇게 {}로 빈칸 넣어주면 해결됨. axios.post(url[, data[, config]])
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+          },
+
+          params: {
+            scrapMemberId: id,
+          },
+        }
+      )
+      //성공시 then 실행
+      .then(function (response) {
+        console.log(response);
+      })
+      //실패 시 catch 실행
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <ProfileCard>
+      <ScrapIcon>
+        <button
+          className="scrap-Btn"
+          type="button" // type을 button으로 해야 클릭 시 submit 되지 않음
+          onClick={() => {
+            setIsOn(!isOn);
+
+            if (isOn === false) {
+              deleteScrap(id);
+            }
+          }}
+        >
+          {/* {isScrapped ? ( */}
+          {isOn ? (
+            <>
+              {
+                <img // scrapped가 되어있다면 초록색 채워진 스크랩 아이콘
+                  src={noScrap}
+                  alt="noscrapIcon"
+                  className="noscrap"
+                  onClick={() => {
+                    applyScrap(id);
+                    console.log("apply");
+                  }}
+                />
+              }
+            </>
+          ) : (
+            <>
+              <img // 스크랩 안 되어있으면 초록색 테두리 스크랩 아이콘
+                src={scrap}
+                alt="ScrapIcon"
+                className="scrap"
+                onClick={() => {
+                  deleteScrap(id);
+                  console.log("delete");
+                }}
+              />
+            </>
+          )}
+        </button>
+      </ScrapIcon>
       <CardContainer>
         <ProfileNScrap>
-          <img src={profileImg} alt="profileImg" />
+          {profilePic === null || profilePic === undefined ? (
+            <img src={sampleProfileImg} alt="profileImg" />
+          ) : (
+            <img src={profilePic} alt="profileImg" />
+          )}
+          {/* <img src={profileImg} alt="profileImg" /> */}
         </ProfileNScrap>
         <Name>{name}</Name>
         <SchoolInfo>
-          한동대학교 {department} {semester}학기
+          한동대학교{" "}
+          {department ? (
+            <> {department}</>
+          ) : (
+            <>
+              <span> (학부)</span>
+            </>
+          )}
+          {semester ? (
+            <> {semester}학기</>
+          ) : (
+            <>
+              <span> (학기)</span>
+            </>
+          )}
         </SchoolInfo>
         <ContentContainer>
           <div className="content-row">
             <div className="content-row-title">희망분야</div>
-            <div className="content-row-content">{field}</div>
+            {/* <div className="content-row-content">{field}</div> */}
+            {field ? (
+              <div className="content-row-content">{field}</div>
+            ) : (
+              <div className="content-row-content">
+                <span>(없음)</span>
+              </div>
+            )}
           </div>
           <div className="content-row">
             <div className="content-row-title">관심직무</div>
-            <div className="content-row-content">{job}</div>
+            {/* <div className="content-row-content">{job}</div> */}
+            {job ? (
+              <div className="content-row-content">{job}</div>
+            ) : (
+              <div className="content-row-content">
+                <span>(없음)</span>
+              </div>
+            )}
           </div>
           <div className="content-row">
             <div className="content-row-title">보유기술</div>
-            <div className="content-row-content">{skill}</div>
+            {/* <div className="content-row-content">{skill}</div> */}
+            {skill ? (
+              <div className="content-row-content">{skill}</div>
+            ) : (
+              <div className="content-row-content">
+                <span>(없음)</span>
+              </div>
+            )}
           </div>
         </ContentContainer>
         <CardButtons>
@@ -61,12 +201,33 @@ const ProfileCard = styled.div`
   box-shadow: 0 0 8px 1px #0000002a; // drop-down shadow 모달 그림자
   padding: 15px;
   width: 200px;
-  height: 290px;
+  height: 310px;
   font-family: "Pretendard-SemiBold", Helvetica;
   margin-right: 30px;
   margin-bottom: 30px;
 `;
-
+const ScrapIcon = styled.div`
+  /* z-index: 3000; */
+  position: relative; // 스크랩 아이콘 고정...
+  > .scrap-Btn {
+    padding-left: 2px;
+    margin-right: 5px;
+  }
+  > button {
+    border: none;
+    background-color: white;
+    position: absolute; // 스크랩 아이콘 고정...
+    top: 3px;
+    left: 180px;
+    z-index: 3500;
+    width: 25px;
+    transition: 0.3s;
+    cursor: pointer;
+    > img {
+      width: 20px;
+    }
+  }
+`;
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -74,14 +235,23 @@ const CardContainer = styled.div`
   justify-content: space-evenly;
   width: 100%;
   /* border: 2px solid black; */
+  position: relative;
 `;
 
 const ProfileNScrap = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  overflow: hidden;
+  border: 2px solid red;
+
   > img {
     // 프로필 이미지
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
   }
   padding: 5px;
 `;
@@ -95,6 +265,10 @@ const SchoolInfo = styled.div`
   display: flex;
   font-size: 12px;
   padding: 5px;
+  > span {
+    margin-left: 5px;
+    color: lightgray;
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -123,6 +297,9 @@ const ContentContainer = styled.div`
 
   > .content-row > .content-row-content {
     /* border: 2px solid green; */
+    > span {
+      color: lightgray;
+    }
   }
 `;
 
@@ -140,9 +317,12 @@ const CardButtons = styled.div`
     border: none;
     border-radius: 20px;
     /* padding: 2px 5px; */
-
     height: 30px;
     width: 90px;
+    cursor: pointer;
+    &:hover {
+      background-color: #008888;
+    }
   }
   > .visit-button {
     background-color: white;
@@ -154,6 +334,10 @@ const CardButtons = styled.div`
     /* padding: 5px 10px; */
     height: 30px;
     width: 90px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(28, 28, 28, 0.15);
+    }
   }
 `;
 function SelectBox({
@@ -528,6 +712,7 @@ function TeamLounge() {
                   <div className="profiles-container">
                     {searchInfo.map((item) => (
                       <ProfileCardExample
+                        key={item.id}
                         name={item.lastName}
                         department={item.department}
                         semester={item.semester}
@@ -535,7 +720,8 @@ function TeamLounge() {
                         job={item.job}
                         skill={item.skill}
                         navigate={navigate}
-                        memberId={item.id}
+                        id={item.id}
+                        profilePic={item.profileImageUrl}
                       />
                     ))}
                   </div>

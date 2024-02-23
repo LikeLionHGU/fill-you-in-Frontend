@@ -261,9 +261,9 @@ const ProfileNScrap = styled.div`
   height: 100px;
   border-radius: 100px;
   overflow: hidden;
+  border: 2px solid red;
   > img {
     // 프로필 이미지
-
     width: 110px;
     height: 110px;
   }
@@ -278,7 +278,9 @@ const SchoolInfo = styled.div`
   display: flex;
   font-size: 12px;
   padding: 5px;
+
   > span {
+    margin-left: 5px;
     color: lightgray;
   }
 `;
@@ -498,8 +500,6 @@ const EachProfileCard = ({
       .catch(function (error) {
         console.log(error);
       });
-
-    console.log("스크랩 완료");
   };
 
   return (
