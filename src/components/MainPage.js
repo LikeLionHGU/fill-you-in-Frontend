@@ -23,6 +23,18 @@ function MainPage() {
       navigate("/");
     }
   };
+  const CheckLogin = () => {
+    if (!localStorage.getItem("loginToken")) {
+      alert("문제가 발생했습니다. 로그인 페이지로 이동합니다");
+      localStorage.getItem("loginToken");
+      navigate("/");
+    }
+  };
+  useEffect(() => {
+    console.log("CHECK LOGIN");
+    CheckLogin();
+  }, []);
+
   const navigate = useNavigate();
   const [post, setPost] = useState({
     firstName: "",
@@ -47,7 +59,7 @@ function MainPage() {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
+        throw new Error(`HTTP 에러 Status: ${response.status}`);
       }
       const responseData = await response.json();
       setPost({
@@ -58,9 +70,9 @@ function MainPage() {
         profileImageUrl: responseData.profileImageUrl,
         email: responseData.email,
       });
-      console.log("Server Response", responseData); // 받아온 데이터를 콘솔로 확인
     } catch (error) {
       console.error("error", error);
+      // console.log(error);
     }
   };
 
