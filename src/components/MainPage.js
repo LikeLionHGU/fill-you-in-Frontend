@@ -68,22 +68,38 @@ function MainPage() {
     getProfile();
   }, []);
 
+  const handleGoMainPage = () => {
+    navigate("/MainPage");
+  };
+
   return (
     <div className={styles.mainpage2}>
       <div className={styles.section1}>
         <div className={styles.flex1}>
-          <img src="/img/fill-you-in-logo.png" alt="logo" />
-          <NavBar>
-            <NavButton>활동 찾기</NavButton>
-            <NavButton onClick={() => navigate("/TeamLounge/Search")}>
-              팀원 라운지
-            </NavButton>
-            <NavButton>팀 관리</NavButton>
-            <NavButton onClick={() => navigate("/Mypage")}>
-              마이페이지
-            </NavButton>
-            <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
-          </NavBar>
+          <div className="div1">
+            <TopBackground>
+              <Header>
+                <img
+                  onClick={() => {
+                    window.location.reload("/MainPage");
+                  }}
+                  alt="LogoImage"
+                  src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/--@2x.png"
+                />
+              </Header>
+              <NavBar>
+                <NavButton>활동 찾기</NavButton>
+                <NavButton onClick={() => navigate("/TeamLounge/Search")}>
+                  팀원 라운지
+                </NavButton>
+                <NavButton>팀 관리</NavButton>
+                <NavButton onClick={() => navigate("/Mypage")}>
+                  마이페이지
+                </NavButton>
+                <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
+              </NavBar>
+            </TopBackground>
+          </div>
         </div>
         <div className={styles.phrases}>
           <p>
@@ -108,7 +124,6 @@ function MainPage() {
                   <ProfilePicture src={post?.profileImageUrl} />
                 </>
               )}
-              {/* <img src={post.profileImageUrl} alt="img" /> */}
             </>
           </>
           <TextWrapper>
@@ -157,7 +172,28 @@ function MainPage() {
 }
 
 export default MainPage;
+const TopBackground = styled.div`
+  /* 배너 배경.. */
+  /* background-color: #04b1b1; */
+  height: 43vh;
+  width: 100vw;
+`;
 
+const Header = styled.div`
+  display: flex;
+  left: 2.8%;
+  position: absolute;
+  top: 4.65%;
+  padding: 2px;
+
+  > img {
+    width: 37.9%;
+    margin: 0px;
+  }
+  > img:hover {
+    cursor: pointer;
+  }
+`;
 const NavBar = styled.div`
   //헤더 바
   display: flex;
@@ -213,8 +249,8 @@ const ImageWrapper = styled.div`
   display: flex;
   width: 160px;
   height: 160px;
-  margin-top: 50px;
-  border: 2px solid red;
+  margin-top: 70px;
+  /* border: 2px solid red; */
   background-color: #e8e8e8;
   border-radius: 145px;
   display: flex;
@@ -235,4 +271,8 @@ const TextWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  > p {
+    margin-bottom: 0px;
+  }
 `;
