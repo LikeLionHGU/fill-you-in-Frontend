@@ -33,6 +33,7 @@ function MainPage() {
   useEffect(() => {
     console.log("CHECK LOGIN");
     CheckLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const navigate = useNavigate();
@@ -72,17 +73,12 @@ function MainPage() {
       });
     } catch (error) {
       console.error("error", error);
-      // console.log(error);
     }
   };
 
   useEffect(() => {
     getProfile();
   }, []);
-
-  const handleGoMainPage = () => {
-    navigate("/MainPage");
-  };
 
   return (
     <div className={styles.mainpage2}>
@@ -260,45 +256,6 @@ const NavButton = styled.div`
     font-weight: 500;
     cursor: pointer;
     border-radius: 5px;
-  }
-`;
-
-const ImgContainer = styled.div`
-  display: flex;
-
-  justify-content: center;
-  width: 25.2vw;
-  height: 47vh;
-  position: absolute;
-  top: 22%;
-  left: 4%;
-  background-color: white;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-
-  box-shadow: 0px 0px 10px gray;
-`;
-const ImageWrapper = styled.div`
-  display: flex;
-  width: 160px;
-  height: 160px;
-  margin-top: 70px;
-  /* border: 2px solid red; */
-  background-color: #e8e8e8;
-  border-radius: 145px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; //
-
-  > img {
-    width: 150px;
-    height: 150px;
-    border-radius: 150px;
-    margin: 0px;
   }
 `;
 
