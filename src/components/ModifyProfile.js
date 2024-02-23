@@ -660,6 +660,12 @@ const Input2 = styled.div`
     width: 100%;
     min-height: 2vh;
     border: none;
+    box-shadow: 0 0 8px 1px #0000002a;
+    border-radius: 7px;
+
+    &:focus {
+      outline: none;
+    }
 
     > option {
     }

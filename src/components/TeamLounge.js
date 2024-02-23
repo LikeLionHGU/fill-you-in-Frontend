@@ -367,7 +367,9 @@ function SelectBox({
             handleSelectChange(event, name);
             console.log("please change");
           }}
-          style={{ visibility: showSelect === name ? "visible" : "hidden" }}
+          style={{
+            visibility: showSelect === name ? "visible" : "hidden",
+          }}
         >
           {options &&
             options
@@ -1007,8 +1009,9 @@ const SearchIcons = styled.div`
     width: 256px;
     height: 50px;
     background-color: #ffffff;
-    border: solid 1px black;
-    border-radius: 4px;
+    box-shadow: 0 0 8px 1px #0000002a;
+    border-radius: 7px;
+    border: none;
     height: 30px;
     z-index: 400;
     position: absolute;
