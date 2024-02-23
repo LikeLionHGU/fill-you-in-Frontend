@@ -5,6 +5,7 @@ import WhiteNavBtns from "./WhiteNavBtns";
 import sampleProfileImg from "../img/profileSample.png";
 import scrap from "../img/Scrap.png";
 import noScrap from "../img/noScrap.png";
+import placeholderImg from "../img/searchImg.png";
 import axios from "axios";
 
 function ProfileCardExample({
@@ -352,7 +353,7 @@ function SelectBox({
       {showSelect && inputValue && (
         <select
           id="search"
-          size={3}
+          size={5}
           onChange={(event) => {
             handleSelectChange(event, name);
           }}
@@ -497,12 +498,14 @@ function TeamLounge() {
             <NoSearchIcons>
               <NameSearch>
                 <div>이름</div>
-                <input
-                  className={"name-search-box"}
-                  placeholder="검색어 입력"
-                  name="Name"
-                  onChange={(e) => handleInputChange(e, "Name")}
-                />
+                <div>
+                  <input
+                    className={"name-search-box"}
+                    placeholder="검색어 입력"
+                    name="Name"
+                    onChange={(e) => handleInputChange(e, "Name")}
+                  />
+                </div>
               </NameSearch>
               <DepartmentSearch>
                 <div>학부</div>
@@ -517,11 +520,13 @@ function TeamLounge() {
               </DepartmentSearch>
               <SemesterSearch>
                 <div>학기 수</div>
-                <input
-                  placeholder="검색어 입력"
-                  name="Semester"
-                  onChange={(e) => handleInputChange(e, "Semester")}
-                />
+                <div>
+                  <input
+                    placeholder="검색어 입력"
+                    name="Semester"
+                    onChange={(e) => handleInputChange(e, "Semester")}
+                  />
+                </div>
               </SemesterSearch>
             </NoSearchIcons>
             <SearchIcons>
@@ -958,6 +963,29 @@ const SearchIcons = styled.div`
     width: 100px;
     color: #005f5f;
     /* margin-right: 20px; */
+  }
+
+  > div > div > input {
+    width: 250px;
+    background-color: #f4f3f1;
+    border: none;
+    border-radius: 4px;
+    height: 30px;
+    border: none;
+    background-color: #f4f3f1;
+    background-image: url(${placeholderImg});
+    background-repeat: no-repeat;
+    background-position: 210px center;
+  }
+  > div > div > select {
+    width: 256px;
+    height: 50px;
+    background-color: #ffffff;
+    border: solid 1px black;
+    border-radius: 4px;
+    height: 30px;
+    z-index: 400;
+    position: absolute;
   }
 
   > div > input {
