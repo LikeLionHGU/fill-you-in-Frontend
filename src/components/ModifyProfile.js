@@ -483,7 +483,7 @@ function ModifyProfile({ setModalOpen }) {
               </div>
               <Input3>
                 <p className="title">자기소개</p>
-                <input
+                <textarea
                   name="introduction"
                   placeholder="직접 입력하세요"
                   value={post.introduction}
@@ -706,10 +706,11 @@ const Input3 = styled.div`
     margin: 10px 0px 10px 0px;
   }
 
-  > input {
+  > textarea {
     background-color: #f4f3f1;
     width: 98%;
     height: 80%;
     border: none;
+    white-space: pre-wrap;
   }
 `;
