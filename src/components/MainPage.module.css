@@ -75,6 +75,13 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
+.flex1 > .div1 {
+  background-color: #ffffff;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
 .section1 img {
   margin-left: 54px;
   width: 12vw;
@@ -137,6 +144,9 @@ body {
 
 /* profile css */
 .profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 25.2vw;
   height: 47vh;
   position: absolute;
