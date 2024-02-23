@@ -4,7 +4,18 @@ import styled from "styled-components";
 import WhiteNavBtns from "./WhiteNavBtns";
 import profileImg from "../img/profileSample.png";
 
-function ProfileCardExample({ name, department, semester, field, job, skill }) {
+import OtherPersonProfile from "./OtherPersonProfile";
+
+function ProfileCardExample({
+  name,
+  department,
+  semester,
+  field,
+  job,
+  skill,
+  navigate,
+  id,
+}) {
   return (
     <ProfileCard>
       <CardContainer>
@@ -31,7 +42,12 @@ function ProfileCardExample({ name, department, semester, field, job, skill }) {
         </ContentContainer>
         <CardButtons>
           <button className="invite-button">팀 초대</button>
-          <button className="visit-button">프로필 방문</button>
+          <button
+            className="visit-button"
+            onClick={() => navigate(OtherPersonProfile(id))}
+          >
+            프로필 방문
+          </button>
         </CardButtons>
       </CardContainer>
     </ProfileCard>
@@ -518,6 +534,8 @@ function TeamLounge() {
                         field={item.field}
                         job={item.job}
                         skill={item.skill}
+                        navigate={navigate}
+                        memberId={item.id}
                       />
                     ))}
                   </div>
