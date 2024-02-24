@@ -712,6 +712,7 @@ function TeamLounge() {
               <ScrapWrapper>
                 <Profiles>
                   <div className="profiles-container">
+                    {/* <div> {searchInfo?.profileCards?.firstName}</div> */}
                     {searchInfo.map((item) => (
                       <ProfileCardExample
                         key={item.id}
@@ -838,9 +839,10 @@ const ContentWrapper = styled.div`
 const ScrapWrapper = styled.div`
   display: flex;
   /* border: 2px solid red; */
-  flex-direction: row;
+  /* flex-direction: row; */
+  flex-direction: column;
   width: 100%; // 위에서 좌우에 padding 7% 넣어서 너비를 100%해도 빈칸 생김.
-  min-height: 500px;
+  /* min-height: 500px; */
 `;
 const ContentText = styled.div`
   // 팀원 찾아보세요 text //
@@ -865,11 +867,22 @@ const Profiles = styled.div`
   height: 20px; // 임시
   margin-top: 20px;
   /* border: 2px solid blue; */
+  display: flex;
+  flex-wrap: wrap;
+  height: 500px; // 임시
   width: 100%;
+
+  padding-left: 5px;
+  padding-top: 5px;
+  overflow: scroll;
+
   > .profiles-container {
-    width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%; // 임시
+    /* width: 100%; */
+    /* display: flex; */
+    /* flex-direction: row; */
   }
 `;
 
