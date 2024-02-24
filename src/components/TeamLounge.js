@@ -619,7 +619,6 @@ function TeamLounge() {
             </SearchButton>
           </SearchContainer>
         </ProfileSearch>
-        <Profiles></Profiles>
       </ContentWrapper>
     );
   };
@@ -890,6 +889,20 @@ const ScrapWrapper = styled.div`
   flex-direction: column;
   width: 100%; // 위에서 좌우에 padding 7% 넣어서 너비를 100%해도 빈칸 생김.
   /* min-height: 500px; */
+  > div {
+    display: flex;
+    height: 20px; // 임시
+    margin-top: 20px;
+    /* border: 2px solid blue; */
+    display: flex;
+    flex-wrap: wrap;
+    height: 500px; // 임시
+    width: 100%;
+
+    padding-left: 5px;
+    padding-top: 5px;
+    overflow: scroll;
+  }
 `;
 const ContentText = styled.div`
   // 팀원 찾아보세요 text //
@@ -910,8 +923,6 @@ const ProfileSearch = styled.div`
 
 const Profiles = styled.div`
   //프로필 넣기
-  display: flex;
-  height: 20px; // 임시
   margin-top: 20px;
   /* border: 2px solid blue; */
   display: flex;
