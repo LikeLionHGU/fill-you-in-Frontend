@@ -531,6 +531,9 @@ function ModifyProfile({ setModalOpen }) {
                   placeholder="직접 입력하세요"
                   value={post.introduction}
                   onChange={changeValue}
+                  style={{
+                    resize: "none",
+                  }}
                 />
               </Input3>
             </Flex1>
