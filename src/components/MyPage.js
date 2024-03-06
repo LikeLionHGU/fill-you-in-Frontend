@@ -6,8 +6,8 @@ import ModifyProfile from "./ModifyProfile";
 import PictureSelect from "./PictureSelect";
 import profileSample from "../img/profileSample.png";
 import pinImg from "../img/pinned.png";
-// import editImgIcon from "../img/file-upload.jpeg";
-// import editImgIcon from "../img/fileupload.png";
+import editProfile from "../img/fileupload.png";
+
 const TopBackground = styled.div`
   /* 배너 배경.. */
   background-color: #04b1b1;
@@ -87,6 +87,7 @@ const ProfilePic = styled.div`
   height: 210px;
   width: 210px;
   /* border: 2px solid red; */
+  cursor: pointer;
 
   > div > img {
     height: 215px;
@@ -107,15 +108,32 @@ const EditIcon = styled.div`
   }
   > .edit-icon-profile-pic {
     position: absolute;
-    /* border: 2px solid green; */
-    border-radius: 5px;
 
-    left: 23vw;
-    /* left: 325px; */
-    top: 38vh;
+    background-color: #ffffff;
+
+    /* border-left: 3px solid #23a2a2;
+    border-top: 3px solid #029191;
+    border-right: 3px solid #03a2a2; */
+    border: 3px solid #04b1b1;
+
+    border-radius: 50px;
+    padding: 3px;
+    width: 28px;
+    height: 28px;
+
+    //top: 38vh;
+
+    top: 40vh;
+    left: 22vw;
+
+    transition: 0.1s;
   }
   > .edit-icon-profile-pic:hover {
     cursor: pointer;
+    width: 30px;
+    height: 30px;
+    /* border-radius: 5px; */
+    /* border: 3px solid #028181; */
   }
 `;
 const EditIconImg = styled.img``;
@@ -530,7 +548,11 @@ export const MyPage = () => {
                 <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
               </NavBar>
             </TopBackground>
-            <ProfilePic>
+            <ProfilePic
+              onClick={() => {
+                setIsPicModalOpen(true);
+              }}
+            >
               {(!profile?.profileImageUrl &&
                 profile?.profileImageUrl === null) ||
               profile?.profileImageUrl === undefined ? (
@@ -553,7 +575,8 @@ export const MyPage = () => {
                 className="edit-icon-profile-pic"
                 alt="editIcon"
                 // src={editImgIcon}
-                src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
+                src={editProfile}
+                // src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
               />
             </EditIcon>
 
