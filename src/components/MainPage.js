@@ -138,10 +138,12 @@ function MainPage() {
             <p className={styles.name}>
               {post.firstName} {post.lastName}
             </p>
-            <p className={styles.academicInfo}>
-              한동대학교 {post.department} {post.semester}학기
-            </p>
-            <p className={styles.academicInfo}>{post.email}</p>
+            <Wrapper>
+              <p className={styles.academicInfo}>
+                한동대학교 {post.department} {post.semester}학기
+              </p>
+              <p className={styles.academicInfo}>{post.email}</p>
+            </Wrapper>
           </TextWrapper>
         </div>
         <Link to="mainImg" spy={true} smooth={true}>
@@ -152,27 +154,7 @@ function MainPage() {
       </div>
 
       <div className={styles.grid}>
-        <div className={styles.announcement}>
-          <h4>교내공지</h4>
-          <ol className={styles.flex2}>
-            <div>
-              <li>2024 SW 페스티벌 개최 안내</li>
-              <li>2024 SW 창업 경진 대회 안내</li>
-            </div>
-            <div>
-              <li>THE CEO 공모전 안내</li>
-              <li>제 2회 학생 주도형 SW 해커톤 경진 대회</li>
-            </div>
-            <div>
-              <li>KT AIVLE School 4기 교육학교 추천</li>
-              <li>대경권 SW 산학 프로젝트 경진대회</li>
-            </div>
-            <div>
-              <li>제 10회 소개딩 안내</li>
-              <li>트레이딩 머신 프로젝트</li>
-            </div>
-          </ol>
-        </div>
+        <img src="img/mainImg2.png" alt="img" />
         <img src="img/mainImg.png" alt="img" id="mainImg" />
       </div>
     </div>
@@ -244,4 +226,8 @@ const TextWrapper = styled.div`
   > p {
     margin-bottom: 0px;
   }
+`;
+
+const Wrapper = styled.div`
+  margin-top: 10px;
 `;

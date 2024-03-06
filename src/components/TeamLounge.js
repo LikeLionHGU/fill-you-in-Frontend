@@ -181,7 +181,7 @@ function ProfileCardExample({
           <button className="invite-button">팀 초대</button>
           <button
             className="visit-button"
-            onClick={() => navigate(`/OtherPage/${id}/${isScrapped}`)}
+            onClick={() => navigate(`/OtherPage/${id}/${scrapped}`)}
           >
             프로필 방문
           </button>
@@ -345,6 +345,12 @@ function SelectBox({
   showSelect,
   options,
 }) {
+  console.log("AAAAA", {
+    showSelect,
+    name,
+    bool: showSelect === name,
+    options,
+  });
   return (
     <div>
       <input
@@ -352,12 +358,17 @@ function SelectBox({
         value={inputValue}
         onChange={(event) => handleInputChange(event, name)}
       ></input>
-      {showSelect && inputValue && (
+      {/* {showSelect === name && inputValue && ( */}
+      {inputValue && (
         <select
           id="search"
           size={5}
           onChange={(event) => {
             handleSelectChange(event, name);
+            console.log("please change");
+          }}
+          style={{
+            visibility: showSelect === name ? "visible" : "hidden",
           }}
         >
           {options &&
@@ -366,11 +377,9 @@ function SelectBox({
                 option.toLowerCase().includes(inputValue.toLowerCase())
               )
               .map((option) => (
-                <>
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                </>
+                <option key={option} value={option}>
+                  {option}
+                </option>
               ))}
         </select>
       )}
@@ -383,10 +392,30 @@ function TeamLounge() {
   //   const handleGoMainPage = () => {
   //     navigate("/MainPage");
   //   };
+  const [name, setName] = useState("");
 
-  //
-  //
-  // 프로파일 설정하고 받아오는 부분
+  const getProfile = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL +
+      "/api/fillyouin/members/my-simple-profile-card"; // 백엔드 api url => 각 페이지에서 요구하는 api 주소에 맞게 바꿔써줘야함.
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP 에러 Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      setName(responseData.lastName);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
 
   const [departments, setDepartments] = useState([]); // 타입 ?
   const [fields, setFields] = useState([]);
@@ -407,7 +436,24 @@ function TeamLounge() {
       field: "",
     });
 
-    const [showSelect, setShowSelect] = useState(false);
+    const [showSelect, setShowSelect] = useState("");
+
+    useEffect(() => {
+      const fn = () => {
+        console.log("AAAB", document.activeElement);
+        const currentEl = document.activeElement;
+        console.log("AAAB", currentEl.tagName);
+        if (currentEl.tagName !== "SELECT")
+          setShowSelect(document.activeElement?.getAttribute("name"));
+      };
+      getProfile();
+      window.addEventListener("focusin", fn);
+      // window.addEventListener("focusout", fn);
+      return () => {
+        window.removeEventListener("focusin", fn);
+        // window.removeEventListener("focusout", fn);
+      };
+    }, []);
 
     const [inputValue, setInputValue] = useState({
       department: "",
@@ -415,17 +461,18 @@ function TeamLounge() {
       job: "",
       field: "",
     });
+    console.log("AAAA Focus", showSelect);
 
     const { Department, Skill, Job, Field } = inputValue;
 
     const handleInputChange = (event, Name) => {
       const { name, value } = event.target;
-      console.log(event);
-      setInputValue({
-        ...inputValue,
+      console.log("BBBBB", event, { Name, value });
+      setInputValue((prev) => ({
+        ...prev,
         [name]: value,
-      });
-      setShowSelect(value.trim() !== "");
+      }));
+      // setShowSelect(value.trim() !== "");
 
       if (Name === "Name") setPost({ ...post, name: event.target.value });
       if (Name === "Department")
@@ -459,7 +506,7 @@ function TeamLounge() {
       }
       setInputValue({ ...inputValue, [Name]: event.target.value });
       setPost({ ...post, [name]: event.target.value });
-      setShowSelect(false);
+      setShowSelect("");
     };
 
     const submitInfo = async (e) => {
@@ -493,7 +540,7 @@ function TeamLounge() {
     };
     return (
       <ContentWrapper>
-        <ContentText>000님, 팀원을 찾아보세요 !</ContentText>
+        <ContentText>{name}님, 팀원을 찾아보세요 !</ContentText>
         <ProfileSearch>
           <SearchContainer>
             {/* <SearchFilterForm /> */}
@@ -1007,8 +1054,9 @@ const SearchIcons = styled.div`
     width: 256px;
     height: 50px;
     background-color: #ffffff;
-    border: solid 1px black;
-    border-radius: 4px;
+    box-shadow: 0 0 8px 1px #0000002a;
+    border-radius: 7px;
+    border: none;
     height: 30px;
     z-index: 400;
     position: absolute;
