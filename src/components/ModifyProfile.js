@@ -597,9 +597,10 @@ const Container = styled.div`
     position: relative;
 
     left: 53vw;
+    top: -6vh;
 
     > img {
-      width: 26px;
+      width: 23px;
     }
   }
 
