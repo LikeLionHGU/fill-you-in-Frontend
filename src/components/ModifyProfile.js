@@ -28,13 +28,17 @@ function InputBox({
               setIsFocus({ ...isFocus, [name]: true });
               setShowSelect(true);
             }}
+            onBlur={() => {
+              setIsFocus({ ...isFocus, [name]: false });
+              setShowSelect(false);
+            }}
           ></input>
         </div>
       </div>
       {((inputValue && showSelect) || isFocus[name] === true) && (
         <select
           id="search"
-          size={3}
+          size={4}
           onChange={(event) => {
             handleSelectChange(event, arrays, setArrays, name);
           }}
@@ -661,7 +665,6 @@ const Input1 = styled.div`
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-
     &:focus {
       outline: none;
     }
@@ -706,7 +709,8 @@ const Input2 = styled.div`
   > select {
     margin-top: 5px;
     width: 100%;
-    min-height: 2vh;
+    height: 57px;
+    overflow-y: auto;
     border: none;
     box-shadow: 0 0 8px 1px #0000002a;
     border-radius: 7px;
