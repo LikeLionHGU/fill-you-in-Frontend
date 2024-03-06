@@ -382,9 +382,9 @@ const TableCol = styled.div`
 const SchoolMajor = styled.div`
   /* border: 2px solid red; */
   display: flex;
-  justify-content: center;
-
-  padding: 5px 5px;
+  justify-content: left;
+  padding: 5px;
+  padding-left: 0px;
   font-family: "Pretendard-SemiBold", Helvetica;
 
   font-weight: 600;
