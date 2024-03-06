@@ -147,7 +147,7 @@ function MainPage() {
           </TextWrapper>
         </div>
         <Link to="mainImg" spy={true} smooth={true}>
-          <button className={styles.move}>
+          <button className={styles.move} style={{ cursor: "pointer" }}>
             <img src="img/move.png" alt="img" />
           </button>
         </Link>
@@ -157,6 +157,9 @@ function MainPage() {
         <img src="img/mainImg2.png" alt="img" />
         <img src="img/mainImg.png" alt="img" id="mainImg" />
       </div>
+      <NavigateBtn onClick={() => navigate("/TeamLounge/Search")}>
+        나에게 맞는 팀원 찾기
+      </NavigateBtn>
     </div>
   );
 }
@@ -230,4 +233,16 @@ const TextWrapper = styled.div`
 
 const Wrapper = styled.div`
   margin-top: 10px;
+`;
+
+const NavigateBtn = styled.button`
+  font-family: "Pretendard-Regular";
+  font-size: 19px;
+  color: white;
+  background-color: #06b5b5;
+  border: none;
+  border-radius: 40px;
+  width: 18vw;
+  height: 43px;
+  cursor: pointer;
 `;
