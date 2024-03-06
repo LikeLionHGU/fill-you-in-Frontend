@@ -774,5 +774,9 @@ const Input3 = styled.div`
     height: 80%;
     border: none;
     white-space: pre-wrap;
+    padding: 15px;
+    &:focus {
+      outline: none;
+    }
   }
 `;
