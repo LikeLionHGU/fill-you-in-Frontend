@@ -62,7 +62,7 @@ function WhiteNavBtns() {
       <LogoImg>
         <img
           className="image"
-          alt="img"
+          alt="logoImg"
           src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/--@2x.png"
           onClick={handleGoMainPage}
         />
