@@ -3,6 +3,140 @@ import React, { useState } from "react";
 import axios from "axios";
 import profileImgCharacters from "../img/ProfileUploadCharacters.png";
 
+function PictureSelect({ isOpen, closeModal, ImgUrl }) {
+  const [file, setFile] = useState({});
+  const [fileUrl, setFileUrl] = useState({});
+
+  const imageUpload = (e) => {
+    if (e.target.files.length !== 0) {
+      setFile(e.target.files[0]);
+      setFileUrl(e.target.files[0]);
+      const imageTpye = e.target.files[0].type.includes("image");
+
+      setFileUrl({
+        url: URL.createObjectURL(e.target.files[0]),
+        name: e.target.files[0].name,
+        image: imageTpye,
+      });
+    }
+  };
+  const [fileError, setFileError] = useState("");
+
+  const handleSubmit = async (data) => {
+    // Form Data
+    const formData = new FormData();
+    formData.append("image", file); // 백엔드로 넘겨주는 이름이 image임.
+
+    data.preventDefault();
+    console.log("에러!!!! 이미지 너무 큼");
+    // 만약 여기서 기존 이미지 파일이 있으면 에러메시지 X
+    if (!file.name) {
+      setFileError("* 파일을 선택해주세요");
+      return;
+    } else if (file.size >= 2 * 10e5) {
+      setFileError("* 파일이 너무 큽니다");
+      return;
+    } else {
+      setFileError("");
+    }
+
+    const url =
+      process.env.REACT_APP_BACK_URL +
+      "/api/fillyouin/my-profile/profile-image";
+
+    const config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axios.post(url, formData, config);
+      console.log("파일 업로드 완료");
+      window.location.reload("/");
+    } catch (error) {
+      console.log("파일업로드 에러 발생: ", error);
+      alert("파일 업로드 중 에러 발생. 다시 시도해주세요.");
+    }
+  };
+  console.log(file);
+  return (
+    <ModalBackground style={{ display: isOpen ? "flex" : "none" }}>
+      <ModalExitBackground onClick={closeModal}></ModalExitBackground>
+      <Modal>
+        <ModalContents>
+          <ModalText>
+            <div>
+              {fileUrl?.image ? (
+                <Preview>
+                  {fileUrl?.image && ( // 이미지가 존재하면 실행
+                    <img
+                      src={fileUrl.image}
+                      alt="previewimage"
+                      style={{
+                        width: "110%",
+                        height: "110%",
+                      }}
+                    />
+                  )}
+                </Preview>
+              ) : (
+                <div>프로필 사진</div>
+              )}
+            </div>
+          </ModalText>
+          <ModalInfo>
+            <ModalInfoText>
+              <img
+                className="chara-img"
+                src={profileImgCharacters}
+                alt="characters"
+              />
+              <span className="file-upload-text">
+                " 프로필을 업로드해보세요 ! "
+              </span>
+              <div>
+                <span className="file-name">파일 이름 </span>
+                <ImgFileName
+                  placeholder="file name"
+                  value={fileUrl.name}
+                  disabled="disabled"
+                />
+              </div>
+              <InputImg>
+                <ImgSelectBtn
+                  className="choose-pic-button"
+                  htmlFor="ex_filename"
+                >
+                  사진 선택
+                </ImgSelectBtn>
+                {fileError && <Error>{fileError}</Error>}
+                <RealBtn
+                  type="file"
+                  accept="image/*" // 이미지만 선택할 수 있도록
+                  id="ex_filename"
+                  onChange={imageUpload}
+                  required
+                />
+              </InputImg>
+              {/* <div className="choose-pic-button">다른 사진 선택</div> */}
+            </ModalInfoText>
+            <ModalButtons>
+              <CancelButton onClick={closeModal}>취소</CancelButton>
+              <SaveProfile type="submit" onClick={handleSubmit}>
+                저장
+              </SaveProfile>
+            </ModalButtons>
+          </ModalInfo>
+        </ModalContents>
+      </Modal>
+    </ModalBackground>
+  );
+}
+
+export default PictureSelect;
+
 const ModalBackground = styled.div`
   z-index: 1000; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
   width: 100%;
@@ -109,9 +243,7 @@ const ImgSelectBtn = styled.label`
   text-decoration: underline;
   cursor: pointer;
   border-radius: 0.25em;
-  &:hover {
-    color: black;
-  }
+
   font-family: "Pretendard", Helvetica;
 `;
 
@@ -242,142 +374,3 @@ const CancelButton = styled.div`
     background-color: #06b5b522;
   }
 `;
-
-function PictureSelect({ isOpen, closeModal, ImgUrl }) {
-  const [file, setFile] = useState({});
-  const [fileUrl, setFileUrl] = useState({});
-
-  const imageUpload = (e) => {
-    if (e.target.files.length !== 0) {
-      setFile(e.target.files[0]);
-      setFileUrl(e.target.files[0]);
-      const imageTpye = e.target.files[0].type.includes("image");
-
-      setFileUrl({
-        url: URL.createObjectURL(e.target.files[0]),
-        name: e.target.files[0].name,
-        image: imageTpye,
-      });
-    }
-  };
-  const [fileError, setFileError] = useState("");
-
-  const handleSubmit = async (data) => {
-    // Form Data
-    const formData = new FormData();
-    formData.append("image", file); // 백엔드로 넘겨주는 이름이 image임.
-
-    data.preventDefault();
-    console.log("에러!!!! 이미지 너무 큼");
-    // 만약 여기서 기존 이미지 파일이 있으면 에러메시지 X
-    if (!file.name) {
-      setFileError("* 파일을 선택해주세요");
-      return;
-    } else if (file.size >= 2 * 10e5) {
-      setFileError("* 파일이 너무 큽니다");
-      return;
-    } else {
-      setFileError("");
-    }
-
-    const url =
-      process.env.REACT_APP_BACK_URL +
-      "/api/fillyouin/my-profile/profile-image";
-
-    const config = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post(url, formData, config);
-      // .then((response) => {
-      //   console.log("서버 응답:", response.data);
-      //   // onClick(); // 여기 있어야 이름 없을 때, 안넘어감
-      // });
-      console.log("파일 업로드 완료");
-      window.location.reload("/");
-    } catch (error) {
-      console.log("파일업로드 에러 발생: ", error);
-      alert("파일 업로드 중 에러 발생. 다시 시도해주세요.");
-    }
-  };
-
-  return (
-    <ModalBackground style={{ display: isOpen ? "flex" : "none" }}>
-      <ModalExitBackground onClick={closeModal}></ModalExitBackground>
-      <Modal>
-        <ModalContents>
-          <ModalText>
-            <div>
-              {fileUrl?.image ? (
-                <Preview>
-                  {fileUrl &&
-                    fileUrl?.image && ( // 이미지가 존재하면 실행
-                      <img
-                        src={fileUrl.url}
-                        alt="previewimage"
-                        style={{
-                          width: "110%",
-                          height: "110%",
-                        }}
-                      />
-                    )}
-                </Preview>
-              ) : (
-                <div>프로필 사진</div>
-              )}
-            </div>
-          </ModalText>
-          <ModalInfo>
-            <ModalInfoText>
-              <img
-                className="chara-img"
-                src={profileImgCharacters}
-                alt="characters"
-              />
-              <span className="file-upload-text">
-                " 프로필을 업로드해보세요 ! "
-              </span>
-              <div>
-                <span className="file-name">파일 이름 </span>
-                <ImgFileName
-                  placeholder="file name"
-                  value={fileUrl.name}
-                  disabled="disabled"
-                />
-              </div>
-              <InputImg>
-                <ImgSelectBtn
-                  className="choose-pic-button"
-                  htmlFor="ex_filename"
-                >
-                  다른 사진 선택
-                </ImgSelectBtn>
-                {fileError && <Error>{fileError}</Error>}
-                <RealBtn
-                  type="file"
-                  accept="image/*" // 이미지만 선택할 수 있도록
-                  id="ex_filename"
-                  onChange={imageUpload}
-                  required
-                />
-              </InputImg>
-              {/* <div className="choose-pic-button">다른 사진 선택</div> */}
-            </ModalInfoText>
-            <ModalButtons>
-              <SaveProfile type="submit" onClick={handleSubmit}>
-                저장
-              </SaveProfile>
-              <CancelButton onClick={closeModal}>취소</CancelButton>
-            </ModalButtons>
-          </ModalInfo>
-        </ModalContents>
-      </Modal>
-    </ModalBackground>
-  );
-}
-
-export default PictureSelect;
