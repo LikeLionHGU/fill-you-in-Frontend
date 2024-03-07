@@ -193,8 +193,8 @@ function ProfileCardExample({
 
 const ProfileCard = styled.div`
   display: flex;
-
   /* border: 2px solid goldenrod; */
+  background-color: white;
   box-shadow: 0 0 8px 1px #0000002a; // drop-down shadow 모달 그림자
   padding: 15px;
   width: 200px;
@@ -232,6 +232,7 @@ const CardContainer = styled.div`
   justify-content: space-evenly;
   width: 100%;
   /* border: 2px solid black; */
+  background-color: white;
   position: relative;
 `;
 
@@ -540,7 +541,6 @@ function TeamLounge() {
     };
     return (
       <ContentWrapper>
-        <ContentText>{name}님, 팀원을 찾아보세요 !</ContentText>
         <ProfileSearch>
           <SearchContainer>
             {/* <SearchFilterForm /> */}
@@ -550,7 +550,6 @@ function TeamLounge() {
                 <div>
                   <input
                     className={"name-search-box"}
-                    placeholder="검색어 입력"
                     name="Name"
                     onChange={(e) => handleInputChange(e, "Name")}
                   />
@@ -571,7 +570,6 @@ function TeamLounge() {
                 <div>학기 수</div>
                 <div>
                   <input
-                    placeholder="검색어 입력"
                     name="Semester"
                     onChange={(e) => handleInputChange(e, "Semester")}
                   />
@@ -790,6 +788,7 @@ const Container = styled.div`
   flex-direction: row;
 
   font-family: "Pretendard-SemiBold", Helvetica;
+  background-color: white;
 `;
 const SideBar = styled.div`
   position: absolute;
@@ -869,11 +868,11 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  margin-left: 240px; // 전체화면에서 퍼센트.. 왼쪽 사이드바 부분을 margin으로 처리
+  margin-left: 230px; // 전체화면에서 퍼센트.. 왼쪽 사이드바 부분을 margin으로 처리
   /* border: 3px solid limegreen; */
   padding-top: 20px;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding-left: 5%;
+  padding-right: 5%;
 `;
 
 const ContentWrapper = styled.div`
@@ -924,7 +923,7 @@ const ProfileSearch = styled.div`
 const Profiles = styled.div`
   //프로필 넣기
   margin-top: 20px;
-  /* border: 2px solid blue; */
+
   display: flex;
   flex-wrap: wrap;
   height: 500px; // 임시
@@ -934,10 +933,13 @@ const Profiles = styled.div`
   padding-top: 5px;
   overflow: scroll;
 
+  /* border: 2px solid blue; */
+  /* background-color: #04b1b122; */
   > .profiles-container {
     display: flex;
     flex-wrap: wrap;
     height: 100%; // 임시
+
     /* width: 100%; */
     /* display: flex; */
     /* flex-direction: row; */

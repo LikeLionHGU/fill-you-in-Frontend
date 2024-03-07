@@ -198,7 +198,7 @@ export default EachProfileCard;
 
 const ProfileCard = styled.div`
   display: flex;
-
+  background-color: white;
   /* border: 2px solid goldenrod; */
   box-shadow: 0 0 8px 1px #0000002a; // drop-down shadow 모달 그림자
   padding: 15px;
