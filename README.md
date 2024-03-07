@@ -7,8 +7,7 @@
 1차: 24/02/08/목 - 24/02/24
 
 ## 배포 주소
-https://fill-you-in.netlify.app/
-
+<a href="https://fill-you-in.netlify.app/">Fill You In 웹 사이트</a>
 
 ## 🧑‍💻 개발자들의 깃허브 
 
