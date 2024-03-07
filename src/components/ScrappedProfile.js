@@ -93,7 +93,7 @@ const Content = styled.div`
   /* border: 3px solid limegreen; */
   padding-top: 20px;
   padding-left: 7%;
-  padding-right: 7%;
+  /* padding-right: 7%; */
 `;
 
 const ContentWrapper = styled.div`
