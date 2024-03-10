@@ -4,6 +4,7 @@ import placeholderImg from "../img/searchImg.png";
 
 function InputBox({
   inputValue,
+  setInputValue,
   name,
   handleInputChange,
   showSelect,
@@ -28,9 +29,18 @@ function InputBox({
               setIsFocus({ ...isFocus, [name]: true });
               setShowSelect(true);
             }}
-            onBlur={() => {
-              setIsFocus({ ...isFocus, [name]: false });
-              setShowSelect(false);
+            onBlur={(e) => {
+              console.log(e);
+              const searchInput = document.querySelectorAll("input");
+              let isInput = 0;
+
+              for (let i = 0; i < 7; i++) {
+                if (e.relatedTarget === searchInput[i]) isInput = 1;
+              }
+              if (e.relatedTarget === null || isInput === 1) {
+                setIsFocus(false);
+                setInputValue({ ...inputValue, [name]: "" });
+              }
             }}
           ></input>
         </div>
@@ -199,14 +209,14 @@ function ModifyProfile({ setModalOpen }) {
   };
 
   const handleSelectChange = (event, arrays, setArrays, Name) => {
-    setInputValue({ ...inputValue, [Name]: "" });
-    setShowSelect(false);
-    setIsFocus(false);
     if (Name !== "Affiliations") {
       setArrays([...arrays, { name: event.target.value, isPinned: false }]);
     } else {
       setArrays([...arrays, { name: event.target.value }]);
     }
+    setInputValue({ ...inputValue, [Name]: "" });
+    setShowSelect(false);
+    setIsFocus(false);
   };
 
   const closeModal = () => {
@@ -463,6 +473,7 @@ function ModifyProfile({ setModalOpen }) {
                   <p className="title">소속 학회 및 동아리</p>
                   <InputBox
                     inputValue={Affiliations}
+                    setInputValue={setInputValue}
                     name="Affiliations"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
@@ -480,6 +491,7 @@ function ModifyProfile({ setModalOpen }) {
                   <p className="title">희망 활동 분야</p>
                   <InputBox
                     inputValue={Fields}
+                    setInputValue={setInputValue}
                     name="Fields"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
@@ -497,6 +509,7 @@ function ModifyProfile({ setModalOpen }) {
                   <p className="title">관심 직무</p>
                   <InputBox
                     inputValue={Jobs}
+                    setInputValue={setInputValue}
                     name="Jobs"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
@@ -514,6 +527,7 @@ function ModifyProfile({ setModalOpen }) {
                   <p className="title">보유기술</p>
                   <InputBox
                     inputValue={Skills}
+                    setInputValue={setInputValue}
                     name="Skills"
                     handleInputChange={handleInputChange}
                     showSelect={showSelect}
