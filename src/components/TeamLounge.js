@@ -557,7 +557,7 @@ function TeamLounge() {
                 <select
                   onChange={handleSelectChange}
                   value={post.departments}
-                  id
+                  name="Department"
                 >
                   {departments.map((option, index) => (
                     <option key={index} value={option}>
