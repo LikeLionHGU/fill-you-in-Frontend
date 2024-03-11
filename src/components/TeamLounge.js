@@ -461,7 +461,7 @@ function TeamLounge() {
     });
     console.log("AAAA Focus", showSelect);
 
-    const { Department, Skill, Job, Field } = inputValue;
+    const { Skill, Job, Field } = inputValue;
 
     const handleInputChange = (event, Name) => {
       const { name, value } = event.target;
@@ -554,14 +554,17 @@ function TeamLounge() {
               </NameSearch>
               <DepartmentSearch>
                 <div>학부</div>
-                <SelectBox
-                  name="Department"
-                  inputValue={Department}
-                  handleInputChange={handleInputChange}
-                  handleSelectChange={handleSelectChange}
-                  showSelect={showSelect}
-                  options={departments}
-                ></SelectBox>
+                <select
+                  onChange={handleSelectChange}
+                  value={post.departments}
+                  id
+                >
+                  {departments.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </DepartmentSearch>
               <SemesterSearch>
                 <div>학기 수</div>
@@ -1024,6 +1027,19 @@ const DepartmentSearch = styled.div`
 
   //중복
   /* border: 2px solid black; */
+  > select {
+    background-color: #f4f3f1;
+    width: 143px;
+    height: 30px;
+    border: none;
+    -o-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    &:focus {
+      outline: none;
+    }
+  }
 `;
 const SemesterSearch = styled.div`
   display: flex;
