@@ -393,7 +393,6 @@ function TeamLounge() {
   //   const handleGoMainPage = () => {
   //     navigate("/MainPage");
   //   };
-  const [name, setName] = useState("");
 
   const getProfile = async () => {
     const url =
@@ -411,8 +410,6 @@ function TeamLounge() {
       if (!response.ok) {
         throw new Error(`HTTP 에러 Status: ${response.status}`);
       }
-      const responseData = await response.json();
-      setName(responseData.lastName);
     } catch (error) {
       console.error("error", error);
     }
@@ -700,6 +697,28 @@ function TeamLounge() {
     } catch (error) {
       console.error("error", error);
     }
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACK_URL}/api/fillyouin/members/profile-card`,
+        {
+          method: "GET", //(+ GET인지 POST인지 명세 확인)
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log("성공");
+      console.log(responseData.profileCards);
+      setSearchInfo(responseData.profileCards);
+      setVariable(true);
+    } catch (error) {
+      console.error("error", error);
+    }
   };
 
   useEffect(() => {
@@ -902,14 +921,6 @@ const ScrapWrapper = styled.div`
     padding-top: 5px;
     overflow: scroll;
   }
-`;
-const ContentText = styled.div`
-  // 팀원 찾아보세요 text //
-  display: flex;
-  align-items: center;
-  height: 80px;
-  font-size: 20px;
-  /* border: 2px solid red; */
 `;
 
 const ProfileSearch = styled.div`
