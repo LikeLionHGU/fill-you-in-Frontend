@@ -138,12 +138,12 @@ function MainPage() {
             <p className={styles.name}>
               {post.firstName} {post.lastName}
             </p>
-            <Wrapper>
-              <p className={styles.academicInfo}>
-                한동대학교 {post.department} {post.semester}학기
-              </p>
-              <p className={styles.academicInfo}>{post.email}</p>
-            </Wrapper>
+            {/* <Wrapper> */}
+            <p className={styles.academicInfo1}>
+              한동대학교 {post.department} {post.semester}학기
+            </p>
+            <p className={styles.academicInfo}>{post.email}</p>
+            {/* </Wrapper> */}
           </TextWrapper>
         </div>
         <Link to="mainImg" spy={true} smooth={true}>
@@ -231,9 +231,9 @@ const TextWrapper = styled.div`
   }
 `;
 
-const Wrapper = styled.div`
-  margin-top: 10px;
-`;
+// const Wrapper = styled.div`
+//   margin-top: 10px;
+// `;
 
 const NavigateBtn = styled.button`
   font-family: "Pretendard-Regular";
