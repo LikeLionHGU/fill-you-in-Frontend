@@ -81,9 +81,9 @@ const ProfilePic = styled.div`
   align-items: center;
   overflow: hidden; //
 
-  position: absolute;
-  left: 6vw;
-  top: 30vh;
+  position: relative;
+  /* left: 6vw;
+  top: 30vh; */
   height: 210px;
   width: 210px;
   /* border: 2px solid red; */
@@ -102,36 +102,41 @@ const ProfilePicture = ({ src }) => {
   );
 };
 const EditIcon = styled.div`
+  /* position: absolute; */
   img {
     height: 30px;
     width: 30px;
     background-color: #ffffffff;
   }
   > .edit-icon-profile-pic {
-    position: absolute;
-
     background-color: #ffffff;
-
     /* border: 3px solid #04b1b1; */
     padding: 5px;
     width: 28px;
     height: 28px;
     border-radius: 70px;
     box-shadow: 0 0 6px 1px #0000002a; // drop-down shadow 아이콘 그림자
-    //top: 38vh;
 
-    top: 40vh;
-    left: 22vw;
-
+    position: relative;
+    left: 165px; // 아이콘 왼쪽에서 165px만큼 이동
+    top: -50px; // 아이콘 위로 올림
     transition: 0.1s;
   }
   > .edit-icon-profile-pic:hover {
     cursor: pointer;
     width: 30px;
     height: 30px;
-    /* border-radius: 5px; */
-    /* border: 3px solid #028181; */
   }
+`;
+const EditProfPicBlock = styled.div`
+  position: absolute;
+  left: 6vw;
+  top: 30vh;
+
+  width: 100%;
+  height: 100%;
+  max-width: 210px;
+  max-height: 210px;
 `;
 const EditIconImg = styled.img``;
 const BottomBackground = styled.div`
@@ -545,45 +550,46 @@ export const MyPage = () => {
                 <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
               </NavBar>
             </TopBackground>
-            <ProfilePic
-              onClick={() => {
-                setIsPicModalOpen(true);
-              }}
-            >
-              {(!profile?.profileImageUrl &&
-                profile?.profileImageUrl === null) ||
-              profile?.profileImageUrl === undefined ? (
-                <>
-                  {console.log("no profile", profile?.profileImageUrl)}
-                  <ProfilePicture src={profileSample} />
-                </>
-              ) : (
-                <>
-                  <ProfilePicture src={profile?.profileImageUrl} />
-                </>
-              )}
-            </ProfilePic>
-            <EditIcon
-              onClick={() => {
-                setIsPicModalOpen(true);
-              }}
-            >
-              <img
-                className="edit-icon-profile-pic"
-                alt="editIcon"
-                // src={editImgIcon}
-                src={editProfile}
-                // src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
-              />
-            </EditIcon>
+            <EditProfPicBlock>
+              <ProfilePic
+                onClick={() => {
+                  setIsPicModalOpen(true);
+                }}
+              >
+                {(!profile?.profileImageUrl &&
+                  profile?.profileImageUrl === null) ||
+                profile?.profileImageUrl === undefined ? (
+                  <>
+                    {console.log("no profile", profile?.profileImageUrl)}
+                    <ProfilePicture src={profileSample} />
+                  </>
+                ) : (
+                  <>
+                    <ProfilePicture src={profile?.profileImageUrl} />
+                  </>
+                )}
+              </ProfilePic>
+              <EditIcon
+                onClick={() => {
+                  setIsPicModalOpen(true);
+                }}
+              >
+                <img
+                  className="edit-icon-profile-pic"
+                  alt="editIcon"
+                  // src={editImgIcon}
+                  src={editProfile}
+                  // src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/vector.svg"
+                />
+              </EditIcon>
 
-            {isPicModalOpen === true ? (
-              <PictureSelect
-                isOpen={isPicModalOpen}
-                closeModal={closePicModal}
-              />
-            ) : null}
-
+              {isPicModalOpen === true ? (
+                <PictureSelect
+                  isOpen={isPicModalOpen}
+                  closeModal={closePicModal}
+                />
+              ) : null}
+            </EditProfPicBlock>
             <BottomBackground>
               <ContentContainer>
                 <Sidebar>
