@@ -6,7 +6,7 @@ import ModifyProfile from "./ModifyProfile";
 import PictureSelect from "./PictureSelect";
 import profileSample from "../img/profileSample.png";
 import pinImg from "../img/pinned.png";
-import editProfile from "../img/fileupload.png";
+import editProfile from "../img/profile-upload_g.png";
 
 const TopBackground = styled.div`
   /* 배너 배경.. */
@@ -103,24 +103,21 @@ const ProfilePicture = ({ src }) => {
 };
 const EditIcon = styled.div`
   img {
-    height: 26px;
-    width: 26px;
+    height: 30px;
+    width: 30px;
+    background-color: #ffffffff;
   }
   > .edit-icon-profile-pic {
     position: absolute;
 
     background-color: #ffffff;
 
-    /* border-left: 3px solid #23a2a2;
-    border-top: 3px solid #029191;
-    border-right: 3px solid #03a2a2; */
-    border: 3px solid #04b1b1;
-
-    border-radius: 50px;
-    padding: 3px;
+    /* border: 3px solid #04b1b1; */
+    padding: 5px;
     width: 28px;
     height: 28px;
-
+    border-radius: 70px;
+    box-shadow: 0 0 6px 1px #0000002a; // drop-down shadow 아이콘 그림자
     //top: 38vh;
 
     top: 40vh;
