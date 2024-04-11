@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginScreen from "./components/LoginScreen";
-import MainPage from "./components/MainPage";
+import MainPage from "./pages/Mainpage";
 import MyPage from "./components/MyPage";
 import TeamLounge from "./components/TeamLounge";
 import ScrappedProfile from "./components/ScrappedProfile";
