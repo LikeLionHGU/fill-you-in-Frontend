@@ -144,13 +144,10 @@ body {
 
 /* profile css */
 .profile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 25.2vw;
   height: 47vh;
   position: absolute;
-  top: 22%;
+  top: 3%;
   left: 4%;
   background-color: white;
   border-radius: 10px;
