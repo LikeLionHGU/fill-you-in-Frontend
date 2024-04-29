@@ -61,7 +61,6 @@ function HeaderComponent() {
   const navigate = useNavigate();
 
   const handleLogoutMsg = () => {
-    ///// < = jwt를 백엔드로 계속 보내면서 확인해야할듯
     if (window.confirm("로그아웃 하시겠습니까?")) {
       localStorage.removeItem("loginToken"); // 로그인 토큰 제거
       navigate("/");
