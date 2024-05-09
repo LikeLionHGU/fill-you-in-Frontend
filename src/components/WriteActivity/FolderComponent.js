@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { nanoid } from "nanoid";
 import "../../font/font.module.css";
 
 const Folder = styled.button`
@@ -30,7 +31,7 @@ export default function FolderComponent({ FolderInfo }) {
     <>
       {FolderInfo &&
         FolderInfo.map((item) => (
-          <Folder>
+          <Folder key={nanoid()}>
             <p className="title">{item.name}</p>
             <p className="date">{item.date}</p>
             <button>➕</button>
