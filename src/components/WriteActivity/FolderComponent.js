@@ -25,14 +25,17 @@ const Folder = styled.button`
   }
 `;
 
-export default function FolderComponent({ name, date }) {
+export default function FolderComponent({ FolderInfo }) {
   return (
     <>
-      <Folder>
-        <p className="title">{name}</p>
-        <p className="date">{date}</p>
-        <button>➕</button>
-      </Folder>
+      {FolderInfo &&
+        FolderInfo.map((item) => (
+          <Folder>
+            <p className="title">{item.name}</p>
+            <p className="date">{item.date}</p>
+            <button>➕</button>
+          </Folder>
+        ))}
     </>
   );
 }

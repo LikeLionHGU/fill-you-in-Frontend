@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "../font/font.module.css";
 import "../components/WriteActivity/FolderComponent";
@@ -33,6 +33,11 @@ const AddArea = styled.div`
 `;
 
 export default function WriteActivityPage() {
+  // const [folderInfo, setFolderInfo] = useState({
+  //   name: "",
+  //   date: "",
+  // }); // 폴더 이름과 생성 날짜를 관리하는 useState
+
   return (
     <>
       <NavigationBar />
@@ -40,10 +45,25 @@ export default function WriteActivityPage() {
         <SideBar />
         <AddArea>
           <p> ***님, 안녕하세요!</p>
-          <FolderComponent name="멋쟁이 사자처럼" date="2024.04.28" />
+          <FolderComponent FolderInfo={FolderInfo} />
           <AddBtnComponent />
         </AddArea>
       </Wrapper>
     </>
   );
 }
+
+const FolderInfo = [
+  {
+    name: "멋쟁이사자처럼",
+    date: "2024.04.26",
+  },
+  {
+    name: "YMC",
+    date: "2024.05.05",
+  },
+  {
+    name: "PARD",
+    date: "2024.03.09",
+  },
+];
