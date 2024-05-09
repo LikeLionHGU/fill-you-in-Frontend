@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import "../../font/font.module.css";
 
 const Folder = styled.button`
-  width: 19vw;
+  width: 26%;
   height: 19vh;
   background-color: #04b1b1;
   color: white;
@@ -26,12 +26,17 @@ const Folder = styled.button`
   }
 `;
 
-export default function FolderComponent({ FolderInfo }) {
+export default function FolderComponent({ folderInfo }) {
   return (
     <>
-      {FolderInfo &&
-        FolderInfo.map((item) => (
-          <Folder key={nanoid()}>
+      {folderInfo &&
+        folderInfo.map((item) => (
+          <Folder
+            key={nanoid()}
+            onDoubleClick={() => {
+              alert("folder was clicked");
+            }}
+          >
             <p className="title">{item.name}</p>
             <p className="date">{item.date}</p>
             <button>➕</button>

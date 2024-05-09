@@ -16,9 +16,9 @@ const AddBtn = styled.button`
   }
 `;
 
-export default function AddBtnComponent() {
+export default function AddBtnComponent({ folderInfo, setFolderInfo }) {
   return (
-    <AddBtn onClick={() => console.log("add Btn clicked")}>
+    <AddBtn onClick={() => alert("addBtn clicked")}>
       <img src={PlusImg} alt="plusImg" />
     </AddBtn>
   );
