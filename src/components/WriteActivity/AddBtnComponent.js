@@ -17,8 +17,13 @@ const AddBtn = styled.button`
 `;
 
 export default function AddBtnComponent({ folderInfo, setFolderInfo }) {
+  const addFolder = () => {
+    const newFolder = { name: "빈 폴더", date: "20xx.xx.xx" };
+    const updatedFolder = [...folderInfo, newFolder];
+    setFolderInfo(updatedFolder);
+  };
   return (
-    <AddBtn onClick={() => alert("addBtn clicked")}>
+    <AddBtn onClick={() => addFolder()}>
       <img src={PlusImg} alt="plusImg" />
     </AddBtn>
   );
