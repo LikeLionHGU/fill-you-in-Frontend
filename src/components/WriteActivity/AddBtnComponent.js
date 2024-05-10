@@ -18,7 +18,11 @@ const AddBtn = styled.button`
 
 export default function AddBtnComponent({ folderInfo, setFolderInfo }) {
   const addFolder = () => {
-    const newFolder = { name: "빈 폴더", date: "20xx.xx.xx" };
+    const date = new Date();
+    const dateInfo =
+      date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate();
+
+    const newFolder = { name: "빈 폴더", date: dateInfo };
     const updatedFolder = [...folderInfo, newFolder];
     setFolderInfo(updatedFolder);
   };
