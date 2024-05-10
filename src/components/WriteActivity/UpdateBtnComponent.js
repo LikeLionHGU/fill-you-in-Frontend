@@ -5,8 +5,10 @@ import styled from "styled-components";
 const UpdateBtn = styled.button`
   border: none;
   background-color: #04b1b1;
-  padding-bottom: 20px;
+  margin-bottom: 25px;
+  margin-right: 5px;
   > img {
+    width: 17px;
   }
 `;
 

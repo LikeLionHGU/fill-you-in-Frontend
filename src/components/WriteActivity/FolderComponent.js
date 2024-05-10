@@ -13,12 +13,13 @@ const Folder = styled.button`
   border: none;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 
   > div {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-top: 10px;
 
     > .title {
       font-family: "Pretendard-Regular";
@@ -28,6 +29,7 @@ const Folder = styled.button`
       border: none;
       background-color: #04b1b1;
       color: white;
+      margin-top: 20px;
     }
   }
 
@@ -35,7 +37,9 @@ const Folder = styled.button`
     font-family: "Pretendart-Medium";
     font-size: 10px;
     margin-left: 18px;
+    margin-bottom: 0;
     text-align: left;
+    margin-bottom: 20px;
   }
 `;
 
