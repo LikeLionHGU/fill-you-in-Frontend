@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import WhiteNavBtns from "./WhiteNavBtns";
 import { createElement } from "react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
-/*
+// /*
 
- npm install react-icons --save
- 로 아이콘 사용함.
-*/
+//  npm install react-icons --save 로 아이콘 사용함, 에러나면 이 명령어 터미널에 입력 후 아이콘 사용
+
+// */
 
 const Background = styled.div`
   display: flex;
@@ -84,103 +83,72 @@ const BtnSetting = styled.div`
   margin-bottom: 0.4vw;
   color: lightgray;
   font-size: 1.3vw;
+  transition: 0.3s;
+  /* border: 2px solid gray; */
+
+  &:hover {
+    /* background-color: gainsboro; */
+    color: gray;
+    border-radius: 1vw;
+    /* border: 1px solid gray; */
+  }
 `;
 const SideBarAddBtn = styled.div`
   display: flex;
   padding-left: 0px;
 `;
 
-// import styled from "styled-components";
-
-// const Component = styled.div`
-//   color: red;
-//   `;
-
-// render(
-// <Component
-//   as="button"
-//   onClick={() => alert('It works!')}
-// >
-//   Hello World!
-// </Component>
-// )
-
-function MakeNewBtn({ btnNome }) {
-  return createElement(
-    "h1",
-    { className: "greeting" },
-    "Hello ",
-    createElement("i", null, btnNome),
-    ". Welcome!"
-  );
-}
-
 function ArchiveTimelineSidebar() {
-  const [exampleCount, setExampleCount] = useState(1);
-  console.log("WORKJED!!!");
+  /* 새로고침하면 추가한 버튼들이 다시 되돌아감, 나중에 저장해주는 과정 있어야 한다 */
+  // const [buttons, setButtons] = useState(["1학년", "2학년", "3학년", "4학년"]); //
 
-  const addExample = () => {
-    setExampleCount((prevCount) => prevCount + 1);
-  };
+  const [buttons, setButtons] = useState(() => {
+    // 로컬 storage에 일단 저장하고 다시 가져오는 식으로.. 나중에 백엔드랑 연결할때 고쳐야 할 듯
+    const savedButtons = localStorage.getItem("savedButtons"); // 버튼을 로컬에서 가져옴
+    return savedButtons // 로컬에 있으면 로컬에서 가져오고
+      ? JSON.parse(savedButtons) // 로컬에 없으면
+      : ["1학년", "2학년", "3학년", "4학년"]; // 새로 만든 기본 내용을 넣어준다. = > api 연결도 동일한 로직으로 가면 될듯 (없으면 초기, 있으면 있는값 받아오기)
+  });
 
-  const createBtnComponent = (btnName) => {
-    return (
-      <div>
-        <button onClick={addExample}>ADD EXAMPLE</button>
-        {[...Array(exampleCount)].map((_, index) => (
-          <SideBarBtn key={index}>
-            {btnName} {index + 1}
-          </SideBarBtn>
-        ))}
-      </div>
-    );
+  useEffect(() => {
+    // 페이지 처음 렌더링 될 때랑 buttons 상태가 변경될때(= 버튼이 추가될때) 로컬에 buttons state 저장
+    localStorage.setItem("savedButtons", JSON.stringify(buttons));
+  }, [buttons]);
+
+  const addNewBtn = () => {
+    let btnCount = buttons.length + 1; // 현재 있는 버튼 개수 기반으로 새 버튼 추가.. 4학년까지 있으니까 5학년부터 시작될것
+    const newBtnName = btnCount + "학년";
+    setButtons((prevButtons) => [...prevButtons, newBtnName]);
   };
 
   return (
     <>
-      <WhiteNavBtns />
       <Background>
         <SideBarContainer>
           <SideBarContents>
-            <SideBarBtn>
-              1학년
-              <BtnSetting>
-                <HiOutlineDotsHorizontal
-                  onClick={() => {
-                    console.log("button clicked!");
-                  }}
-                />
-              </BtnSetting>
-            </SideBarBtn>
-            <SideBarBtn>
-              2학년
-              <BtnSetting>
-                <HiOutlineDotsHorizontal />
-              </BtnSetting>
-            </SideBarBtn>
-            <SideBarBtn>
-              3학년
-              <BtnSetting>
-                <HiOutlineDotsHorizontal />
-              </BtnSetting>
-            </SideBarBtn>
-            <SideBarBtn>
-              4학년
-              <BtnSetting>
-                <HiOutlineDotsHorizontal />
-              </BtnSetting>
-            </SideBarBtn>
-            <SideBarBtn
-              onClick={() => {
-                console.log("Add Button is clicked!");
-              }}
-              // onClick={() => {
-              //   returncreateBtnComponent();
-              // }}
-            >
+            {buttons.map((btnName, index) => (
+              <SideBarBtn key={index}>
+                {btnName}
+                <BtnSetting onClick={() => console.log("버튼 설정 클릭됨")}>
+                  <HiOutlineDotsHorizontal />
+                  {/* <div>
+                    <button onClick={() => console.log("버튼 삭제")}>
+                      삭제
+                    </button>
+                    <button
+                      onClick={() => {
+                        console.log("버튼 이름 변경 ");
+                      }}
+                    >
+                      이름 변경
+                    </button>
+                  </div> */}
+                </BtnSetting>
+              </SideBarBtn>
+            ))}
+            <SideBarBtn onClick={addNewBtn}>
               <span>+ 추가</span>
             </SideBarBtn>
-            {/* <SideBarAddBtn>+ 추가</SideBarAddBtn> */}
           </SideBarContents>
         </SideBarContainer>
       </Background>
