@@ -4,6 +4,7 @@ import "../font/font.module.css";
 import "../components/WriteActivity/FolderComponent";
 import FolderComponent from "../components/WriteActivity/FolderComponent";
 import AddBtnComponent from "../components/WriteActivity/AddBtnComponent";
+import Sidebar from "../components/ArchiveTimelineSidebar";
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,15 +15,9 @@ const NavigationBar = styled.div`
   width: 100vw;
   height: 17vh;
 `;
-const SideBar = styled.div`
-  width: 20vw;
-  min-height: 83vh;
-  border: 1px solid black;
-`;
-
 /////////// AddArea 부터 내가 구현해야 할 부분
 const AddArea = styled.div`
-  width: 80vw;
+  width: 100vw;
   border: solid 1px red;
   display: flex;
   flex-direction: column;
@@ -67,7 +62,7 @@ export default function WriteActivityPage() {
     <>
       <NavigationBar />
       <Wrapper>
-        <SideBar />
+        <Sidebar />
         <AddArea>
           <p> 한선규 님, 안녕하세요!</p>
           <div className="folderWrapper">
