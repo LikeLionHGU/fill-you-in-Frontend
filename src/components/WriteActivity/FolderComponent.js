@@ -31,6 +31,12 @@ const Folder = styled.button`
       color: white;
       margin-top: 20px;
     }
+
+    > input {
+      &:focus {
+        outline: none;
+      }
+    }
   }
 
   > .date {
@@ -55,7 +61,7 @@ export default function FolderComponent({ folderInfo }) {
             }}
           >
             <div>
-              <input className="title" value={item.name}></input>
+              <input className="title" value={item.name} disabled></input>
               <UpdateBtnComponent />
             </div>
             <p className="date">{item.date}</p>

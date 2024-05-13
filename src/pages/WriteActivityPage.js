@@ -38,7 +38,7 @@ const AddArea = styled.div`
     padding-left: 70px;
     margin-top: 50px;
     display: flex;
-    gap: 20px 5%; // 세로, 가로 -> Flex Item 행간(세로) 간격은 균일하고, 가로는 Container의 크기에 따라 유동적으로 변하는 레이아웃
+    gap: 40px 5.5%; // 세로, 가로 -> Flex Item 행간(세로) 간격은 균일하고, 가로는 Container의 크기에 따라 유동적으로 변하는 레이아웃
     flex-wrap: wrap; // 복수의 행
   }
 `;
@@ -61,7 +61,7 @@ export default function WriteActivityPage() {
       name: "test1",
       date: "2000.01.01",
     },
-  ]); // 폴더 이름과 생성 날짜를 관리하는 useState
+  ]); // 폴더 이름과 생성 날짜를 관리하는 useState, 현재 예시를 위한 데이터 추가
 
   return (
     <>
@@ -69,7 +69,7 @@ export default function WriteActivityPage() {
       <Wrapper>
         <SideBar />
         <AddArea>
-          <p> ***님, 안녕하세요!</p>
+          <p> 한선규 님, 안녕하세요!</p>
           <div className="folderWrapper">
             <FolderComponent folderInfo={folderInfo} />
           </div>

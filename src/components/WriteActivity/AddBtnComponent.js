@@ -9,6 +9,7 @@ const AddBtn = styled.button`
   border-radius: 50%;
   border: none;
   background-color: #04b1b1;
+  box-shadow: 2px 2px 5px gray;
 
   > img {
     width: 20px;
@@ -26,6 +27,7 @@ export default function AddBtnComponent({ folderInfo, setFolderInfo }) {
     const updatedFolder = [...folderInfo, newFolder];
     setFolderInfo(updatedFolder);
   };
+
   return (
     <AddBtn onClick={() => addFolder()}>
       <img src={PlusImg} alt="plusImg" />
