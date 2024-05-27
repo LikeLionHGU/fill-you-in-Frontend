@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { nanoid } from "nanoid";
 import "../../font/font.module.css";
 import UpdateBtnComponent from "./UpdateBtnComponent";
 
@@ -49,20 +48,23 @@ const Folder = styled.button`
   }
 `;
 
-export default function FolderComponent({ folderInfo }) {
+export default function FolderComponent({ folderInfo, setFolderInfo }) {
   return (
     <>
       {folderInfo &&
         folderInfo.map((item) => (
           <Folder
-            key={nanoid()}
             onDoubleClick={() => {
               alert("folder was clicked");
             }}
           >
             <div>
-              <input className="title" value={item.name} disabled></input>
-              <UpdateBtnComponent />
+              <input className="title" value={item.name}></input>
+              <UpdateBtnComponent
+                id={item.id}
+                folderInfo={folderInfo}
+                setFolderInfo={setFolderInfo}
+              />
             </div>
             <p className="date">{item.date}</p>
           </Folder>

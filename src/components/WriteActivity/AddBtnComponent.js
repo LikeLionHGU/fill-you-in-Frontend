@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { nanoid } from "nanoid";
 
 import PlusImg from "../../img/Vector.png";
 
@@ -23,7 +24,7 @@ export default function AddBtnComponent({ folderInfo, setFolderInfo }) {
     const dateInfo =
       date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate();
 
-    const newFolder = { name: "빈 폴더", date: dateInfo };
+    const newFolder = { name: "빈 폴더", date: dateInfo, id: nanoid() };
     const updatedFolder = [...folderInfo, newFolder];
     setFolderInfo(updatedFolder);
   };
