@@ -2,6 +2,43 @@ import React from "react";
 import styled from "styled-components";
 
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+
+// import MUIRichTextEditor from "mui-rte";
+import RichTextEditor from "./RichTextEditor";
+// import TableChartIcon from "@mui/icons-material/TableChart";
+
+/*
+
+npm install mui-rte <- rich text editor 사용하려면 설치해야함 
+npm install draft-js <- 
+
+*/
+
+// const MyBlock = (props) => {
+//   return (
+//     <div
+//       style={{
+//         padding: 10,
+//         backgroundColor: "#ebebeb",
+//       }}
+//     >
+//       My Block content is:
+//       {props.children}
+//     </div>
+//   );
+// };
+
+// <MUIRichTextEditor
+//   controls={["my-block"]}
+//   customControls={[
+//     {
+//       name: "my-block",
+//       icon: <TableChartIcon />,
+//       type: "block",
+//       blockWrapper: <MyBlock />,
+//     },
+//   ]}
+// />;
 /*
 npm install @mui/icons-material
 npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
@@ -33,7 +70,10 @@ function WritePostModal({ setModalOpen }) {
               <ModalPostInfos></ModalPostInfos>
             </ModealHeader>
             <ModalInfo>
-              <ModalInfoText>LALALA</ModalInfoText>
+              <ModalInfoText>
+                <RichTextEditor />
+                {/* LALALA */}
+              </ModalInfoText>
               <ModalButtons>
                 <SaveButton type="submit" onClick={handleSubmit}>
                   저장하기
@@ -154,11 +194,10 @@ const ModalInfo = styled.div`
 const ModalInfoText = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
+
   height: 100%;
   width: 100%;
-  border: 2px solid red;
+  border: 2px solid purple;
 
   font-size: 100px;
 `;
