@@ -9,7 +9,7 @@ const DetailBodyContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  border: 2px solid red;
+  /* border: 2px solid red; */
   flex-direction: row;
   > div {
     /* border: 2px solid green; */
@@ -36,9 +36,9 @@ const BackButton = styled.div`
   align-items: center;
   /* border: 2px solid gold; */
   cursor: pointer;
-  /* font-size: 23px; */
 
-  font-size: 1.5vw;
+  font-size: 23px;
+  /* font-size: 1.5vw; */
 
   /* width: 50px;
   height: 50px; */
@@ -46,7 +46,7 @@ const BackButton = styled.div`
 const ContentBody = styled.div`
   display: flex;
   flex-direction: column;
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   height: 100%;
   margin-left: 8%;
   margin-right: 14%;
@@ -65,15 +65,15 @@ const PostHead = styled.div`
     font-weight: bold;
     /* color: blue; */
 
-    /* font-size: 200px; */
-    font-size: 1.3vw;
+    font-size: 25px;
+    /* font-size: 1.3vw; */
   }
   .folder-date {
     display: flex;
     /* color: gold; */
     font-weight: bold;
-    /* font-size: 15px; */
-    font-size: 1vw;
+    /* font-size: 1vw; */
+    font-size: 15px;
     margin-right: 10px;
   }
 `;
@@ -87,7 +87,8 @@ const SettingDots = styled.div`
 
   > svg {
     /* border: 2px solid red; */
-    font-size: 1.5vw;
+    /* font-size: 1.5vw; */
+    font-size: 23px;
     margin-right: 10px;
     cursor: pointer;
     padding: 2px 2px;
@@ -101,7 +102,7 @@ const PostBody = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  border: 2px solid orange;
+  /* border: 2px solid orange; */
 `;
 const PostTitle = styled.div`
   display: flex;
