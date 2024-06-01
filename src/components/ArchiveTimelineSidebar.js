@@ -121,7 +121,7 @@ function ArchiveTimelineSidebar() {
                   onClick={() => toggleDropdown(index)}
                 >
                   <HiOutlineDotsHorizontal />
-                  {activeDropdown === index && (
+                  {activeDropdown === index && ( // 삭제, 이름 변경하는 dropdown 메뉴 부분
                     <DropdownSetting>
                       <DropdownItem onClick={() => removeButton(index)}>
                         삭제
