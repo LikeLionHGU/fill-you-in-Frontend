@@ -1,4 +1,5 @@
 import RouteSet from "./RouteSet";
+import { RecoilRoot } from "recoil";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 /*
@@ -9,9 +10,11 @@ npm install @mui/material @emotion/react @emotion/styled
 
 function App() {
   return (
+    <RecoilRoot>
     <ThemeProvider theme={theme}>
       <RouteSet />
     </ThemeProvider>
+</RecoilRoot>
   );
 }
 
