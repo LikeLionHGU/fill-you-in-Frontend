@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import "../../font/font.module.css";
 import UpdateBtnComponent from "./UpdateBtnComponent";
+import { folderInfoState } from "../atom";
+import { useRecoilState } from "recoil";
 
 const Folder = styled.button`
   width: 26%;
@@ -48,7 +50,8 @@ const Folder = styled.button`
   }
 `;
 
-export default function FolderComponent({ folderInfo, setFolderInfo }) {
+export default function FolderComponent() {
+  const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   return (
     <>
       {folderInfo &&
@@ -59,12 +62,8 @@ export default function FolderComponent({ folderInfo, setFolderInfo }) {
             }}
           >
             <div>
-              <input className="title" value={item.name}></input>
-              <UpdateBtnComponent
-                id={item.id}
-                folderInfo={folderInfo}
-                setFolderInfo={setFolderInfo}
-              />
+              <input className="title" value={item.name} disabled />
+              <UpdateBtnComponent id={item.id} />
             </div>
             <p className="date">{item.date}</p>
           </Folder>

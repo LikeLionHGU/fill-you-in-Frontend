@@ -1,10 +1,10 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import "../font/font.module.css";
 import "../components/WriteActivity/FolderComponent";
 import FolderComponent from "../components/WriteActivity/FolderComponent";
 import AddBtnComponent from "../components/WriteActivity/AddBtnComponent";
 import Sidebar from "../components/ArchiveTimelineSidebar";
+import RenameModalComponent from "../components/WriteActivity/RenameModalComponent";
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,29 +39,6 @@ const AddArea = styled.div`
 `;
 
 export default function WriteActivityPage() {
-  const [folderInfo, setFolderInfo] = useState([
-    {
-      name: "멋쟁이사자처럼",
-      date: "2024.04.26",
-      id: 1,
-    },
-    {
-      name: "YMC",
-      date: "2024.05.05",
-      id: 2,
-    },
-    {
-      name: "PARD",
-      date: "2024.03.09",
-      id: 3,
-    },
-    {
-      name: "test1",
-      date: "2000.01.01",
-      id: 4,
-    },
-  ]); // 폴더 이름과 생성 날짜를 관리하는 useState, 현재 예시를 위한 데이터 추가
-
   return (
     <>
       <NavigationBar />
@@ -70,17 +47,12 @@ export default function WriteActivityPage() {
         <AddArea>
           <p> 한선규 님, 안녕하세요!</p>
           <div className="folderWrapper">
-            <FolderComponent
-              folderInfo={folderInfo}
-              setFolderInfo={setFolderInfo}
-            />
+            <FolderComponent />
           </div>
-          <AddBtnComponent
-            folderInfo={folderInfo}
-            setFolderInfo={setFolderInfo}
-          />
+          <AddBtnComponent />
         </AddArea>
       </Wrapper>
+      <RenameModalComponent />
     </>
   );
 }

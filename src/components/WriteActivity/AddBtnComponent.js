@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { nanoid } from "nanoid";
-
 import PlusImg from "../../img/Vector.png";
+import { useRecoilState } from "recoil";
+import { modalState } from "../atom";
 
 const AddBtn = styled.button`
   width: 50px;
@@ -18,15 +18,12 @@ const AddBtn = styled.button`
   }
 `;
 
-export default function AddBtnComponent({ folderInfo, setFolderInfo }) {
+export default function AddBtnComponent() {
+  const [modalstate, setModalstate] = useRecoilState(modalState);
   const addFolder = () => {
-    const date = new Date();
-    const dateInfo =
-      date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate();
-
-    const newFolder = { name: "빈 폴더", date: dateInfo, id: nanoid() };
-    const updatedFolder = [...folderInfo, newFolder];
-    setFolderInfo(updatedFolder);
+    const modal = document.querySelector(".modal");
+    setModalstate(true);
+    modal.showModal();
   };
 
   return (

@@ -14,13 +14,13 @@ const UpdateBtn = styled.button`
   }
 `;
 
-export default function UpdateBtnComponent({ id, folderInfo, setFolderInfo }) {
+export default function UpdateBtnComponent({ id }) {
   const [showOption, setShowOption] = useState(false);
 
   return (
     <>
       <UpdateBtn
-        onFocus={(e) => {
+        onFocus={() => {
           setShowOption(true);
         }}
         onBlur={(e) => {
@@ -33,13 +33,7 @@ export default function UpdateBtnComponent({ id, folderInfo, setFolderInfo }) {
       >
         <img src={updateBtn} alt="updateBtn" />
       </UpdateBtn>
-      <CrudBtnsComponent
-        id={id}
-        show={showOption}
-        setShow={setShowOption}
-        folderInfo={folderInfo}
-        setFolderInfo={setFolderInfo}
-      />
+      <CrudBtnsComponent Id={id} show={showOption} setShow={setShowOption} />
     </>
   );
 }
