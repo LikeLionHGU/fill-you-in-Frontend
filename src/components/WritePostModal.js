@@ -1,11 +1,26 @@
 import React from "react";
 import styled from "styled-components";
-
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+
+// import MUIRichTextEditor from "mui-rte";
+// import RichTextEditor from "./RichTextEditor";
+
+// // import MUIRichTextEditor from "mui-rte";
+// import AttachFileIcon from "@mui/icons-material/AttachFile";
+// import TableChartIcon from "@mui/icons-material/TableChart";
+import TestEditorForm from "./TextEditorForm";
+
+/*
+npm install mui-rte <- rich text editor 사용하려면 설치해야함 
+npm install draft-js <- 
+
+*/
+
 /*
 npm install @mui/icons-material
 npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
 */
+
 function WritePostModal({ setModalOpen }) {
   const closeModal = () => {
     setModalOpen(false);
@@ -33,13 +48,16 @@ function WritePostModal({ setModalOpen }) {
               <ModalPostInfos></ModalPostInfos>
             </ModealHeader>
             <ModalInfo>
-              <ModalInfoText>LALALA</ModalInfoText>
-              <ModalButtons>
-                <SaveButton type="submit" onClick={handleSubmit}>
-                  저장하기
-                </SaveButton>
-              </ModalButtons>
+              <ModalInfoText>
+                {/* <RichTextEditor /> */}
+                <TestEditorForm />
+              </ModalInfoText>
             </ModalInfo>
+            <ModalButtons>
+              <SaveButton type="submit" onClick={handleSubmit}>
+                저장하기
+              </SaveButton>
+            </ModalButtons>
           </ModalContents>
         </Modal>
       </ModalBackground>
@@ -80,26 +98,27 @@ const ModalExitBackground = styled.div`
 const Modal = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   box-shadow: 0 0 10px 1px #0000002a; // drop-down shadow 모달 그림자
   z-index: 2000; // 배경 보다 위에 있도록 함
   position: fixed;
-
+  padding-top: 20px;
   align-items: center;
   background-color: white;
-  width: 50%;
+  width: 60%;
   /* height: 65%; */
   height: 600px;
   border-radius: 25px;
 
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
 `;
 const ModalContents = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
-  height: 90%;
   /* border: 1px solid red; */
+  width: 95%;
+  height: 98%; /* 추가 */
+  position: relative; /* 추가 */
 `;
 const ModealHeader = styled.div`
   display: flex;
@@ -140,37 +159,45 @@ const CancelButton = styled.div`
 const ModalPostInfos = styled.div`
   display: flex;
   width: 100%;
-  height: 80px;
+  height: 70px;
   border: 2px solid red;
 `;
 
 const ModalInfo = styled.div`
   display: flex;
+
   flex-direction: column;
   height: 100%;
   width: 100%;
-  border: 2px solid green;
+
+  /* border: 1px solid #303030; */
 `;
 const ModalInfoText = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
+  /* align-items: stretch; */
+  height: 85%;
   width: 100%;
-  border: 2px solid red;
+  /* border: 2px solid purple; */
 
   font-size: 100px;
+  overflow-y: auto; /* 추가 */
+  /* overflow-x: scroll; */
 `;
 
 const ModalButtons = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  /* padding: 30px 30px; */
+
+  justify-content: center;
+
   align-items: end;
-  /* border: 1px solid blue; */
-  height: 25%;
+  border: 2px solid pink;
+  /* height: 25%; */
+  position: absolute; /* 추가 */
+  bottom: 0; /* 추가 */
+  width: 100%; /* 추가 */
+  //padding: 10px 0; /* 추가 */
+  background: none; /* 추가 */
 `;
 const SaveProfile = styled.form`
   /* border: 1px solid green; */
