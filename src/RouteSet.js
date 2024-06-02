@@ -7,7 +7,7 @@ import TeamLounge from "./components/TeamLounge";
 import ScrappedProfile from "./components/ScrappedProfile";
 import OtherPersonProfile from "./components/OtherPersonProfile";
 import WriteActivityPage from "./pages/WriteActivityPage";
-
+import DetailedPost from "./components/DetailedPost";
 function RouteSet() {
   return (
     <Router>
@@ -25,6 +25,7 @@ function RouteSet() {
           element={<OtherPersonProfile />}
         ></Route>
         <Route path="/WriteActivity" element={<WriteActivityPage />}></Route>
+        <Route path="/MainPage/Detail" element={<DetailedPost />}></Route>
       </Routes>
     </Router>
   );

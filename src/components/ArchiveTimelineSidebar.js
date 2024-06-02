@@ -1,127 +1,93 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-// eslint-disable-next-line no-unused-vars
-import { useNavigate } from "react-router-dom";
-// eslint-disable-next-line no-unused-vars
-import { createElement } from "react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
-// /*
-
-//  npm install react-icons --save 로 아이콘 사용함, 에러나면 이 명령어 터미널에 입력 후 아이콘 사용
-
-// */
-
-const Background = styled.div`
-  display: flex;
-  /* background-color: aliceblue; */
-  width: 16vw;
-  height: 100vh;
-  padding-top: 4%;
-`;
-const SideBarContainer = styled.div`
-  display: flex;
-
-  /* border-right: 0.2vw solid lightgray; */
-
-  border-right: 0.2vw solid rgba(0, 0, 0, 0.1);
-
-  /* box-shadow: 3px 0 2px lightgray; */
-  width: 100%;
-  height: 80%;
-  padding: 8%;
-`;
-const SideBarContents = styled.div`
-  display: flex;
-  background-color: white;
-  flex-direction: column;
-  /* border: 2px solid green; */
-  width: 100%;
-  padding-left: 4%;
-`;
-const SideBarBtn = styled.div`
-  display: flex;
-  height: 6%;
-  /* width: 100%; */
-  padding-left: 1.5vw;
-  padding-right: 0.2vw;
-  padding-top: 2.5%;
-  margin-bottom: 10%;
-  text-align: left;
-  justify-content: space-between;
-  align-items: center;
-  /* border: 2px solid gold; */
-  border-radius: 0.3vw;
-  color: #04b1b1;
-  font-weight: bold;
-  font-size: 1vw;
-
-  cursor: pointer;
-
-  &:hover {
-    /* color: red; */
-    background-color: rgba(
-      4,
-      177,
-      177,
-      0.08
-    ); // #04b1b1 를 rgba로 바꾼 것. 8% opacity
-    > div {
-      display: flex; // 버튼 안의 메뉴인 *** 버튼을 SidebarBtn을 호버 할때만 보이도록 설정
-    }
-  }
-  > span {
-    padding-left: 0px;
-  }
-`;
-const BtnSetting = styled.div`
-  display: none;
-  justify-content: center;
-  align-items: center;
-  width: 3vw;
-  height: 3vw;
-
-  margin: 0px;
-  margin-bottom: 0.4vw;
-  color: lightgray;
-  font-size: 1.3vw;
-  transition: 0.3s;
-  /* border: 2px solid gray; */
-
-  &:hover {
-    /* background-color: gainsboro; */
-    color: gray;
-    border-radius: 1vw;
-    /* border: 1px solid gray; */
-  }
-`;
-// eslint-disable-next-line no-unused-vars
-const SideBarAddBtn = styled.div`
-  display: flex;
-  padding-left: 0px;
-`;
-
 function ArchiveTimelineSidebar() {
-  /* 새로고침하면 추가한 버튼들이 다시 되돌아감, 나중에 저장해주는 과정 있어야 한다 */
-  // const [buttons, setButtons] = useState(["1학년", "2학년", "3학년", "4학년"]); //
-
   const [buttons, setButtons] = useState(() => {
-    // 로컬 storage에 일단 저장하고 다시 가져오는 식으로.. 나중에 백엔드랑 연결할때 고쳐야 할 듯
-    const savedButtons = localStorage.getItem("savedButtons"); // 버튼을 로컬에서 가져옴
-    return savedButtons // 로컬에 있으면 로컬에서 가져오고
-      ? JSON.parse(savedButtons) // 로컬에 없으면
-      : ["1학년", "2학년", "3학년", "4학년"]; // 새로 만든 기본 내용을 넣어준다. = > api 연결도 동일한 로직으로 가면 될듯 (없으면 초기, 있으면 있는값 받아오기)
+    const savedButtons = localStorage.getItem("savedButtons");
+    return savedButtons
+      ? JSON.parse(savedButtons)
+      : [
+          { name: "1학년", editing: false },
+          { name: "2학년", editing: false },
+          { name: "3학년", editing: false },
+          { name: "4학년", editing: false },
+        ];
   });
 
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const dropdownRefs = useRef([]);
+
   useEffect(() => {
-    // 페이지 처음 렌더링 될 때랑 buttons 상태가 변경될때(= 버튼이 추가될때) 로컬에 buttons state 저장
     localStorage.setItem("savedButtons", JSON.stringify(buttons));
   }, [buttons]);
 
   const addNewBtn = () => {
-    let btnCount = buttons.length + 1; // 현재 있는 버튼 개수 기반으로 새 버튼 추가.. 4학년까지 있으니까 5학년부터 시작될것
-    const newBtnName = btnCount + "학년";
-    setButtons((prevButtons) => [...prevButtons, newBtnName]);
+    // const btnCount = buttons.length + 1;
+    // const newBtnName = btnCount + "학년"; <- 기간에서 새로운 학년 추가할때...
+
+    const newBtnName = "제목 없음";
+    setButtons((prevButtons) => [
+      ...prevButtons,
+      { name: newBtnName, editing: false },
+    ]);
+  };
+
+  const toggleDropdown = (index) => {
+    setActiveDropdown(activeDropdown === index ? null : index);
+  };
+
+  const removeButton = (index) => {
+    setButtons(buttons.filter((_, i) => i !== index));
+    setActiveDropdown(null);
+  };
+
+  const startEditing = (index) => {
+    setButtons(
+      buttons.map((btn, i) =>
+        i === index ? { ...btn, editing: true } : { ...btn, editing: false }
+      )
+    );
+    setActiveDropdown(null);
+  };
+
+  const handleNameChange = (index, newName) => {
+    setButtons(
+      buttons.map((btn, i) =>
+        i === index ? { ...btn, name: newName, editing: false } : btn
+      )
+    );
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      activeDropdown !== null &&
+      !dropdownRefs.current[activeDropdown].contains(event.target)
+    ) {
+      setActiveDropdown(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+    // eslint-disable-next-line
+  }, [activeDropdown]);
+
+  const handleKeyDown = (event, index) => {
+    if (event.key === "Enter") {
+      handleNameChange(index, event.target.value);
+    }
+  };
+
+  const handleBlur = (index, currentName) => {
+    setButtons(
+      buttons.map((btn, i) =>
+        i === index ? { ...btn, name: currentName, editing: false } : btn
+      )
+    );
   };
 
   return (
@@ -129,23 +95,42 @@ function ArchiveTimelineSidebar() {
       <Background>
         <SideBarContainer>
           <SideBarContents>
-            {buttons.map((btnName, index) => (
+            {buttons.map((btn, index) => (
               <SideBarBtn key={index}>
-                {btnName}
-                <BtnSetting onClick={() => console.log("버튼 설정 클릭됨")}>
+                {btn.editing ? (
+                  <RenameInput
+                    className="rename-input"
+                    type="text"
+                    value={btn.name}
+                    onChange={(e) =>
+                      setButtons(
+                        buttons.map((b, i) =>
+                          i === index ? { ...b, name: e.target.value } : b
+                        )
+                      )
+                    }
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    onBlur={() => handleBlur(index, btn.name)}
+                    // autoFocus // <- 이걸 빼야 input 필드 스타일 수정 가능
+                  />
+                ) : (
+                  btn.name
+                )}
+                <BtnSetting
+                  ref={(el) => (dropdownRefs.current[index] = el)}
+                  onClick={() => toggleDropdown(index)}
+                >
                   <HiOutlineDotsHorizontal />
-                  {/* <div>
-                    <button onClick={() => console.log("버튼 삭제")}>
-                      삭제
-                    </button>
-                    <button
-                      onClick={() => {
-                        console.log("버튼 이름 변경 ");
-                      }}
-                    >
-                      이름 변경
-                    </button>
-                  </div> */}
+                  {activeDropdown === index && ( // 삭제, 이름 변경하는 dropdown 메뉴 부분
+                    <DropdownSetting>
+                      <DropdownItem onClick={() => removeButton(index)}>
+                        삭제
+                      </DropdownItem>
+                      <DropdownItem onClick={() => startEditing(index)}>
+                        이름 변경
+                      </DropdownItem>
+                    </DropdownSetting>
+                  )}
                 </BtnSetting>
               </SideBarBtn>
             ))}
@@ -160,3 +145,143 @@ function ArchiveTimelineSidebar() {
 }
 
 export default ArchiveTimelineSidebar;
+const RenameInput = styled.input`
+  display: flex;
+  width: 100%;
+  height: 50%;
+  /* border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: none; */
+  /* border: 2px solid red; */
+  color: black;
+  transition: 0.1s;
+  &.rename-input {
+    // 이름 수정하기 버튼 누르고 직후 input 칸
+
+    /* border: 2px solid red; */
+    /* border: none; */
+    border: 2px solid #04b1b1;
+    transition: 0.1s;
+    /* background: aliceblue; */
+    /* border-bottom: 2px solid #04b1b1; */
+    border-radius: 4px;
+    color: #04b1b1;
+    font-weight: bold;
+    padding-bottom: 2px;
+    /* transition: 0.5s; */
+    margin-left: 0px;
+  }
+  &.rename-input:focus-visible {
+    // 인풋 클릭해서 focus했을 때
+    // input 필드 클릭했을때 스타일
+    outline: none !important; // 원래 아웃라인. (Input 필드 클릭시 생기는 기본 파란색 테두리)
+    // 아웃라인 None 해야 앞서 설정한 테두리 설정 그대로 적용.
+  }
+`;
+const DropdownSetting = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+  border-radius: 5px;
+  padding: 5px;
+  text-align: center;
+  position: absolute;
+  color: black;
+  font-size: 12px;
+  background-color: white;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  right: 0;
+  top: 75%;
+  left: 3%;
+  z-index: 1;
+`;
+
+const DropdownItem = styled.div`
+  padding: 8px 12px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
+const Background = styled.div`
+  display: flex;
+  width: 16vw;
+  height: 100vh;
+  padding-top: 4%;
+`;
+
+const SideBarContainer = styled.div`
+  display: flex;
+  border-right: 0.2vw solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  padding: 8%;
+`;
+
+const SideBarContents = styled.div`
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 4%;
+`;
+
+const SideBarBtn = styled.div`
+  display: flex;
+  height: 5%;
+  padding-left: 1.5vw;
+  padding-right: 0.2vw;
+  padding-top: 2.5%;
+  margin-bottom: 10%;
+  text-align: left;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.3vw;
+  color: #04b1b1;
+  font-weight: bold;
+  font-size: 1vw;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(4, 177, 177, 0.08);
+    > div svg {
+      color: lightgray;
+      &:hover {
+        color: gray;
+      }
+    }
+  }
+
+  > span {
+    padding-left: 0px;
+  }
+
+  input {
+    font-size: 1vw;
+    padding: 0.5vw;
+    border: 1px solid #ccc;
+    border-radius: 0.2vw;
+  }
+`;
+
+const BtnSetting = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3vw;
+  height: 3vw;
+  margin: 0px;
+  margin-bottom: 0.4vw;
+  color: white;
+  font-size: 20px;
+  transition: 0.3s;
+  position: relative;
+`;
+// eslint-disable-next-line
+
+const SideBarAddBtn = styled.div`
+  display: flex;
+  padding-left: 0px;
+`;
