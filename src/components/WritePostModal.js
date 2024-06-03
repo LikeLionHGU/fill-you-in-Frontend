@@ -2,23 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 
-// import MUIRichTextEditor from "mui-rte";
-// import RichTextEditor from "./RichTextEditor";
-
-// // import MUIRichTextEditor from "mui-rte";
-// import AttachFileIcon from "@mui/icons-material/AttachFile";
-// import TableChartIcon from "@mui/icons-material/TableChart";
 import TestEditorForm from "./TextEditorForm";
 
 /*
-npm install mui-rte <- rich text editor 사용하려면 설치해야함 
-npm install draft-js <- 
+mui rte 삭제. 다른것 쓸 것임.
 
-*/
-
-/*
-npm install @mui/icons-material
-npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
 */
 
 function WritePostModal({ setModalOpen }) {
@@ -45,7 +33,31 @@ function WritePostModal({ setModalOpen }) {
               </div>
 
               <div className="modal-title">활동 작성하기</div>
-              <ModalPostInfos></ModalPostInfos>
+              {/* <ModalPostInfos>
+                <ActivityNames className="activity-title">활동명</ActivityNames>
+                <ActivityNames className="activity-agency-title">
+                  회사/기관/단체명
+                </ActivityNames>
+                <DateWrapper>
+                  <ActivityDate className="activity-start-date">
+                    시작일
+                  </ActivityDate>
+                  <ActivityDate className="activity-end-date">
+                    종료일
+                  </ActivityDate>
+                </DateWrapper>
+              </ModalPostInfos> */}
+              <ModalPostInfos>
+                <InputField className="activity-title" placeholder="활동명" />
+                <InputField
+                  className="activity-agency-title"
+                  placeholder="회사/기관/단체명"
+                />
+                <DateWrapper>
+                  <InputField type="date" className="activity-start-date" />
+                  <InputField type="date" className="activity-end-date" />
+                </DateWrapper>
+              </ModalPostInfos>
             </ModealHeader>
             <ModalInfo>
               <ModalInfoText>
@@ -84,6 +96,7 @@ const ModalBackground = styled.div`
 `;
 
 // 아래 컴포넌트는 나중에 배경만 눌렀을때 모달 끄고싶으면 사용!!!!!
+// eslint-disable-next-line
 const ModalExitBackground = styled.div`
   width: 100%;
   height: 100%;
@@ -117,8 +130,10 @@ const ModalContents = styled.div`
   flex-direction: column;
   /* border: 1px solid red; */
   width: 95%;
-  height: 98%; /* 추가 */
-  position: relative; /* 추가 */
+  /* 아래부분 추가 */
+  height: 98%;
+  position: relative;
+  /* 위 부분 추가 */
 `;
 const ModealHeader = styled.div`
   display: flex;
@@ -160,7 +175,89 @@ const ModalPostInfos = styled.div`
   display: flex;
   width: 100%;
   height: 70px;
-  border: 2px solid red;
+  /* border: 2px solid red; */
+  /* justify-content: space-evenly; */
+  align-items: center;
+`;
+
+// const ActivityNames = styled.div`
+//   // 동일한 부분은 이렇게 놔두고, 클래스로 나눠서 다르게 효괒 ㅜ기.
+//   display: flex;
+//   height: 35px;
+
+//   margin-right: 30px;
+//   border-radius: 5px;
+//   border: 2px solid #04b1b1;
+//   align-items: center;
+//   padding-left: 10px;
+//   &.activity-title {
+//     /* background-color: black; */
+//     /* color: white; */
+
+//     width: 180px;
+//   }
+
+//   &.activity-agency-title {
+//     width: 180px;
+//   }
+// `;
+
+const InputField = styled.input`
+  display: flex;
+  height: 35px;
+  margin-right: 30px;
+  border-radius: 5px;
+  border: 2px solid #04b1b1;
+  padding-left: 10px;
+
+  &.activity-title,
+  &.activity-agency-title {
+    width: 180px;
+  }
+
+  &.activity-start-date,
+  &.activity-end-date {
+    width: 150px;
+  }
+
+  &.activity-start-date {
+    margin-right: 0px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &.activity-end-date {
+    margin-right: 0px;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+`;
+
+const DateWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 35px;
+`;
+const ActivityDate = styled.div`
+  display: flex;
+
+  /* border: 2px solid black; */
+
+  border-radius: 5px;
+  border: 2px solid #04b1b1;
+  width: 100px;
+
+  &.activity-start-date {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  &.activity-end-date {
+    border-left: none;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
 `;
 
 const ModalInfo = styled.div`
@@ -189,16 +286,18 @@ const ModalButtons = styled.div`
   display: flex;
 
   justify-content: center;
-
   align-items: end;
-  border: 2px solid pink;
+  /* border: 2px solid pink; */
   /* height: 25%; */
   position: absolute; /* 추가 */
-  bottom: 0; /* 추가 */
+  bottom: 10px; /* 추가 */
   width: 100%; /* 추가 */
   //padding: 10px 0; /* 추가 */
   background: none; /* 추가 */
+  cursor: pointer;
 `;
+
+// eslint-disable-next-line
 const SaveProfile = styled.form`
   /* border: 1px solid green; */
   padding: 10px 60px;
