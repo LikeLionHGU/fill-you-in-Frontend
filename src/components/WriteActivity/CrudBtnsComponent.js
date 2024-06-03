@@ -1,19 +1,24 @@
 import React from "react";
-import { folderInfoState, modalState, modalNameState } from "../atom";
+import { reNmModalState, deleteModal } from "../atom";
 import { useRecoilState } from "recoil";
 
 export default function CrudBtnsComponent({ show, setShow, Id }) {
-  const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
-  const [modalstate, setModalstate] = useRecoilState(modalState);
-  const [modalNmState, setModalNmState] = useRecoilState(modalNameState);
+  const [modalState, setModalState] = useRecoilState(reNmModalState);
+  const [deleteMdState, setDeleteMdState] = useRecoilState(deleteModal);
 
   const updateFolder = () => {
     const modal = document.querySelector(".modal");
-    setModalNmState({
+    setModalState({
       name: "수정",
       id: Id,
+      state: true,
     });
-    setModalstate(true);
+    modal.showModal();
+  };
+
+  const deleteFolder = () => {
+    const modal = document.querySelector(".deleteModal");
+    setDeleteMdState({ state: true, id: Id });
     modal.showModal();
   };
 
@@ -34,9 +39,7 @@ export default function CrudBtnsComponent({ show, setShow, Id }) {
             id="delete"
             onClick={() => {
               setShow(false);
-              setFolderInfo((item) => {
-                return item.filter((itm) => itm.id !== Id);
-              });
+              deleteFolder();
             }}
           >
             삭제

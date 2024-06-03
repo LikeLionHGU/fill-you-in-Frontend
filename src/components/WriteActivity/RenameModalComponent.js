@@ -3,13 +3,12 @@ import "../../font/font.module.css";
 import { useState } from "react";
 import styled from "styled-components";
 import { nanoid } from "nanoid";
-import { folderInfoState } from "../atom";
+import { folderInfoState, reNmModalState } from "../atom";
 import { useRecoilState } from "recoil";
-import { modalState, modalNameState } from "../atom";
 
 const Modal = styled.dialog`
-  width: 31.7%;
-  height: 34%;
+  width: 31.7vw;
+  height: 34vh;
   border: none;
   border-radius: 40px;
   text-align: center;
@@ -85,12 +84,7 @@ const InputArea = styled.div`
 function RenameModalComponent() {
   const [inputValue, setInputValue] = useState("");
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
-  const [modalstate, setModalstate] = useRecoilState(modalState);
-  const [modalNmState, setModalNmState] = useRecoilState(modalNameState);
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+  const [modalState, setModalState] = useRecoilState(reNmModalState);
 
   const addFolder = () => {
     const date = new Date();
@@ -100,39 +94,45 @@ function RenameModalComponent() {
     const updatedFolder = [...folderInfo, newFolder];
     setFolderInfo(updatedFolder);
     setInputValue("");
-    setModalstate(false);
+    setModalState({ state: false });
   };
 
   const updateFolder = () => {
     const updatedFolderInfo = folderInfo.map((itm) =>
-      itm.id === modalNmState.id ? { ...itm, name: inputValue } : itm
+      itm.id === modalState.id ? { ...itm, name: inputValue } : itm
     );
     setFolderInfo(updatedFolderInfo);
     setInputValue("");
-    setModalstate(false);
+    setModalState({ state: false });
   };
 
   return (
-    <Modal className="modal" style={{ display: modalstate ? null : "none" }}>
-      <h3>폴더 {modalNmState.name}하기</h3>
+    <Modal
+      className="modal"
+      style={{ display: modalState.state ? null : "none" }}
+    >
+      <h3>폴더 {modalState.name}하기</h3>
       <InputArea>
         <p>폴더명</p>
         <input
           placeholder="폴더명을 적어주세요"
           value={inputValue}
-          onChange={(e) => handleInputChange(e)}
+          onChange={(e) => setInputValue(e.target.value)}
         />
       </InputArea>
       <form method="dialog">
-        <button className="cancle" onClick={() => setModalstate(false)}>
+        <button
+          className="cancle"
+          onClick={() => setModalState({ state: false })}
+        >
           취소
         </button>
         <button
           className="add"
-          onClick={modalNmState.name === "추가" ? addFolder : updateFolder}
+          onClick={modalState.name === "추가" ? addFolder : updateFolder}
           type="submit"
         >
-          {modalNmState.name}
+          {modalState.name}
         </button>
       </form>
     </Modal>

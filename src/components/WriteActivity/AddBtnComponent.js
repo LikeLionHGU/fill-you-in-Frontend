@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PlusImg from "../../img/Vector.png";
 import { useRecoilState } from "recoil";
-import { modalState, modalNameState } from "../atom";
+import { reNmModalState } from "../atom";
 
 const AddBtn = styled.button`
   width: 50px;
@@ -19,15 +19,14 @@ const AddBtn = styled.button`
 `;
 
 export default function AddBtnComponent() {
-  const [modalstate, setModalstate] = useRecoilState(modalState);
-  const [modalNmState, setModalNmState] = useRecoilState(modalNameState);
+  const [modalState, setModalState] = useRecoilState(reNmModalState);
 
   const addFolder = () => {
     const modal = document.querySelector(".modal");
-    setModalNmState({
+    setModalState({
+      state: true,
       name: "추가",
     });
-    setModalstate(true);
     modal.showModal();
   };
 

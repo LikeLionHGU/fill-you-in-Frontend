@@ -5,6 +5,7 @@ import FolderComponent from "../components/WriteActivity/FolderComponent";
 import AddBtnComponent from "../components/WriteActivity/AddBtnComponent";
 import Sidebar from "../components/ArchiveTimelineSidebar";
 import RenameModalComponent from "../components/WriteActivity/RenameModalComponent";
+import DeleteModalComponent from "../components/WriteActivity/DeleteModalComponent";
 
 const Wrapper = styled.div`
   display: flex;
@@ -53,6 +54,7 @@ export default function WriteActivityPage() {
         </AddArea>
       </Wrapper>
       <RenameModalComponent />
+      <DeleteModalComponent />
     </>
   );
 }

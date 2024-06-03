@@ -9,29 +9,25 @@ export const folderInfoState = atom({
       id: 1,
     },
     {
-      name: "YMC",
-      date: "2024.05.05",
-      id: 2,
-    },
-    {
       name: "PARD",
       date: "2024.03.09",
       id: 3,
     },
-    {
-      name: "test1",
-      date: "2000.01.01",
-      id: 4,
-    },
   ],
 });
 
-export const modalState = atom({
-  key: "modal",
-  default: false,
+export const reNmModalState = atom({
+  key: "renameModal",
+  default: {
+    state: false,
+    name: " ",
+  },
 });
 
-export const modalNameState = atom({
-  key: "modalNm",
-  default: " ",
+export const deleteModal = atom({
+  key: "deleteMD",
+  default: {
+    state: false,
+    id: " ",
+  },
 });
