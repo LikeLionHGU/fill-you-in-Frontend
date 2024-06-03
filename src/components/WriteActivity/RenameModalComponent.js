@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { nanoid } from "nanoid";
 import { folderInfoState } from "../atom";
 import { useRecoilState } from "recoil";
-import { modalState } from "../atom";
+import { modalState, modalNameState } from "../atom";
 
 const Modal = styled.dialog`
   width: 31.7%;
@@ -86,6 +86,7 @@ function RenameModalComponent() {
   const [inputValue, setInputValue] = useState("");
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const [modalstate, setModalstate] = useRecoilState(modalState);
+  const [modalNmState, setModalNmState] = useRecoilState(modalNameState);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -102,9 +103,18 @@ function RenameModalComponent() {
     setModalstate(false);
   };
 
+  const updateFolder = () => {
+    const updatedFolderInfo = folderInfo.map((itm) =>
+      itm.id === modalNmState.id ? { ...itm, name: inputValue } : itm
+    );
+    setFolderInfo(updatedFolderInfo);
+    setInputValue("");
+    setModalstate(false);
+  };
+
   return (
     <Modal className="modal" style={{ display: modalstate ? null : "none" }}>
-      <h3>폴더 추가하기</h3>
+      <h3>폴더 {modalNmState.name}하기</h3>
       <InputArea>
         <p>폴더명</p>
         <input
@@ -117,8 +127,12 @@ function RenameModalComponent() {
         <button className="cancle" onClick={() => setModalstate(false)}>
           취소
         </button>
-        <button className="add" onClick={addFolder} type="submit">
-          추가
+        <button
+          className="add"
+          onClick={modalNmState.name === "추가" ? addFolder : updateFolder}
+          type="submit"
+        >
+          {modalNmState.name}
         </button>
       </form>
     </Modal>

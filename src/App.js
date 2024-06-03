@@ -11,10 +11,10 @@ npm install @mui/material @emotion/react @emotion/styled
 function App() {
   return (
     <RecoilRoot>
-    <ThemeProvider theme={theme}>
-      <RouteSet />
-    </ThemeProvider>
-</RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <RouteSet />
+      </ThemeProvider>
+    </RecoilRoot>
   );
 }
 

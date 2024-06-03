@@ -30,3 +30,8 @@ export const modalState = atom({
   key: "modal",
   default: false,
 });
+
+export const modalNameState = atom({
+  key: "modalNm",
+  default: " ",
+});

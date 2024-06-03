@@ -1,9 +1,21 @@
 import React from "react";
-import { folderInfoState, inputValueState } from "../atom";
+import { folderInfoState, modalState, modalNameState } from "../atom";
 import { useRecoilState } from "recoil";
 
 export default function CrudBtnsComponent({ show, setShow, Id }) {
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
+  const [modalstate, setModalstate] = useRecoilState(modalState);
+  const [modalNmState, setModalNmState] = useRecoilState(modalNameState);
+
+  const updateFolder = () => {
+    const modal = document.querySelector(".modal");
+    setModalNmState({
+      name: "수정",
+      id: Id,
+    });
+    setModalstate(true);
+    modal.showModal();
+  };
 
   return (
     <>
@@ -13,7 +25,7 @@ export default function CrudBtnsComponent({ show, setShow, Id }) {
             id="modify"
             onClick={() => {
               setShow(false);
-              console.log("modify clicked");
+              updateFolder();
             }}
           >
             수정
