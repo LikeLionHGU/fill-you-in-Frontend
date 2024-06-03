@@ -4,6 +4,7 @@ import ArchiveTimelineSidebar from "./ArchiveTimelineSidebar";
 import styled from "styled-components";
 import { FaChevronLeft } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import WritePostModal from "./WritePostModal";
 
 const DetailBodyContainer = styled.div`
   display: flex;
@@ -129,6 +130,19 @@ const PostContent = styled.div`
 `;
 
 function DetailedPost() {
+  // eslint-disable-next-line
+  {
+    /* 모달 추가 state */
+  }
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
+  // eslint-disable-next-line
+  {
+    /* 모달 추가 state */
+  }
+
   return (
     <div>
       <WhiteNavBtns />
