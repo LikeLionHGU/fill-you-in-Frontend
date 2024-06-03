@@ -2,12 +2,9 @@
 npm i react-draft-wysiwyg draft-js
 ㄴ> 이게 설치가 안 된다면 다음 터미널로 입력:
 npm install react-draft-wysiwyg draft-js --legacy-peer-deps
-
 npm install draftjs-to-html --legacy-peer-deps
-
 npm install redux
 npm install @reduxjs/toolkit --legacy-peer-deps
-
 */
 
 import React, { useEffect, useState } from "react";
@@ -21,7 +18,7 @@ const MyBlock = styled.div`
   // 여기서 overflow-y 하면 안된다..
   overflow: none;
 
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   .wrapper-class {
     width: 100%;
     /* height: 95%; */
@@ -47,7 +44,7 @@ const TestEditorForm = () => {
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
   // EditorState의 비어있는 ContentState 기본 구성으로 새 개체를 반환 => 이렇게 안하면 상태 값을 나중에 변경할 수 없음.
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
+  // eslint-disable-next-line
   const editorToHtml = draftToHtml(
     convertToRaw(editorState.getCurrentContent())
   );
@@ -57,9 +54,7 @@ const TestEditorForm = () => {
     setEditorState(editorState);
   };
 
-  const htmlToEditor = `<pre>const editorToHtml =
-        draftToHtml(convertToRaw(editorState.getCurrentContent()));</pre>
-        <p style="text-align:center;"><strong>hello hi hi
+  const htmlToEditor = `<p"><strong>hello hi hi
         </strong><strong>Hello my name is this!</strong> I am not strongggg and i am <strong>Strong!</strong></p>`;
 
   useEffect(() => {
@@ -97,7 +92,7 @@ const TestEditorForm = () => {
           link: { inDropdown: true },
           history: { inDropdown: false },
         }}
-        placeholder="내용을 작성해주세요."
+        placeholder="내용 작성하기"
         // 한국어 설정
         localization={{
           locale: "ko",
