@@ -6,7 +6,7 @@ import { folderInfoState } from "../atom";
 import { useRecoilState } from "recoil";
 
 const Folder = styled.button`
-  width: 26%;
+  width: 20vw;
   height: 19vh;
   background-color: #04b1b1;
   color: white;
@@ -34,6 +34,8 @@ const Folder = styled.button`
     }
 
     > input {
+      font-size: 1vw;
+      width: 70%;
       &:focus {
         outline: none;
       }
@@ -61,7 +63,7 @@ export default function FolderComponent() {
               alert("folder was clicked");
             }}
           >
-            <div>
+            <div style={{ position: "relative" }}>
               <input className="title" value={item.name} disabled />
               <UpdateBtnComponent id={item.id} />
             </div>

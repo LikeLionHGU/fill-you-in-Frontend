@@ -1,6 +1,37 @@
 import React from "react";
 import { reNmModalState, deleteModal } from "../atom";
+import "../../font/font.module.css";
 import { useRecoilState } from "recoil";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 0px;
+  display: flex;
+  flex-direction: column;
+
+  > button {
+    border: 0;
+    background-color: #ffffff;
+    font-size: 12px;
+    font-family: "Pretendard-SemiBold";
+
+    &:hover {
+      color: gray;
+    }
+  }
+
+  > #delete {
+    padding: 5px;
+    border-radius: 5px 5px 0 0;
+  }
+
+  > #modify {
+    padding: 5px;
+    border-radius: 0 0 5px 5px;
+  }
+`;
 
 export default function CrudBtnsComponent({ show, setShow, Id }) {
   const [modalState, setModalState] = useRecoilState(reNmModalState);
@@ -23,18 +54,9 @@ export default function CrudBtnsComponent({ show, setShow, Id }) {
   };
 
   return (
-    <>
+    <Wrapper>
       {show && (
         <>
-          <button
-            id="modify"
-            onClick={() => {
-              setShow(false);
-              updateFolder();
-            }}
-          >
-            수정
-          </button>
           <button
             id="delete"
             onClick={() => {
@@ -44,8 +66,17 @@ export default function CrudBtnsComponent({ show, setShow, Id }) {
           >
             삭제
           </button>
+          <button
+            id="modify"
+            onClick={() => {
+              setShow(false);
+              updateFolder();
+            }}
+          >
+            이름변경
+          </button>
         </>
       )}
-    </>
+    </Wrapper>
   );
 }

@@ -26,9 +26,9 @@ export default function UpdateBtnComponent({ id }) {
         onBlur={(e) => {
           const modifyBtn = document.querySelector("#modify");
           const deleteBtn = document.querySelector("#delete");
-          if (e.relatedTarget !== modifyBtn && e.relatedTarget !== deleteBtn) {
-            setShowOption(false);
-          }
+          // if (e.relatedTarget !== modifyBtn && e.relatedTarget !== deleteBtn) {
+          //   setShowOption(false);
+          // }
         }}
       >
         <img src={updateBtn} alt="updateBtn" />
