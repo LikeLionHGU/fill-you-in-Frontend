@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import WhiteNavBtns from "./WhiteNavBtns";
 import ArchiveTimelineSidebar from "./ArchiveTimelineSidebar";
 import styled from "styled-components";
 import { FaChevronLeft } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+
 import WritePostModal from "./WritePostModal";
 
 const DetailBodyContainer = styled.div`
@@ -149,6 +150,11 @@ function DetailedPost() {
       <DetailBodyContainer>
         <ArchiveTimelineSidebar />
         <DetialContent>
+          {/* 나중에 따로 넣을 모달,,,  */}
+          <button onClick={showModal}>글 새로 작성 </button>
+          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
+
+          {/* 나중에 다른 컴포넌트로 넣을 모달 부분 */}
           <ContentHead>
             <BackButton>
               <FaChevronLeft />

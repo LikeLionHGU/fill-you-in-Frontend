@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import updateBtn from "../../img/dot.png";
+import CrudBtnsComponent from "./CrudBtnsComponent";
 import styled from "styled-components";
 
 const UpdateBtn = styled.button`
@@ -7,17 +8,21 @@ const UpdateBtn = styled.button`
   background-color: #04b1b1;
   margin-bottom: 25px;
   margin-right: 5px;
+
   > img {
-    width: 17px;
+    width: 1vw;
   }
 `;
 
-export default function UpdateBtnComponent() {
+export default function UpdateBtnComponent({ id }) {
   const [showOption, setShowOption] = useState(false);
+
   return (
     <>
       <UpdateBtn
-        onFocus={() => setShowOption(true)}
+        onFocus={() => {
+          setShowOption(true);
+        }}
         onBlur={(e) => {
           const modifyBtn = document.querySelector("#modify");
           const deleteBtn = document.querySelector("#delete");
@@ -28,36 +33,7 @@ export default function UpdateBtnComponent() {
       >
         <img src={updateBtn} alt="updateBtn" />
       </UpdateBtn>
-      <ShowModifyOption show={showOption} setShow={setShowOption} />
-    </>
-  );
-}
-
-function ShowModifyOption({ show, setShow }) {
-  return (
-    <>
-      {show && (
-        <>
-          <button
-            id="modify"
-            onClick={() => {
-              setShow(false);
-              console.log("modify clicked");
-            }}
-          >
-            수정
-          </button>
-          <button
-            id="delete"
-            onClick={() => {
-              setShow(false);
-              console.log("delete clicked");
-            }}
-          >
-            삭제
-          </button>
-        </>
-      )}
+      <CrudBtnsComponent Id={id} show={showOption} setShow={setShowOption} />
     </>
   );
 }
