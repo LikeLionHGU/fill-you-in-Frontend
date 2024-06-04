@@ -4,9 +4,88 @@ import ArchiveTimelineSidebar from "./ArchiveTimelineSidebar";
 import styled from "styled-components";
 import { FaChevronLeft } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-
 import WritePostModal from "./WritePostModal";
 
+function DetailedPost() {
+  {
+    /* 모달 추가 state */
+  }
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
+  {
+    /* 모달 추가 state */
+  }
+
+  return (
+    <div>
+      <WhiteNavBtns />
+      <DetailBodyContainer>
+        <ArchiveTimelineSidebar />
+        <DetialContent>
+          {/* 나중에 따로 넣을 모달,,,  */}
+          <button onClick={showModal}>글 새로 작성 </button>
+          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
+
+          {/* 나중에 다른 컴포넌트로 넣을 모달 부분 */}
+          <ContentHead>
+            <BackButton>
+              <FaChevronLeft />
+            </BackButton>
+          </ContentHead>
+          {/* DetailedPost */}
+          <ContentBody>
+            <PostHead>
+              {/* <PostHeadTitle> */}
+              <div className="folder-title">멋쟁이사자처럼_방학 프로젝트</div>
+              <div className="folder-date">24.01~ 24.02</div>
+              {/* </PostHeadTitle> */}
+            </PostHead>
+            <SettingDots>
+              <HiOutlineDotsHorizontal />
+            </SettingDots>
+            <PostBody>
+              <PostTitle>
+                <div className="post-title">첫 해커톤</div>
+              </PostTitle>
+              <PostContent>
+                <div>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam vitae semper nisi, eu pulvinar massa. Donec lobortis
+                  pulvinar egestas. Duis eu felis efficitur, tempus felis eget,
+                  gravida orci. Sed finibus neque vel ipsum laoreet, eget
+                  vulputate lorem ultrices. Fusce efficitur neque et convallis
+                  vehicula. <br /> <br /> Fusce at dictum lacus. Nullam nunc
+                  dui, faucibus at volutpat in, ullamcorper eget orci. Nullam
+                  volutpat sem ac turpis consectetur pulvinar ut non elit.
+                  Curabitur nunc lectus, auctor ac ligula id, porttitor
+                  hendrerit nunc. In tempor pretium volutpat. Integer congue
+                  rhoncus risus, in tincidunt nisi fringilla id. Donec faucibus
+                  pellentesque eros sit amet hendrerit. Sed pellentesque libero
+                  gravida purus mattis blandit. Quisque blandit dolor vel
+                  dignissim sollicitudin. <br /> <br />
+                  Ut sodales lobortis cursus. Suspendisse potenti. Aenean
+                  egestas eu dui non dictum. Donec metus metus, tristique at
+                  pharetra faucibus, eleifend ac turpis. Integer a egestas
+                  ligula. Donec sit amet vulputate tellus. Fusce id egestas
+                  ligula. Suspendisse eu quam nulla. Aliquam ac risus libero.{" "}
+                  <br /> <br />
+                  Quisque vehicula tincidunt massa a interdum. Vestibulum ante
+                  ipsum primis in faucibus orci luctus et ultrices posuere
+                  cubilia curae; Nullam velit lectus, elementum eu est in,
+                  bibendum ultricies augue.
+                </div>
+              </PostContent>
+            </PostBody>
+          </ContentBody>
+        </DetialContent>
+      </DetailBodyContainer>
+    </div>
+  );
+}
+
+export default DetailedPost;
 const DetailBodyContainer = styled.div`
   display: flex;
   width: 100%;
@@ -129,86 +208,3 @@ const PostContent = styled.div`
   height: 100%;
   padding: 10px;
 `;
-
-function DetailedPost() {
-  // eslint-disable-next-line
-  {
-    /* 모달 추가 state */
-  }
-  const [modalOpen, setModalOpen] = useState(false);
-  const showModal = () => {
-    setModalOpen(true);
-  };
-  // eslint-disable-next-line
-  {
-    /* 모달 추가 state */
-  }
-
-  return (
-    <div>
-      <WhiteNavBtns />
-      <DetailBodyContainer>
-        <ArchiveTimelineSidebar />
-        <DetialContent>
-          {/* 나중에 따로 넣을 모달,,,  */}
-          <button onClick={showModal}>글 새로 작성 </button>
-          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
-
-          {/* 나중에 다른 컴포넌트로 넣을 모달 부분 */}
-          <ContentHead>
-            <BackButton>
-              <FaChevronLeft />
-            </BackButton>
-          </ContentHead>
-          {/* DetailedPost */}
-          <ContentBody>
-            <PostHead>
-              {/* <PostHeadTitle> */}
-              <div className="folder-title">멋쟁이사자처럼_방학 프로젝트</div>
-              <div className="folder-date">24.01~ 24.02</div>
-              {/* </PostHeadTitle> */}
-            </PostHead>
-            <SettingDots>
-              <HiOutlineDotsHorizontal />
-            </SettingDots>
-            <PostBody>
-              <PostTitle>
-                <div className="post-title">첫 해커톤</div>
-              </PostTitle>
-              <PostContent>
-                <div>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam vitae semper nisi, eu pulvinar massa. Donec lobortis
-                  pulvinar egestas. Duis eu felis efficitur, tempus felis eget,
-                  gravida orci. Sed finibus neque vel ipsum laoreet, eget
-                  vulputate lorem ultrices. Fusce efficitur neque et convallis
-                  vehicula. <br /> <br /> Fusce at dictum lacus. Nullam nunc
-                  dui, faucibus at volutpat in, ullamcorper eget orci. Nullam
-                  volutpat sem ac turpis consectetur pulvinar ut non elit.
-                  Curabitur nunc lectus, auctor ac ligula id, porttitor
-                  hendrerit nunc. In tempor pretium volutpat. Integer congue
-                  rhoncus risus, in tincidunt nisi fringilla id. Donec faucibus
-                  pellentesque eros sit amet hendrerit. Sed pellentesque libero
-                  gravida purus mattis blandit. Quisque blandit dolor vel
-                  dignissim sollicitudin. <br /> <br />
-                  Ut sodales lobortis cursus. Suspendisse potenti. Aenean
-                  egestas eu dui non dictum. Donec metus metus, tristique at
-                  pharetra faucibus, eleifend ac turpis. Integer a egestas
-                  ligula. Donec sit amet vulputate tellus. Fusce id egestas
-                  ligula. Suspendisse eu quam nulla. Aliquam ac risus libero.{" "}
-                  <br /> <br />
-                  Quisque vehicula tincidunt massa a interdum. Vestibulum ante
-                  ipsum primis in faucibus orci luctus et ultrices posuere
-                  cubilia curae; Nullam velit lectus, elementum eu est in,
-                  bibendum ultricies augue.
-                </div>
-              </PostContent>
-            </PostBody>
-          </ContentBody>
-        </DetialContent>
-      </DetailBodyContainer>
-    </div>
-  );
-}
-
-export default DetailedPost;
