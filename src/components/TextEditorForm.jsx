@@ -16,27 +16,6 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import axios from "axios";
 
-const MyBlock = styled.div`
-  overflow: none;
-  .wrapper-class {
-    width: 100%;
-    margin: 0 auto;
-    margin-bottom: 4rem;
-    position: absolute;
-  }
-  .editor {
-    height: 320px !important;
-    border: 2px solid #f1f1f1 !important;
-    padding: 5px !important;
-    border-radius: 2px !important;
-    font-size: 20px;
-    & {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  }
-`;
-
 const TestEditorForm = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const editorToHtml = draftToHtml(
@@ -119,3 +98,24 @@ function uploadImageCallBack(file) {
 }
 
 export default TestEditorForm;
+
+const MyBlock = styled.div`
+  overflow: none;
+  .wrapper-class {
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 4rem;
+    position: absolute;
+  }
+  .editor {
+    height: 320px !important;
+    border: 2px solid #f1f1f1 !important;
+    padding: 5px !important;
+    border-radius: 2px !important;
+    font-size: 20px;
+    & {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+`;
