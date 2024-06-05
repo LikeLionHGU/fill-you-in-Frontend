@@ -41,12 +41,20 @@ const LogoImg = styled.div`
   top: 3%;
   padding: 2px;
   cursor: pointer;
-  > img {
+  > .whiteLogo {
     width: 37.9%;
   }
+
+  > .blueLogo {
+    width: 80%;
+  }
 `;
-function WhiteNavBtns() {
+function WhiteNavBtns({ img }) {
   const navigate = useNavigate();
+  const blueLogo =
+    "https://cdn.builder.io/api/v1/image/assets/TEMP/da499762202f994dca54ca969adb1ef5319c49ef9d16de21ea1a331e2cdf55f0?";
+  const whiteLogo =
+    "https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/--@2x.png";
   const handleLogoutMsg = () => {
     ///// < = jwt를 백엔드로 계속 보내면서 확인해야할듯
     if (window.confirm("로그아웃 하시겠습니까?")) {
@@ -60,12 +68,21 @@ function WhiteNavBtns() {
   return (
     <NavBar>
       <LogoImg>
-        <img
-          className="image"
-          alt="logoImg"
-          src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/--@2x.png"
-          onClick={handleGoMainPage}
-        />
+        {img === "blue" ? (
+          <img
+            className="blueLogo"
+            alt="logoImg"
+            src={blueLogo}
+            onClick={handleGoMainPage}
+          />
+        ) : (
+          <img
+            className="whiteLogo"
+            alt="logoImg"
+            src={whiteLogo}
+            onClick={handleGoMainPage}
+          />
+        )}
       </LogoImg>
       <NavButton>활동 찾기</NavButton>
       <NavButton
