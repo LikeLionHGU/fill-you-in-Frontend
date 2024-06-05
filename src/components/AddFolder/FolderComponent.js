@@ -23,7 +23,7 @@ const Folder = styled.button`
     margin-top: 10px;
 
     > .title {
-      font-family: "Pretendard-SemiBold";
+      font-family: "Pretendard-Regular";
       font-size: 17px;
       margin-left: 18px;
       text-align: left;

@@ -14,8 +14,8 @@ const Wrapper = styled.div`
   > button {
     border: 0;
     background-color: #ffffff;
-    font-size: 12px;
-    font-family: "Pretendard-SemiBold";
+    font-size: 9px;
+    font-family: "Pretendard-Regular";
 
     &:hover {
       background-color: #f1f1f1;
@@ -23,12 +23,12 @@ const Wrapper = styled.div`
   }
 
   > #delete {
-    padding: 5px;
+    padding: 8px;
     border-radius: 5px 5px 0 0;
   }
 
   > #modify {
-    padding: 5px;
+    padding: 8px;
     border-radius: 0 0 5px 5px;
   }
 `;
