@@ -106,12 +106,12 @@ function RenameModalComponent() {
     setModalState({ state: false });
   };
 
-  const activeEnter = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      modalState.name === "추가" ? addFolder() : updateFolder();
-    }
-  };
+  // const activeEnter = (e) => {
+  //   if (e.key === "Enter") {
+  //     e.preventDefault();
+  //     modalState.name === "추가" ? addFolder() : updateFolder();
+  //   }
+  // };
 
   return (
     <Modal
@@ -125,7 +125,7 @@ function RenameModalComponent() {
           placeholder="폴더명을 적어주세요"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={activeEnter}
+          // onKeyDown={activeEnter}
         />
       </InputArea>
       <form method="dialog">
