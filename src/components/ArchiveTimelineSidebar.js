@@ -209,7 +209,7 @@ const Background = styled.div`
   display: flex;
   width: 16vw;
   height: 100vh;
-  padding-top: 4%;
+  /* margin-top: 4%; */
 `;
 
 const SideBarContainer = styled.div`
@@ -218,6 +218,7 @@ const SideBarContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 8%;
+  margin-top: 4%;
 `;
 
 const SideBarContents = styled.div`

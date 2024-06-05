@@ -1,25 +1,21 @@
 import styled from "styled-components";
 import "../font/font.module.css";
-import "../components/WriteActivity/FolderComponent";
-import FolderComponent from "../components/WriteActivity/FolderComponent";
-import AddBtnComponent from "../components/WriteActivity/AddBtnComponent";
+import "../components/AddFolder/FolderComponent";
+import FolderComponent from "../components/AddFolder/FolderComponent";
+import AddBtnComponent from "../components/AddFolder/AddBtnComponent";
 import Sidebar from "../components/ArchiveTimelineSidebar";
-import RenameModalComponent from "../components/WriteActivity/RenameModalComponent";
-import DeleteModalComponent from "../components/WriteActivity/DeleteModalComponent";
+import RenameModalComponent from "../components/AddFolder/RenameModalComponent";
+import DeleteModalComponent from "../components/AddFolder/DeleteModalComponent";
+import WhiteNavBtns from "../components/WhiteNavBtns";
 
 const Wrapper = styled.div`
   display: flex;
+  /* margin-top: 30px; */
 `;
 
-const NavigationBar = styled.div`
-  border: 1px solid blue;
-  width: 100vw;
-  height: 17vh;
-`;
 /////////// AddArea 부터 내가 구현해야 할 부분
 const AddArea = styled.div`
   width: 80vw;
-  border: solid 1px red;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -43,7 +39,7 @@ const AddArea = styled.div`
 export default function AddFolderPage() {
   return (
     <>
-      <NavigationBar />
+      <WhiteNavBtns />
       <Wrapper>
         <Sidebar />
         <AddArea>
