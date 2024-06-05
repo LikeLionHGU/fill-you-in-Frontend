@@ -22,7 +22,8 @@ const AddArea = styled.div`
   border: solid 1px red;
   display: flex;
   flex-direction: column;
-
+  position: relative;
+  min-height: 83vh;
   > p {
     margin-left: 5.8vw;
     margin-top: 3.5vh;
@@ -39,7 +40,7 @@ const AddArea = styled.div`
   }
 `;
 
-export default function WriteActivityPage() {
+export default function AddFolderPage() {
   return (
     <>
       <NavigationBar />
@@ -48,9 +49,9 @@ export default function WriteActivityPage() {
         <AddArea>
           <p> 한선규 님, 안녕하세요!</p>
           <div className="folderWrapper">
+            <AddBtnComponent />
             <FolderComponent />
           </div>
-          <AddBtnComponent />
         </AddArea>
       </Wrapper>
       <RenameModalComponent />

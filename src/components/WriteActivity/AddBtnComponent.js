@@ -1,20 +1,29 @@
 import React from "react";
 import styled from "styled-components";
-import PlusImg from "../../img/Vector.png";
+import emptyFolder from "../../img/addFolder.png";
+import plusBtn from "../../img/plusFolder.png";
 import { useRecoilState } from "recoil";
 import { reNmModalState } from "../atom";
 
 const AddBtn = styled.button`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  width: 20vw;
+  height: 19vh;
+  position: relative;
   border: none;
-  background-color: #04b1b1;
-  box-shadow: 2px 2px 5px gray;
+  background-color: #ffffff;
+  padding: 0;
 
-  > img {
-    width: 20px;
-    padding-top: 3px;
+  > #emptyFolder {
+    width: 20vw;
+    height: 19vh;
+  }
+
+  > #plusBtn {
+    width: 35px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 `;
 
@@ -32,7 +41,8 @@ export default function AddBtnComponent() {
 
   return (
     <AddBtn onClick={() => addFolder()}>
-      <img src={PlusImg} alt="plusImg" />
+      <img src={emptyFolder} alt="emptyFolder" id="emptyFolder" />
+      <img src={plusBtn} alt="plusBtn" id="plusBtn" />
     </AddBtn>
   );
 }

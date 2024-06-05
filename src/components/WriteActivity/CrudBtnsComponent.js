@@ -18,7 +18,7 @@ const Wrapper = styled.div`
     font-family: "Pretendard-SemiBold";
 
     &:hover {
-      color: gray;
+      background-color: #f1f1f1;
     }
   }
 

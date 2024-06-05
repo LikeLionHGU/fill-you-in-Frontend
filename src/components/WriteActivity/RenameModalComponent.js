@@ -34,7 +34,7 @@ const Modal = styled.dialog`
       font-family: "Pretendard-SemiBold";
 
       &:hover {
-        color: gray;
+        background-color: gray;
       }
     }
 
@@ -49,7 +49,7 @@ const Modal = styled.dialog`
       color: #06b5b5;
 
       &:hover {
-        color: gray;
+        background-color: #f1f1f1;
       }
     }
   }
@@ -106,6 +106,13 @@ function RenameModalComponent() {
     setModalState({ state: false });
   };
 
+  const activeEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      modalState.name === "추가" ? addFolder() : updateFolder();
+    }
+  };
+
   return (
     <Modal
       className="modal"
@@ -118,19 +125,22 @@ function RenameModalComponent() {
           placeholder="폴더명을 적어주세요"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={activeEnter}
         />
       </InputArea>
       <form method="dialog">
         <button
           className="cancle"
-          onClick={() => setModalState({ state: false })}
+          onClick={() => {
+            setModalState({ state: false });
+            setInputValue("");
+          }}
         >
           취소
         </button>
         <button
           className="add"
           onClick={modalState.name === "추가" ? addFolder : updateFolder}
-          type="submit"
         >
           {modalState.name}
         </button>

@@ -19,6 +19,38 @@ const Modal = styled.dialog`
     color: #005f5f;
     margin: 0;
   }
+
+  > form {
+    > .cancle {
+      width: 100px;
+      height: 35px;
+      margin-left: 15px;
+      border-radius: 30px;
+      border: none;
+      background-color: #06b5b5;
+      color: #ffffff;
+      font-family: "Pretendard-SemiBold";
+
+      &:hover {
+        background-color: gray;
+      }
+    }
+
+    > .delete {
+      width: 100px;
+      height: 35px;
+      margin-right: 15px;
+      border-radius: 30px;
+      border: 2px solid #06b5b5;
+      font-family: "Pretendard-SemiBold";
+      background-color: #ffffff;
+      color: #06b5b5;
+
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
+  }
 `;
 
 export default function DeleteModalComponent() {
@@ -38,8 +70,15 @@ export default function DeleteModalComponent() {
     >
       <h3>폴더를 삭제하시겠습니까?</h3>
       <form method="dialog">
-        <button onClick={() => setDeleteMdState({ state: false })}>취소</button>
-        <button onClick={deleteFolder}>삭제</button>
+        <button
+          className="delete"
+          onClick={() => setDeleteMdState({ state: false })}
+        >
+          취소
+        </button>
+        <button className="cancle" onClick={deleteFolder}>
+          삭제
+        </button>
       </form>
     </Modal>
   );
