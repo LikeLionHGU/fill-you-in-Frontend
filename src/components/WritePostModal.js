@@ -1,48 +1,162 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
-/*
-npm install @mui/icons-material
-npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
-*/
+import TestEditorForm from "./TextEditorForm";
+
 function WritePostModal({ setModalOpen }) {
+  const [modalPost, setModalPost] = useState([]);
+  const [post, setPost] = useState({
+    activityName: "",
+    agencyName: "",
+    postContent: "", // 초기 상태
+  });
+  const [requiredField, setRequiredField] = useState(true);
+
   const closeModal = () => {
     setModalOpen(false);
   };
 
   const handleSubmit = async (data) => {
-    setModalOpen(false); // !! 나중에 백엔드랑 연결할 때 여기서 저장해서 넘겨줘야함.
+    setModalOpen(false); // 나중에 백엔드랑 연결할 때 여기서 저장해서 넘겨줘야함.
   };
+
+  const handleRequiredFieldTrue = () => {
+    setRequiredField(true);
+  };
+
+  const handleRequiredFieldFalse = () => {
+    setRequiredField(false);
+  };
+
+  const handleSubmitPost = async (event) => {
+    event.preventDefault();
+
+    const modifyPost = {
+      activityName: post.activityName,
+      agencyName: post.agencyName,
+      postContent: post.postContent,
+    };
+
+    console.log("받은데이터: ");
+    console.log(modifyPost);
+
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/files";
+
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"),
+        },
+        body: JSON.stringify(modifyPost),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log(json.ok);
+      if (json.ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const getPost = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/files";
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"),
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log("Server Response12", responseData);
+
+      setModalPost(responseData);
+      setPost({
+        activityName: responseData.activityName || "",
+        agencyName: responseData.agencyName || "",
+        postContent: responseData.postContent || "",
+      });
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getPost();
+  }, []); // 빈 배열을 추가하여 처음 마운트될 때만 호출되도록 함
+
   return (
     <>
-      <ModalBackground>
-        {/* <ModalExitBackground onClick={closeModal}></ModalExitBackground> 
-        나중에 배경만 눌렀을때도 모달을 끄고싶다면 이부분 추가.
-        */}
-        <Modal>
-          <ModalContents>
-            <ModealHeader>
-              <div className="modal-cancel">
-                <CancelButton onClick={closeModal}>
-                  <ClearRoundedIcon />
-                </CancelButton>
-              </div>
+      <form onSubmit={handleSubmitPost}>
+        <ModalBackground>
+          <Modal>
+            <ModalContents>
+              <ModealHeader>
+                <div className="modal-cancel">
+                  <CancelButton onClick={closeModal}>
+                    <ClearRoundedIcon />
+                  </CancelButton>
+                </div>
+                <div className="modal-title">활동 작성하기</div>
+                <ModalPostInfos>
+                  <div
+                    className="InputFieldWrapper"
+                    onChange={handleRequiredFieldFalse}
+                  >
+                    <InputField
+                      type="text"
+                      className="inputField-activity-name"
+                      // className="InputField"
+                      placeholder="활동명을 입력해주세요"
+                      required
+                    />
+                    <label>
+                      활동명 <span className="RequiredIndicator">*</span>
+                    </label>
+                  </div>
 
-              <div className="modal-title">활동 작성하기</div>
-              <ModalPostInfos></ModalPostInfos>
-            </ModealHeader>
-            <ModalInfo>
-              <ModalInfoText>LALALA</ModalInfoText>
+                  <DateWrapper>
+                    <InputField
+                      type="date"
+                      className="activity-start-date"
+                      required
+                    />
+                    <InputField
+                      type="date"
+                      className="activity-end-date"
+                      required
+                    />
+                  </DateWrapper>
+                </ModalPostInfos>
+              </ModealHeader>
+              <ModalInfo>
+                {/* <ModalInfoText> */}
+                <TestEditorForm />
+                {/* </ModalInfoText> */}
+              </ModalInfo>
               <ModalButtons>
-                <SaveButton type="submit" onClick={handleSubmit}>
+                <SaveButton type="submit" onClick={handleSubmitPost}>
                   저장하기
                 </SaveButton>
               </ModalButtons>
-            </ModalInfo>
-          </ModalContents>
-        </Modal>
-      </ModalBackground>
+            </ModalContents>
+          </Modal>
+        </ModalBackground>
+      </form>
     </>
   );
 }
@@ -66,6 +180,7 @@ const ModalBackground = styled.div`
 `;
 
 // 아래 컴포넌트는 나중에 배경만 눌렀을때 모달 끄고싶으면 사용!!!!!
+// eslint-disable-next-line
 const ModalExitBackground = styled.div`
   width: 100%;
   height: 100%;
@@ -80,26 +195,29 @@ const ModalExitBackground = styled.div`
 const Modal = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   box-shadow: 0 0 10px 1px #0000002a; // drop-down shadow 모달 그림자
   z-index: 2000; // 배경 보다 위에 있도록 함
   position: fixed;
-
+  padding-top: 20px;
   align-items: center;
   background-color: white;
-  width: 50%;
+  width: 60%;
   /* height: 65%; */
   height: 600px;
   border-radius: 25px;
 
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
 `;
 const ModalContents = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
-  height: 90%;
   /* border: 1px solid red; */
+  width: 95%;
+  /* 아래부분 추가 */
+  height: 98%;
+  position: relative;
+  /* 위 부분 추가 */
 `;
 const ModealHeader = styled.div`
   display: flex;
@@ -140,52 +258,118 @@ const CancelButton = styled.div`
 const ModalPostInfos = styled.div`
   display: flex;
   width: 100%;
-  height: 80px;
-  border: 2px solid red;
+  height: 60px;
+
+  /* border: 2px solid red; */
+  justify-content: space-between;
+  align-items: end;
+  /* margin-bottom: 5px; */
+  margin-bottom: 10px;
+  .InputFieldWrapper {
+    position: relative;
+    display: inline-block;
+    display: flex;
+
+    flex-direction: column-reverse;
+    margin-right: 10px;
+    width: 50%;
+    .inputField-activity-name {
+      display: flex;
+      width: 100%;
+      padding: 0px;
+      padding-left: 10px;
+    }
+  }
+
+  label {
+    // 활동명 *
+    color: black;
+    margin-left: 5px;
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+  .RequiredIndicator {
+    position: absolute;
+    top: 10%;
+    transform: translateY(-50%);
+    color: red;
+  }
+`;
+
+const InputField = styled.input`
+  position: relative; // ::before를 위한 상대 위치 설정
+  display: flex;
+  height: 40px;
+  margin-right: 30px;
+  border-radius: 5px;
+  border: 2px solid #04b1b1;
+  padding-left: 10px;
+
+  &.activity-start-date,
+  &.activity-end-date {
+    width: 150px;
+  }
+
+  &.activity-start-date {
+    margin-right: 0px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &.activity-end-date {
+    margin-right: 0px;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+`;
+
+const DateWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  /* height: 40px; */
+  /* border: 2px solid white; */
 `;
 
 const ModalInfo = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  border: 2px solid green;
-`;
-const ModalInfoText = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  border: 2px solid red;
 
-  font-size: 100px;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 `;
+// const ModalInfoText = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   height: 80%;
+//   width: 100%;
+//   border: 5px solid purple;
+//   /* justify-content: center; */
+//   font-size: 100px;
+//   overflow-y: auto; /* 추가 */
+//   overflow-x: scroll;
+//   /* & { */
+//   -ms-overflow-style: none;
+//   scrollbar-width: none;
+
+//   /* } */
+// `;
 
 const ModalButtons = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  /* padding: 30px 30px; */
+
+  justify-content: center;
   align-items: end;
-  /* border: 1px solid blue; */
-  height: 25%;
-`;
-const SaveProfile = styled.form`
-  /* border: 1px solid green; */
-  padding: 10px 60px;
-  border-radius: 25px;
-  background-color: #06b5b5;
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  font-family: "Pretendard-SemiBold", Helvetica;
-  transition: 0.2s;
-  &:hover {
-    background-color: #008888;
-    cursor: pointer;
-  }
+  /* border: 2px solid pink; */
+  /* height: 25%; */
+  position: absolute; /* 추가 */
+  bottom: 10px; /* 추가 */
+  width: 100%; /* 추가 */
+  //padding: 10px 0; /* 추가 */
+  background: none; /* 추가 */
+  cursor: pointer;
 `;
 
 const SaveButton = styled.div`
