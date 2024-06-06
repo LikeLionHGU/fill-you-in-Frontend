@@ -8,7 +8,7 @@ import RenameModalComponent from "../components/AddFolder/RenameModalComponent";
 import DeleteModalComponent from "../components/AddFolder/DeleteModalComponent";
 import WhiteNavBtns from "../components/WhiteNavBtns";
 import { useRecoilState } from "recoil";
-import { folderInfoState } from "../components/atom";
+import { folderInfoState, categoryIDState } from "../components/atom";
 import { useEffect } from "react";
 
 const Wrapper = styled.div`
@@ -40,10 +40,12 @@ const AddArea = styled.div`
 
 export default function AddFolderPage() {
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
+  const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
 
   const getFolderInfo = async () => {
     const url =
-      process.env.REACT_APP_BACK_URL + "/api/fillyouin/categories/1/folders"; //id는 recoil로 쓰기..?
+      process.env.REACT_APP_BACK_URL +
+      `/api/fillyouin/categories/${categoryID}/folders`; //id는 recoil로 쓰기..?
 
     try {
       const response = await fetch(url, {
@@ -59,7 +61,7 @@ export default function AddFolderPage() {
       const responseData = await response.json();
       const variable = responseData.folders.map((item) => ({
         name: item.name,
-        categoryId: item.id,
+        id: item.id,
       }));
       setFolderInfo(variable);
     } catch (error) {
@@ -69,7 +71,7 @@ export default function AddFolderPage() {
 
   useEffect(() => {
     getFolderInfo();
-  }, []);
+  }, [categoryID]);
   return (
     <>
       <WhiteNavBtns img="blue" />

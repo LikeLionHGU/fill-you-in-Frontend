@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { categoryIDState } from "./atom";
+import { useRecoilState } from "recoil";
 
 function ArchiveTimelineSidebar() {
   const [buttons, setButtons] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [cid, setCid] = useState(null);
+  const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
+
   const dropdownRefs = useRef([]);
   var categoryId;
   var changedName;
@@ -206,7 +210,12 @@ function ArchiveTimelineSidebar() {
         <SideBarContainer>
           <SideBarContents>
             {buttons.map((btn, index) => (
-              <SideBarBtn key={index}>
+              <SideBarBtn
+                key={index}
+                onClick={() => {
+                  setCategoryID(btn.id);
+                }}
+              >
                 {btn.editing ? (
                   <RenameInput
                     className="rename-input"
