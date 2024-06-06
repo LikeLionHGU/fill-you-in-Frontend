@@ -159,6 +159,7 @@ export const LoginScreen = () => {
     };
 
     try {
+      console.log(data);
       const response = await fetch(url, {
         method: "POST",
         headers: {

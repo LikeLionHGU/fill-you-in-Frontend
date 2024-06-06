@@ -86,20 +86,46 @@ function RenameModalComponent() {
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const [modalState, setModalState] = useRecoilState(reNmModalState);
 
+  const setFolderData = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/folders";
+    // console.log("Bearer " + localStorage.getItem("loginToken"));
+    try {
+      console.log(folderInfo);
+      const response = await fetch(url, {
+        method: "POST", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+
+        body: JSON.stringify(folderInfo),
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   const addFolder = () => {
-    const date = new Date();
-    const dateInfo =
-      date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate();
-    const newFolder = { name: inputValue, date: dateInfo, id: nanoid() };
+    const newFolder = { name: inputValue, categoryId: 3 };
     const updatedFolder = [...folderInfo, newFolder];
     setFolderInfo(updatedFolder);
     setInputValue("");
     setModalState({ state: false });
+    setFolderData();
   };
 
   const updateFolder = () => {
     const updatedFolderInfo = folderInfo.map((itm) =>
-      itm.id === modalState.id ? { ...itm, name: inputValue } : itm
+      itm.categoryId === modalState.id ? { ...itm, name: inputValue } : itm
     );
     setFolderInfo(updatedFolderInfo);
     setInputValue("");

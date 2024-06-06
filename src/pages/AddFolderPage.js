@@ -7,10 +7,12 @@ import Sidebar from "../components/ArchiveTimelineSidebar";
 import RenameModalComponent from "../components/AddFolder/RenameModalComponent";
 import DeleteModalComponent from "../components/AddFolder/DeleteModalComponent";
 import WhiteNavBtns from "../components/WhiteNavBtns";
+import { useRecoilState } from "recoil";
+import { folderInfoState } from "../components/atom";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
   display: flex;
-  /* margin-top: 30px; */
 `;
 
 /////////// AddArea 부터 내가 구현해야 할 부분
@@ -37,9 +39,40 @@ const AddArea = styled.div`
 `;
 
 export default function AddFolderPage() {
+  const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
+
+  const getFolderInfo = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL + "/api/fillyouin/categories/1/folders"; //id는 recoil로 쓰기..?
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      const variable = responseData.folders.map((item) => ({
+        name: item.name,
+        categoryId: item.id,
+      }));
+      setFolderInfo(variable);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getFolderInfo();
+  }, []);
   return (
     <>
-      <WhiteNavBtns />
+      <WhiteNavBtns img="blue" />
       <Wrapper>
         <Sidebar />
         <AddArea>
