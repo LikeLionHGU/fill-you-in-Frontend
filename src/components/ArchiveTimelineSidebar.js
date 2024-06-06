@@ -3,35 +3,142 @@ import styled from "styled-components";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 function ArchiveTimelineSidebar() {
-  const [buttons, setButtons] = useState(() => {
-    const savedButtons = localStorage.getItem("savedButtons");
-    return savedButtons
-      ? JSON.parse(savedButtons)
-      : [
-          { name: "1학년", editing: false },
-          { name: "2학년", editing: false },
-          { name: "3학년", editing: false },
-          { name: "4학년", editing: false },
-        ];
-  });
-
+  const [buttons, setButtons] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  // const [deleteIndex, setDeleteIndex] = useState(null);
+
+  const [cid, setCid] = useState(null);
+
   const dropdownRefs = useRef([]);
+  var categoryId;
+  var changedName;
 
   useEffect(() => {
-    localStorage.setItem("savedButtons", JSON.stringify(buttons));
-  }, [buttons]);
+    getCategories();
+    // setCategories();
+  }, []);
+
+  // useEffect(() => {
+  //   localStorage.setItem("savedButtons", JSON.stringify(buttons));
+
+  const getCategories = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/categories";
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      const variable = responseData.categories.map((item) => ({
+        name: item.name,
+        id: item.id,
+        editing: false,
+      }));
+      setButtons(variable);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const delCategories = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL +
+      `/api/fillyouin/categories/${categoryId}`;
+
+    console.log(url);
+    try {
+      const response = await fetch(url, {
+        method: "DELETE", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const setCategories = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/categories";
+    const newArr = { name: "제목없음" };
+    // console.log("Bearer " + localStorage.getItem("loginToken"));
+    try {
+      const response = await fetch(url, {
+        method: "POST", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+
+        body: JSON.stringify(newArr),
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const updateCategories = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL + `/api/fillyouin/categories/${cid}`;
+    const newArr = { name: changedName };
+    // console.log("Bearer " + localStorage.getItem("loginToken"));
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+
+        body: JSON.stringify(newArr),
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
 
   const addNewBtn = () => {
     // const btnCount = buttons.length + 1;
     // const newBtnName = btnCount + "학년"; <- 기간에서 새로운 학년 추가할때...
 
     const newBtnName = "제목 없음";
-    setButtons((prevButtons) => [
-      ...prevButtons,
-      { name: newBtnName, editing: false },
-    ]);
+    const newArr = [...buttons, { name: newBtnName, editing: false }];
+    setButtons(newArr);
+    setCategories();
   };
 
   const toggleDropdown = (index) => {
@@ -49,6 +156,7 @@ function ArchiveTimelineSidebar() {
   const removeButton = (index) => {
     setButtons(buttons.filter((_, i) => i !== index));
     setActiveDropdown(null);
+    delCategories();
   };
 
   const startEditing = (index) => {
@@ -66,6 +174,8 @@ function ArchiveTimelineSidebar() {
         i === index ? { ...btn, name: newName, editing: false } : btn
       )
     );
+    changedName = newName;
+    updateCategories();
   };
 
   const handleClickOutside = (event) => {
@@ -97,6 +207,7 @@ function ArchiveTimelineSidebar() {
         i === index ? { ...btn, name: currentName, editing: false } : btn
       )
     );
+    updateCategories();
   };
 
   return (
@@ -119,7 +230,10 @@ function ArchiveTimelineSidebar() {
                       )
                     }
                     onKeyDown={(e) => handleKeyDown(e, index)}
-                    onBlur={() => handleBlur(index, btn.name)}
+                    onBlur={() => {
+                      handleBlur(index, btn.name);
+                      changedName = btn.name;
+                    }}
                     // autoFocus // <- 이걸 빼야 input 필드 스타일 수정 가능
                   />
                 ) : (
@@ -132,11 +246,22 @@ function ArchiveTimelineSidebar() {
                   <HiOutlineDotsHorizontal />
                   {activeDropdown === index && ( // 삭제, 이름 변경하는 dropdown 메뉴 부분
                     <DropdownSetting>
-                      <DropdownItem onClick={() => removeButton(index)}>
-                        {/* <DropdownItem onClick={() => confirmDeleteButton(index)}> */}
+
+                      <DropdownItem
+                        onClick={() => {
+                          categoryId = btn.id;
+                          removeButton(index);
+                        }}
+                      >
                         삭제
                       </DropdownItem>
-                      <DropdownItem onClick={() => startEditing(index)}>
+                      <DropdownItem
+                        onClick={() => {
+                          categoryId = btn.id;
+                          setCid(btn.id);
+                          startEditing(index);
+                        }}
+                      >
                         이름 변경
                       </DropdownItem>
                     </DropdownSetting>
@@ -223,7 +348,7 @@ const DropdownItem = styled.div`
 
 const Background = styled.div`
   display: flex;
-  width: 16vw;
+  width: 17vw;
   height: 100vh;
   padding-top: 4%;
 `;

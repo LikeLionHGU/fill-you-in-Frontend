@@ -14,7 +14,7 @@ const UpdateBtn = styled.button`
   }
 `;
 
-export default function UpdateBtnComponent({ id }) {
+export default function UpdateBtnComponent({ categoryId }) {
   const [showOption, setShowOption] = useState(false);
 
   return (
@@ -33,7 +33,11 @@ export default function UpdateBtnComponent({ id }) {
       >
         <img src={updateBtn} alt="updateBtn" />
       </UpdateBtn>
-      <CrudBtnsComponent Id={id} show={showOption} setShow={setShowOption} />
+      <CrudBtnsComponent
+        categoryId={categoryId}
+        show={showOption}
+        setShow={setShowOption}
+      />
     </>
   );
 }

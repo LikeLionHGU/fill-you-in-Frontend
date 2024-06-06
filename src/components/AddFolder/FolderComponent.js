@@ -65,9 +65,8 @@ export default function FolderComponent() {
           >
             <div style={{ position: "relative" }}>
               <input className="title" value={item.name} disabled />
-              <UpdateBtnComponent id={item.id} />
+              <UpdateBtnComponent categoryId={item.categoryId} />
             </div>
-            <p className="date">{item.date}</p>
           </Folder>
         ))}
     </>
