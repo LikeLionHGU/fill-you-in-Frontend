@@ -16,6 +16,11 @@ export const folderInfoState = atom({
   ],
 });
 
+export const categoryIDState = atom({
+  key: "categoryID",
+  default: "",
+});
+
 export const reNmModalState = atom({
   key: "renameModal",
   default: {
