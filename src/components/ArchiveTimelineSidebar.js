@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 function ArchiveTimelineSidebar() {
   const [buttons, setButtons] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
+
   const [cid, setCid] = useState(null);
   const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
 
@@ -147,6 +148,14 @@ function ArchiveTimelineSidebar() {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
+  // const confirmDeleteButton = (index) => {
+  //   setDeleteIndex(index);
+  //   setActiveDropdown(null);
+  // };
+  // const removeButton = (index) => {
+  //   setButtons(buttons.filter((_, i) => i !== index));
+  //   setDeleteIndex(null);
+  // };
   const removeButton = (index) => {
     setButtons(buttons.filter((_, i) => i !== index));
     setActiveDropdown(null);
@@ -245,6 +254,7 @@ function ArchiveTimelineSidebar() {
                   <HiOutlineDotsHorizontal />
                   {activeDropdown === index && ( // 삭제, 이름 변경하는 dropdown 메뉴 부분
                     <DropdownSetting>
+
                       <DropdownItem
                         onClick={() => {
                           categoryId = btn.id;
@@ -273,6 +283,17 @@ function ArchiveTimelineSidebar() {
           </SideBarContents>
         </SideBarContainer>
       </Background>
+      {/* {deleteIndex !== null && (
+        <DeleteModal>
+          <ModalContent>
+            <p>정말 삭제하시겠습니까?</p>
+            <ModalButtons>
+              <button onClick={() => removeButton(deleteIndex)}>예</button>
+              <button onClick={() => setDeleteIndex(null)}>아니요</button>
+            </ModalButtons>
+          </ModalContent>
+        </DeleteModal>
+      )} */}
     </>
   );
 }
@@ -282,21 +303,16 @@ const RenameInput = styled.input`
   display: flex;
   width: 100%;
   height: 50%;
-  /* border-top: none;
-  border-bottom: none;
-  border-left: none;
-  border-right: none; */
-  /* border: 2px solid red; */
+
   color: black;
   transition: 0.1s;
   &.rename-input {
     // 이름 수정하기 버튼 누르고 직후 input 칸
 
     /* border: 2px solid red; */
-    /* border: none; */
+
     border: 2px solid #04b1b1;
     transition: 0.1s;
-    /* background: aliceblue; */
     /* border-bottom: 2px solid #04b1b1; */
     border-radius: 4px;
     color: #04b1b1;
@@ -342,7 +358,7 @@ const Background = styled.div`
   display: flex;
   width: 17vw;
   height: 100vh;
-  /* margin-top: 4%; */
+  padding-top: 4%;
 `;
 
 const SideBarContainer = styled.div`
@@ -351,7 +367,6 @@ const SideBarContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 8%;
-  margin-top: 4%;
 `;
 
 const SideBarContents = styled.div`
@@ -414,8 +429,48 @@ const BtnSetting = styled.div`
   position: relative;
 `;
 // eslint-disable-next-line
+// const SideBarAddBtn = styled.div`
+//   display: flex;
+//   padding-left: 0px;
+// `;
 
-const SideBarAddBtn = styled.div`
-  display: flex;
-  padding-left: 0px;
-`;
+// const DeleteModal = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   background: rgba(0, 0, 0, 0.5);
+// `;
+
+// const ModalContent = styled.div`
+//   background: white;
+//   padding: 20px;
+//   border-radius: 8px;
+//   text-align: center;
+// `;
+
+// const ModalButtons = styled.div`
+//   display: flex;
+//   justify-content: space-around;
+//   margin-top: 20px;
+
+//   button {
+//     padding: 8px 16px;
+//     border: none;
+//     border-radius: 4px;
+//     cursor: pointer;
+
+//     &:first-child {
+//       background-color: #04b1b1;
+//       color: white;
+//     }
+
+//     &:last-child {
+//       background-color: #f1f1f1;
+//     }
+//   }
+// `;

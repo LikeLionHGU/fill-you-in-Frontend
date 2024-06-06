@@ -1,6 +1,72 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+function WhiteNavBtns({ img }) {
+  const navigate = useNavigate();
+  const blueLogo =
+    "https://cdn.builder.io/api/v1/image/assets/TEMP/da499762202f994dca54ca969adb1ef5319c49ef9d16de21ea1a331e2cdf55f0?";
+  const whiteLogo =
+    "https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/--@2x.png";
+  const handleLogoutMsg = () => {
+    ///// < = jwt를 백엔드로 계속 보내면서 확인해야할듯
+    if (window.confirm("로그아웃 하시겠습니까?")) {
+      localStorage.removeItem("loginToken"); // 로그인 토큰 제거
+      navigate("/");
+    }
+  };
+  const handleGoMainPage = () => {
+    navigate("/MainPage");
+  };
+
+  const location = useLocation();
+  const handleNavigate = (path) => {
+    if (location.pathname !== path) {
+      navigate(path);
+    }
+  };
+  return (
+    <NavBar>
+      <LogoImg>
+        {img === "blue" ? (
+          <img
+            className="blueLogo"
+            alt="logoImg"
+            src={blueLogo}
+            onClick={handleGoMainPage}
+          />
+        ) : (
+          <img
+            className="whiteLogo"
+            alt="logoImg"
+            src={whiteLogo}
+            onClick={handleGoMainPage}
+          />
+        )}
+      </LogoImg>
+      <NavButton onClick={() => handleNavigate("/AddFolderPage")}>
+        활동 다이어리
+      </NavButton>
+      <NavButton
+        onClick={() => {
+          handleNavigate("/TeamLounge/Search");
+        }}
+      >
+        팀원 라운지
+      </NavButton>
+      <NavButton
+        onClick={() => {
+          handleNavigate("/MyPage");
+        }}
+      >
+        마이페이지
+      </NavButton>
+      <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
+    </NavBar>
+  );
+}
+
+export default WhiteNavBtns;
 const NavBar = styled.div`
   //헤더 바
   display: flex;
@@ -49,60 +115,3 @@ const LogoImg = styled.div`
     width: 80%;
   }
 `;
-function WhiteNavBtns({ img }) {
-  const navigate = useNavigate();
-  const blueLogo =
-    "https://cdn.builder.io/api/v1/image/assets/TEMP/da499762202f994dca54ca969adb1ef5319c49ef9d16de21ea1a331e2cdf55f0?";
-  const whiteLogo =
-    "https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65d311206269ef486d8b65d3/img/--@2x.png";
-  const handleLogoutMsg = () => {
-    ///// < = jwt를 백엔드로 계속 보내면서 확인해야할듯
-    if (window.confirm("로그아웃 하시겠습니까?")) {
-      localStorage.removeItem("loginToken"); // 로그인 토큰 제거
-      navigate("/");
-    }
-  };
-  const handleGoMainPage = () => {
-    navigate("/MainPage");
-  };
-  return (
-    <NavBar>
-      <LogoImg>
-        {img === "blue" ? (
-          <img
-            className="blueLogo"
-            alt="logoImg"
-            src={blueLogo}
-            onClick={handleGoMainPage}
-          />
-        ) : (
-          <img
-            className="whiteLogo"
-            alt="logoImg"
-            src={whiteLogo}
-            onClick={handleGoMainPage}
-          />
-        )}
-      </LogoImg>
-      <NavButton>활동 찾기</NavButton>
-      <NavButton
-        onClick={() => {
-          window.location.reload("/TeamLounge/Search");
-        }}
-      >
-        팀원 라운지
-      </NavButton>
-      <NavButton>팀 관리</NavButton>
-      <NavButton
-        onClick={() => {
-          navigate("/MyPage");
-        }}
-      >
-        마이페이지
-      </NavButton>
-      <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
-    </NavBar>
-  );
-}
-
-export default WhiteNavBtns;
