@@ -33,7 +33,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export default function CrudBtnsComponent({ show, setShow, Id }) {
+export default function CrudBtnsComponent({ show, setShow, categoryId }) {
   const [modalState, setModalState] = useRecoilState(reNmModalState);
   const [deleteMdState, setDeleteMdState] = useRecoilState(deleteModal);
 
@@ -41,7 +41,7 @@ export default function CrudBtnsComponent({ show, setShow, Id }) {
     const modal = document.querySelector(".modal");
     setModalState({
       name: "수정",
-      id: Id,
+      id: categoryId,
       state: true,
     });
     modal.showModal();
@@ -49,7 +49,7 @@ export default function CrudBtnsComponent({ show, setShow, Id }) {
 
   const deleteFolder = () => {
     const modal = document.querySelector(".deleteModal");
-    setDeleteMdState({ state: true, id: Id });
+    setDeleteMdState({ state: true, id: categoryId });
     modal.showModal();
   };
 

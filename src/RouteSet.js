@@ -8,6 +8,7 @@ import ScrappedProfile from "./components/ScrappedProfile";
 import OtherPersonProfile from "./components/OtherPersonProfile";
 import AddFolderPage from "./pages/AddFolderPage";
 import DetailedPost from "./components/DetailedPost";
+import ViewMyPostPage from "./pages/ViewMyPostPage";
 function RouteSet() {
   return (
     <Router>
@@ -26,6 +27,10 @@ function RouteSet() {
         ></Route>
         <Route path="/AddFolderPage" element={<AddFolderPage />}></Route>
         <Route path="/MainPage/Detail" element={<DetailedPost />}></Route>
+        <Route
+          path="/AddFolderPage/ViewMyPostPage"
+          element={<ViewMyPostPage />}
+        ></Route>
       </Routes>
     </Router>
   );
