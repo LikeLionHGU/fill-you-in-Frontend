@@ -7,7 +7,6 @@ import { useRecoilState } from "recoil";
 function ArchiveTimelineSidebar() {
   const [buttons, setButtons] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
-
   const [cid, setCid] = useState(null);
   const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
 
@@ -254,7 +253,6 @@ function ArchiveTimelineSidebar() {
                   <HiOutlineDotsHorizontal />
                   {activeDropdown === index && ( // 삭제, 이름 변경하는 dropdown 메뉴 부분
                     <DropdownSetting>
-
                       <DropdownItem
                         onClick={() => {
                           categoryId = btn.id;
