@@ -3,13 +3,12 @@ import "../../font/font.module.css";
 import { useState } from "react";
 import styled from "styled-components";
 import { nanoid } from "nanoid";
-import { folderInfoState } from "../atom";
+import { folderInfoState, reNmModalState } from "../atom";
 import { useRecoilState } from "recoil";
-import { modalState } from "../atom";
 
 const Modal = styled.dialog`
-  width: 31.7%;
-  height: 34%;
+  width: 31.7vw;
+  height: 34vh;
   border: none;
   border-radius: 40px;
   text-align: center;
@@ -35,7 +34,7 @@ const Modal = styled.dialog`
       font-family: "Pretendard-SemiBold";
 
       &:hover {
-        color: gray;
+        background-color: gray;
       }
     }
 
@@ -50,7 +49,7 @@ const Modal = styled.dialog`
       color: #06b5b5;
 
       &:hover {
-        color: gray;
+        background-color: #f1f1f1;
       }
     }
   }
@@ -85,11 +84,7 @@ const InputArea = styled.div`
 function RenameModalComponent() {
   const [inputValue, setInputValue] = useState("");
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
-  const [modalstate, setModalstate] = useRecoilState(modalState);
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+  const [modalState, setModalState] = useRecoilState(reNmModalState);
 
   const addFolder = () => {
     const date = new Date();
@@ -99,26 +94,55 @@ function RenameModalComponent() {
     const updatedFolder = [...folderInfo, newFolder];
     setFolderInfo(updatedFolder);
     setInputValue("");
-    setModalstate(false);
+    setModalState({ state: false });
   };
 
+  const updateFolder = () => {
+    const updatedFolderInfo = folderInfo.map((itm) =>
+      itm.id === modalState.id ? { ...itm, name: inputValue } : itm
+    );
+    setFolderInfo(updatedFolderInfo);
+    setInputValue("");
+    setModalState({ state: false });
+  };
+
+  // const activeEnter = (e) => {
+  //   if (e.key === "Enter") {
+  //     e.preventDefault();
+  //     modalState.name === "추가" ? addFolder() : updateFolder();
+  //   }
+  // };
+
   return (
-    <Modal className="modal" style={{ display: modalstate ? null : "none" }}>
-      <h3>폴더 추가하기</h3>
+    <Modal
+      className="modal"
+      style={{ display: modalState.state ? null : "none" }}
+    >
+      <h3>폴더 {modalState.name}하기</h3>
       <InputArea>
         <p>폴더명</p>
         <input
           placeholder="폴더명을 적어주세요"
           value={inputValue}
-          onChange={(e) => handleInputChange(e)}
+          onChange={(e) => setInputValue(e.target.value)}
+          // onKeyDown={activeEnter}
         />
       </InputArea>
       <form method="dialog">
-        <button className="cancle" onClick={() => setModalstate(false)}>
+        <button
+          className="cancle"
+          onClick={() => {
+            setModalState({ state: false });
+            setInputValue("");
+          }}
+        >
           취소
         </button>
-        <button className="add" onClick={addFolder} type="submit">
-          추가
+        <button
+          className="add"
+          onClick={modalState.name === "추가" ? addFolder : updateFolder}
+        >
+          {modalState.name}
         </button>
       </form>
     </Modal>

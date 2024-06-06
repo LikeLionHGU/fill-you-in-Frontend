@@ -3,13 +3,11 @@ import { RecoilRoot } from "recoil";
 
 function App() {
   return (
-
     <RecoilRoot>
-
-      <RouteSet />
-
+      <ThemeProvider theme={theme}>
+        <RouteSet />
+      </ThemeProvider>
     </RecoilRoot>
-
   );
 }
 

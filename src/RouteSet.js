@@ -6,7 +6,7 @@ import MyPage from "./components/MyPage";
 import TeamLounge from "./components/TeamLounge";
 import ScrappedProfile from "./components/ScrappedProfile";
 import OtherPersonProfile from "./components/OtherPersonProfile";
-import WriteActivityPage from "./pages/WriteActivityPage";
+import AddFolderPage from "./pages/AddFolderPage";
 import DetailedPost from "./components/DetailedPost";
 function RouteSet() {
   return (
@@ -24,7 +24,7 @@ function RouteSet() {
           path="/OtherPage/:id/:isScrapped"
           element={<OtherPersonProfile />}
         ></Route>
-        <Route path="/WriteActivity" element={<WriteActivityPage />}></Route>
+        <Route path="/AddFolderPage" element={<AddFolderPage />}></Route>
         <Route path="/MainPage/Detail" element={<DetailedPost />}></Route>
       </Routes>
     </Router>
