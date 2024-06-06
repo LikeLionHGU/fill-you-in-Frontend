@@ -6,8 +6,6 @@ import TestEditorForm from "./TextEditorForm";
 function WritePostModal({ setModalOpen }) {
   const [modalPost, setModalPost] = useState([]);
   const [post, setPost] = useState({
-    activityName: "",
-    agencyName: "",
     postContent: "", // 초기 상태
   });
   const [requiredField, setRequiredField] = useState(true);
@@ -20,36 +18,38 @@ function WritePostModal({ setModalOpen }) {
     setModalOpen(false); // 나중에 백엔드랑 연결할 때 여기서 저장해서 넘겨줘야함.
   };
 
-  const handleRequiredFieldTrue = () => {
-    setRequiredField(true);
-  };
+  // const handleRequiredFieldTrue = () => {
+  //   setRequiredField(true);
+  // };
 
-  const handleRequiredFieldFalse = () => {
-    setRequiredField(false);
-  };
+  // const handleRequiredFieldFalse = () => {
+  //   setRequiredField(false);
+  // };
 
   const handleSubmitPost = async (event) => {
     event.preventDefault();
 
-    const modifyPost = {
-      activityName: post.activityName,
-      agencyName: post.agencyName,
-      postContent: post.postContent,
+    const postAllContent = {
+      folderId: 4,
+      title: post.title,
+      startDate: post.startDate,
+      endDate: post.endDate,
+      mainText: post.postContent,
     };
 
     console.log("받은데이터: ");
-    console.log(modifyPost);
+    console.log(postAllContent);
 
-    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/files";
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/events";
 
     try {
       const response = await fetch(url, {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("loginToken"),
         },
-        body: JSON.stringify(modifyPost),
+        body: JSON.stringify(postAllContent),
       });
 
       if (!response.ok) {
@@ -66,38 +66,37 @@ function WritePostModal({ setModalOpen }) {
     }
   };
 
-  const getPost = async () => {
-    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/files";
+  // const getPost = async () => {
+  //   const url =
+  //     process.env.REACT_APP_BACK_URL + "/api/fillyouin/folders/1/events"; // <<<< 맞음
 
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("loginToken"),
-        },
-      });
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: "Bearer " + localStorage.getItem("loginToken"),
+  //       },
+  //     });
 
-      if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP Error! Status: ${response.status}`);
+  //     }
 
-      const responseData = await response.json();
-      console.log("Server Response12", responseData);
+  //     const responseData = await response.json();
+  //     console.log("Server Response12", responseData);
 
-      setModalPost(responseData);
-      setPost({
-        activityName: responseData.activityName || "",
-        agencyName: responseData.agencyName || "",
-        postContent: responseData.postContent || "",
-      });
-    } catch (error) {
-      console.error("error", error);
-    }
-  };
+  //     // setModalPost(responseData);
+  //     setPost({
+  //       postContent: post.postContent || "!",
+  //     });
+  //   } catch (error) {
+  //     console.error("error", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getPost();
-  }, []); // 빈 배열을 추가하여 처음 마운트될 때만 호출되도록 함
+  // useEffect(() => {
+  //   getPost();
+  // }, []); // 빈 배열을 추가하여 처음 마운트될 때만 호출되도록 함
 
   return (
     <>
@@ -113,15 +112,18 @@ function WritePostModal({ setModalOpen }) {
                 </div>
                 <div className="modal-title">활동 작성하기</div>
                 <ModalPostInfos>
-                  <div
-                    className="InputFieldWrapper"
-                    onChange={handleRequiredFieldFalse}
-                  >
+                  <div className="InputFieldWrapper">
                     <InputField
                       type="text"
                       className="inputField-activity-name"
-                      // className="InputField"
                       placeholder="활동명을 입력해주세요"
+                      value={post.title}
+                      onChange={(e) =>
+                        setPost((prevPost) => ({
+                          ...prevPost,
+                          title: e.target.value,
+                        }))
+                      }
                       required
                     />
                     <label>
@@ -133,11 +135,25 @@ function WritePostModal({ setModalOpen }) {
                     <InputField
                       type="date"
                       className="activity-start-date"
+                      value={post.startDate}
+                      onChange={(e) =>
+                        setPost((prevPost) => ({
+                          ...prevPost,
+                          startDate: e.target.value,
+                        }))
+                      }
                       required
                     />
                     <InputField
                       type="date"
                       className="activity-end-date"
+                      value={post.end}
+                      onChange={(e) =>
+                        setPost((prevPost) => ({
+                          ...prevPost,
+                          endDate: e.target.value,
+                        }))
+                      }
                       required
                     />
                   </DateWrapper>
@@ -145,7 +161,15 @@ function WritePostModal({ setModalOpen }) {
               </ModealHeader>
               <ModalInfo>
                 {/* <ModalInfoText> */}
-                <TestEditorForm />
+                <TestEditorForm
+                  onChange={(content) =>
+                    setPost((prevPost) => ({
+                      ...prevPost,
+                      // endDate:
+                      postContent: content,
+                    }))
+                  }
+                />
                 {/* </ModalInfoText> */}
               </ModalInfo>
               <ModalButtons>
@@ -177,6 +201,7 @@ const ModalBackground = styled.div`
   left: 0; // 모달 위치 - 왼쪽에 붙임 */
   top: 0;
   right: 0;
+  z-index: 1500;
 `;
 
 // 아래 컴포넌트는 나중에 배경만 눌렀을때 모달 끄고싶으면 사용!!!!!
@@ -203,11 +228,8 @@ const Modal = styled.div`
   align-items: center;
   background-color: white;
   width: 60%;
-  /* height: 65%; */
   height: 600px;
   border-radius: 25px;
-
-  /* border: 2px solid blue; */
 `;
 const ModalContents = styled.div`
   display: flex;
