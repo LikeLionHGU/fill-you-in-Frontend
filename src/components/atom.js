@@ -16,6 +16,11 @@ export const folderInfoState = atom({
   ],
 });
 
+export const eventInfoState = atom({
+  key: "eventInfoState",
+  default: "",
+});
+
 export const categoryIDState = atom({
   key: "categoryID",
   default: "",

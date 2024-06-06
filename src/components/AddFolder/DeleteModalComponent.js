@@ -57,11 +57,38 @@ export default function DeleteModalComponent() {
   const [deleteMdState, setDeleteMdState] = useRecoilState(deleteModal);
   const [foldetInfo, setFolderInfo] = useRecoilState(folderInfoState);
 
+  const deleteFolderData = async () => {
+    const id = deleteMdState.id;
+    const url = process.env.REACT_APP_BACK_URL + `/api/fillyouin/folders/${id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "DELETE", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   const deleteFolder = () => {
     setFolderInfo((itm) => {
       return itm.filter((i) => i.id !== deleteMdState.id);
     });
     setDeleteMdState({ state: false });
+    deleteFolderData();
   };
 
   return (
