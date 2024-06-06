@@ -116,13 +116,14 @@ function RenameModalComponent() {
   };
 
   const updatedFolderData = async () => {
-    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/folders";
-    const newArr = { name: inputValue, categoryId: categoryID };
+    const id = modalState.id;
+    const url = process.env.REACT_APP_BACK_URL + `/api/fillyouin/folders/${id}`;
+    const newArr = { name: inputValue };
 
     try {
       console.log(folderInfo);
       const response = await fetch(url, {
-        method: "POST", //(+ GET인지 POST인지 명세 확인)
+        method: "PATCH", //(+ GET인지 POST인지 명세 확인)
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
@@ -154,12 +155,14 @@ function RenameModalComponent() {
   };
 
   const updateFolder = () => {
+    console.log(modalState);
     const updatedFolderInfo = folderInfo.map((itm) =>
       itm.id === modalState.id ? { ...itm, name: inputValue } : itm
     );
     setFolderInfo(updatedFolderInfo);
     setInputValue("");
     setModalState({ state: false });
+    updatedFolderData();
   };
 
   // const activeEnter = (e) => {
