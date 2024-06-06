@@ -26,9 +26,12 @@ function RouteSet() {
           element={<OtherPersonProfile />}
         ></Route>
         <Route path="/AddFolderPage" element={<AddFolderPage />}></Route>
-        <Route path="/MainPage/Detail" element={<DetailedPost />}></Route>
         <Route
-          path="/AddFolderPage/ViewMyPostPage"
+          path="/AddFolderPage/ViewMyPostPage/Detail/:id"
+          element={<DetailedPost />}
+        ></Route>
+        <Route
+          path="/AddFolderPage/ViewMyPostPage/:id"
           element={<ViewMyPostPage />}
         ></Route>
       </Routes>

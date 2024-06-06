@@ -4,6 +4,7 @@ import "../../font/font.module.css";
 import UpdateBtnComponent from "./UpdateBtnComponent";
 import { folderInfoState } from "../atom";
 import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 const Folder = styled.button`
   width: 20vw;
@@ -54,13 +55,15 @@ const Folder = styled.button`
 
 export default function FolderComponent() {
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
+  const navigate = useNavigate();
+
   return (
     <>
       {folderInfo &&
         folderInfo.map((item) => (
           <Folder
             onDoubleClick={() => {
-              alert("folder was clicked");
+              navigate(`/AddFolderPage/ViewMyPostPage/${item.id}`);
             }}
             key={item.name}
           >
