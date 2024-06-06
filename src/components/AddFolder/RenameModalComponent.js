@@ -2,8 +2,7 @@ import React from "react";
 import "../../font/font.module.css";
 import { useState } from "react";
 import styled from "styled-components";
-import { nanoid } from "nanoid";
-import { folderInfoState, reNmModalState } from "../atom";
+import { folderInfoState, reNmModalState, categoryIDState } from "../atom";
 import { useRecoilState } from "recoil";
 
 const Modal = styled.dialog`
@@ -85,10 +84,12 @@ function RenameModalComponent() {
   const [inputValue, setInputValue] = useState("");
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const [modalState, setModalState] = useRecoilState(reNmModalState);
+  const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
 
   const setFolderData = async () => {
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/folders";
-    // console.log("Bearer " + localStorage.getItem("loginToken"));
+    const newArr = { name: inputValue, categoryId: categoryID };
+
     try {
       console.log(folderInfo);
       const response = await fetch(url, {
@@ -98,7 +99,36 @@ function RenameModalComponent() {
           Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
         },
 
-        body: JSON.stringify(folderInfo),
+        body: JSON.stringify(newArr),
+      }).then((json) => {
+        console.log(json.ok);
+        if (!!json.ok) {
+          window.location.reload();
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const updatedFolderData = async () => {
+    const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/folders";
+    const newArr = { name: inputValue, categoryId: categoryID };
+
+    try {
+      console.log(folderInfo);
+      const response = await fetch(url, {
+        method: "POST", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+
+        body: JSON.stringify(newArr),
       }).then((json) => {
         console.log(json.ok);
         if (!!json.ok) {
@@ -115,7 +145,7 @@ function RenameModalComponent() {
   };
 
   const addFolder = () => {
-    const newFolder = { name: inputValue, categoryId: 3 };
+    const newFolder = { name: inputValue, id: categoryID };
     const updatedFolder = [...folderInfo, newFolder];
     setFolderInfo(updatedFolder);
     setInputValue("");
@@ -125,7 +155,7 @@ function RenameModalComponent() {
 
   const updateFolder = () => {
     const updatedFolderInfo = folderInfo.map((itm) =>
-      itm.categoryId === modalState.id ? { ...itm, name: inputValue } : itm
+      itm.id === modalState.id ? { ...itm, name: inputValue } : itm
     );
     setFolderInfo(updatedFolderInfo);
     setInputValue("");

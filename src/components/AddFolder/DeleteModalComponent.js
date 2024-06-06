@@ -59,7 +59,7 @@ export default function DeleteModalComponent() {
 
   const deleteFolder = () => {
     setFolderInfo((itm) => {
-      return itm.filter((i) => i.categoryId !== deleteMdState.id);
+      return itm.filter((i) => i.id !== deleteMdState.id);
     });
     setDeleteMdState({ state: false });
   };

@@ -62,10 +62,11 @@ export default function FolderComponent() {
             onDoubleClick={() => {
               alert("folder was clicked");
             }}
+            key={item.name}
           >
             <div style={{ position: "relative" }}>
               <input className="title" value={item.name} disabled />
-              <UpdateBtnComponent categoryId={item.categoryId} />
+              <UpdateBtnComponent categoryId={item.id} />
             </div>
           </Folder>
         ))}
