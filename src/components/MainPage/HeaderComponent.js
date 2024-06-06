@@ -1,6 +1,52 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
+
+function HeaderComponent() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const handleLogoutMsg = () => {
+    if (window.confirm("로그아웃 하시겠습니까?")) {
+      localStorage.removeItem("loginToken"); // 로그인 토큰 제거
+      navigate("/");
+    }
+  };
+
+  const handleNavigate = (path) => {
+    if (location.pathname !== path) {
+      navigate(path);
+    }
+  };
+
+  return (
+    <div>
+      <TopBackground>
+        <Header>
+          <img
+            onClick={() => {
+              window.location.reload("/MainPage");
+            }}
+            alt="LogoImage"
+            src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/--@2x.png"
+          />
+        </Header>
+        <NavBar>
+          <NavButton onClick={() => handleNavigate("/AddFolderPage")}>
+            활동 다이어리
+          </NavButton>
+          <NavButton onClick={() => handleNavigate("/TeamLounge/Search")}>
+            팀원 라운지
+          </NavButton>
+          <NavButton onClick={() => navigate("/Mypage")}>마이페이지</NavButton>
+          <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
+        </NavBar>
+      </TopBackground>
+    </div>
+  );
+}
+
+export default HeaderComponent;
 
 const TopBackground = styled.div`
   /* 배너 배경.. */
@@ -56,40 +102,3 @@ const NavButton = styled.div`
     border-radius: 5px;
   }
 `;
-
-function HeaderComponent() {
-  const navigate = useNavigate();
-
-  const handleLogoutMsg = () => {
-    if (window.confirm("로그아웃 하시겠습니까?")) {
-      localStorage.removeItem("loginToken"); // 로그인 토큰 제거
-      navigate("/");
-    }
-  };
-  return (
-    <div>
-      <TopBackground>
-        <Header>
-          <img
-            onClick={() => {
-              window.location.reload("/MainPage");
-            }}
-            alt="LogoImage"
-            src="https://cdn.animaapp.com/projects/65c5a7d8d4b749ab51e73dc0/releases/65cde3ba568da0c025605028/img/--@2x.png"
-          />
-        </Header>
-        <NavBar>
-          <NavButton>활동 찾기</NavButton>
-          <NavButton onClick={() => navigate("/TeamLounge/Search")}>
-            팀원 라운지
-          </NavButton>
-          <NavButton>팀 관리</NavButton>
-          <NavButton onClick={() => navigate("/Mypage")}>마이페이지</NavButton>
-          <NavButton onClick={handleLogoutMsg}>로그아웃</NavButton>
-        </NavBar>
-      </TopBackground>
-    </div>
-  );
-}
-
-export default HeaderComponent;

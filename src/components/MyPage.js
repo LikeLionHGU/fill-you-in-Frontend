@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import FirstVisitModal from "./FirstVisitModal";
 import ModifyProfile from "./ModifyProfile";
@@ -503,7 +503,12 @@ export const MyPage = () => {
       navigate("/");
     }
   };
-
+  const location = useLocation();
+  const handleNavigate = (path) => {
+    if (location.pathname !== path) {
+      navigate(path);
+    } else window.location.reload(path);
+  };
   return (
     <Index>
       {loading ? (
@@ -531,18 +536,20 @@ export const MyPage = () => {
                 />
               </Header>
               <NavBar>
-                <NavButton>활동 찾기</NavButton>
+                <NavButton onClick={() => handleNavigate("/AddFolderPage")}>
+                  활동 다이어리
+                </NavButton>
                 <NavButton
                   onClick={() => {
-                    navigate("/TeamLounge/Search");
+                    handleNavigate("/TeamLounge/Search");
                   }}
                 >
                   팀원 라운지
                 </NavButton>
-                <NavButton>팀 관리</NavButton>
+
                 <NavButton
                   onClick={() => {
-                    window.location.reload("/MyPage");
+                    handleNavigate("/MyPage");
                   }}
                 >
                   마이페이지
