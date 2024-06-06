@@ -10,6 +10,7 @@ import WhiteNavBtns from "../components/WhiteNavBtns";
 import { useRecoilState } from "recoil";
 import { folderInfoState, categoryIDState } from "../components/atom";
 import { useEffect } from "react";
+import { GetFirstInfo, GetFolderInfo } from "../components/AddFolder/Api";
 
 const Wrapper = styled.div`
   display: flex;
@@ -70,8 +71,19 @@ export default function AddFolderPage() {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      const firstCategoryID = await GetFirstInfo();
+      if (firstCategoryID) {
+        setCategoryID(firstCategoryID);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     getFolderInfo();
   }, [categoryID]);
+
   return (
     <>
       <WhiteNavBtns img="blue" />
