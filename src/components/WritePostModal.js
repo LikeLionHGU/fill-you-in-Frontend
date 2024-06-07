@@ -81,7 +81,8 @@ function WritePostModal({ eventInfo, setModalOpen }) {
       title: post.title,
       startDate: post.startDate,
       endDate: post.endDate,
-      mainText: post.postContent,
+      mainText: post.postContent ? post.postContent : eventInfo.mainText,
+
     };
 
     console.log(postAllContent);

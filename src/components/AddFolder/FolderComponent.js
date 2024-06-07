@@ -6,7 +6,7 @@ import { folderInfoState } from "../atom";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 
-const Folder = styled.button`
+const Folder = styled.div`
   width: 20vw;
   height: 19vh;
   background-color: #04b1b1;
@@ -66,10 +66,13 @@ export default function FolderComponent({ categoryId }) {
       {folderInfo &&
         folderInfo.map((item) => (
           <Folder
-            onClick={() => {
-              navigate(
-                `/AddFolderPage/${categoryId}/ViewMyPostPage/${item.id}`
-              );
+            onClick={(e) => {
+              if (e.target.tagName !== "IMG" && e.target.tagName !== "BUTTON") {
+                navigate(
+                  `/AddFolderPage/${categoryId}/ViewMyPostPage/${item.id}`
+                );
+              }
+              console.log(e.target.tagName);
             }}
             key={item.name}
           >
