@@ -107,7 +107,12 @@ function DetailedPost() {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
-  if (!eventInfo) return <h1>Loading..</h1>;
+  if (!eventInfo)
+    return (
+      <>
+        <div></div>
+      </>
+    );
   return (
     <div>
       <WhiteNavBtns />
