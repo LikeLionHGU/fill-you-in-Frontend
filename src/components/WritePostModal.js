@@ -81,7 +81,7 @@ function WritePostModal({ eventInfo, setModalOpen }) {
       title: post.title,
       startDate: post.startDate,
       endDate: post.endDate,
-      // mainText: post.postContent,
+      mainText: post.postContent,
     };
 
     console.log(postAllContent);
@@ -115,38 +115,6 @@ function WritePostModal({ eventInfo, setModalOpen }) {
     closeModal();
     window.location.reload();
   };
-
-  // const getPost = async () => {
-  //   const url =
-  //     process.env.REACT_APP_BACK_URL + "/api/fillyouin/folders/1/events"; // <<<< 맞음
-
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: "Bearer " + localStorage.getItem("loginToken"),
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP Error! Status: ${response.status}`);
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log("Server Response12", responseData);
-
-  //     // setModalPost(responseData);
-  //     setPost({
-  //       postContent: post.postContent || "!",
-  //     });
-  //   } catch (error) {
-  //     console.error("error", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getPost();
-  // }, []); // 빈 배열을 추가하여 처음 마운트될 때만 호출되도록 함
 
   useEffect(() => {
     if (eventInfo !== undefined) {
