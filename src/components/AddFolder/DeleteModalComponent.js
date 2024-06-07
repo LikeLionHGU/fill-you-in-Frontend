@@ -21,7 +21,7 @@ const Modal = styled.dialog`
   }
 
   > form {
-    > .cancle {
+    > .delete {
       width: 100px;
       height: 35px;
       margin-left: 15px;
@@ -32,11 +32,11 @@ const Modal = styled.dialog`
       font-family: "Pretendard-SemiBold";
 
       &:hover {
-        background-color: gray;
+        background-color: #008888;
       }
     }
 
-    > .delete {
+    > .cancle {
       width: 100px;
       height: 35px;
       margin-right: 15px;
@@ -99,12 +99,12 @@ export default function DeleteModalComponent() {
       <h3>폴더를 삭제하시겠습니까?</h3>
       <form method="dialog">
         <button
-          className="delete"
+          className="cancle"
           onClick={() => setDeleteMdState({ state: false })}
         >
           취소
         </button>
-        <button className="cancle" onClick={deleteFolder}>
+        <button className="delete" onClick={deleteFolder}>
           삭제
         </button>
       </form>

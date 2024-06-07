@@ -52,6 +52,8 @@ export default function MainPage() {
         profileImageUrl: responseData.profileImageUrl,
         email: responseData.email,
       });
+
+      localStorage.setItem("userName", responseData.lastName);
     } catch (error) {
       console.error("error", error);
     }
