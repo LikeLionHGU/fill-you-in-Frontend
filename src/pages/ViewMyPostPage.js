@@ -33,6 +33,8 @@ export default function ViewMyPostPage() {
   const showModal = () => {
     setModalOpen(true);
   };
+
+  console.log(categoryId);
   const getEventInfo = async () => {
     const url =
       process.env.REACT_APP_BACK_URL + `/api/fillyouin/folders/${id}/events`;
@@ -86,15 +88,16 @@ export default function ViewMyPostPage() {
               <AddCircleOutlinedIcon />
             </div>
           </Nav>
-          {/* <EventComponent /> */}
-
+          {/* <EventComponent categoryId={categoryId} /> */}
           <ListWrapper>
             {/* {eventInfo.map((event) => ( */}
             {Array.isArray(eventInfo) &&
               eventInfo.map((event) => (
                 <div
                   onDoubleClick={() =>
-                    navigate(`/AddFolderPage/ViewMyPostPage/Detail/${id}`)
+                    navigate(
+                      `/AddFolderPage/${categoryId}/ViewMyPostPage/Detail/${event.id}`
+                    )
                   }
                 >
                   <Post

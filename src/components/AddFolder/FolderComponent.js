@@ -57,7 +57,7 @@ const Folder = styled.button`
   }
 `;
 
-export default function FolderComponent({ categoryID }) {
+export default function FolderComponent({ categoryId }) {
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const navigate = useNavigate();
 
@@ -68,7 +68,7 @@ export default function FolderComponent({ categoryID }) {
           <Folder
             onDoubleClick={() => {
               navigate(
-                `/AddFolderPage/${categoryID}/ViewMyPostPage/${item.id}`
+                `/AddFolderPage/${categoryId}/ViewMyPostPage/${item.id}`
               );
             }}
             key={item.name}
