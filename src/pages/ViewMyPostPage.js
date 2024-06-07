@@ -11,18 +11,29 @@ import WritePostModal from "../components/WritePostModal";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 
-const Post = ({ title, createdDate, mainText, imageUrl }) => (
-  <PostContainer>
-    <PostThumbnail>
-      <img src={imageUrl} alt="thumbnail" />
-    </PostThumbnail>
-    <PostTextsBox>
-      <PostTitle>{title}</PostTitle>
-      <PostContent>{mainText}</PostContent>
-      <PostDate>{createdDate}</PostDate>
-    </PostTextsBox>
-  </PostContainer>
-);
+const Post = ({ title, createdDate, mainText, imageUrl }) => {
+  const sanitizeHtml = require("sanitize-html");
+
+  function stripHTML(html) {
+    return sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} });
+  }
+
+  const htmlString = mainText;
+  const textString = stripHTML(htmlString);
+  console.log(textString);
+  return (
+    <PostContainer>
+      <PostThumbnail>
+        <img src={imageUrl} alt="thumbnail" />
+      </PostThumbnail>
+      <PostTextsBox>
+        <PostTitle>{title}</PostTitle>
+        <PostContent>{textString}</PostContent>
+        <PostDate>{createdDate}</PostDate>
+      </PostTextsBox>
+    </PostContainer>
+  );
+};
 
 export default function ViewMyPostPage() {
   const [eventInfo, setEventInfo] = useRecoilState(eventInfoState);
