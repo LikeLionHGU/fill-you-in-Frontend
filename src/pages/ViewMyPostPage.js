@@ -5,7 +5,6 @@ import ArchiveTimelineSidebar from "../components/ArchiveTimelineSidebar";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import loginScreen from "../img/loginPageChara.svg";
-import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { eventInfoState } from "../components/atom";
 import EventComponent from "../components/ViewMyPost/EventComponent";
@@ -61,9 +60,9 @@ export default function ViewMyPostPage() {
         </Sidebar>
         <ViewListContainer>
           <Nav>
-          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
-           <button onClick={() => navigate(`/AddFolderPage?${categoryId}`)}>
-            뒤로가기
+            {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
+            <button onClick={() => navigate(`/AddFolderPage?${categoryId}`)}>
+              뒤로가기
             </button>
             <h3>멋쟁이 사자처럼</h3>
             <button onClick={showModal}>추가하기</button>
