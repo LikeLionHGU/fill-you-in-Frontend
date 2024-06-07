@@ -4,7 +4,6 @@ import ArchiveTimelineSidebar from "./ArchiveTimelineSidebar";
 import styled from "styled-components";
 import { FaChevronLeft } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-// import ModifyProfile from "./ModifyProfile";
 import WritePostModal from "./WritePostModal";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -189,21 +188,15 @@ const DetailBodyContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  /* border: 2px solid red; */
   flex-direction: row;
-  > div {
-    /* border: 2px solid green; */
-  }
 `;
 const DetialContent = styled.div`
   display: flex;
   flex-direction: column;
-  /* border: 2px solid black; */
   width: 100%;
 `;
 const ContentHead = styled.div`
   display: flex;
-  /* border: 2px solid green; */
   align-items: center;
   height: 7%;
   padding-left: 4%;
@@ -212,26 +205,18 @@ const BackButton = styled.div`
   // 뒤로가기 버튼
   display: flex;
   align-items: center;
-  /* border: 2px solid gold; */
   cursor: pointer;
-
   font-size: 23px;
-  /* font-size: 1.5vw; */
-
-  /* width: 50px;
-  height: 50px; */
 `;
 const ContentBody = styled.div`
   display: flex;
   flex-direction: column;
-  /* border: 2px solid blue; */
   height: 100%;
   margin-left: 8%;
   margin-right: 14%;
 `;
 const PostHead = styled.div`
   display: flex;
-  /* border: 2px solid black; */
   width: 100%;
   height: 9%;
   align-items: center;
@@ -241,16 +226,11 @@ const PostHead = styled.div`
     display: flex;
     margin-left: 10px;
     font-weight: bold;
-    /* color: blue; */
-
     font-size: 25px;
-    /* font-size: 1.3vw; */
   }
   .folder-date {
     display: flex;
-    /* color: gold; */
     font-weight: bold;
-    /* font-size: 1vw; */
     font-size: 15px;
     margin-right: 10px;
   }
@@ -262,9 +242,8 @@ const SettingDots = styled.div`
   height: 3%;
   align-items: center;
   justify-content: end;
-
+  position: relative;
   > svg {
-    /* border: 2px solid red; */
     font-size: 23px;
     margin-right: 10px;
     cursor: pointer;
@@ -279,27 +258,10 @@ const PostBody = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  /* border: 2px solid orange; */
-`;
-const PostTitle = styled.div`
-  display: flex;
-  width: 100%;
-  height: 9%;
-  /* border: 2px solid purple; */
-  align-items: center;
-  /* padding-left: 10px; */
-
-  > .post-title {
-    // 포스트 제목
-    font-weight: bolder;
-    font-size: 25px;
-    margin-left: 10px;
-  }
 `;
 
 const PostContent = styled.div`
   display: flex;
-  /* border: 2px solid pink; */
   height: 100%;
   padding: 10px;
   div > p > img {
@@ -360,9 +322,8 @@ const DropdownSetting = styled.div`
   font-size: 12px;
   background-color: white;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  right: 0;
-  top: 32%;
-  right: 10%;
+  top: 80%;
+  right: -2%;
   z-index: 1;
 `;
 
@@ -372,11 +333,4 @@ const DropdownItem = styled.div`
   &:hover {
     background-color: #f1f1f1;
   }
-`;
-
-const Background = styled.div`
-  display: flex;
-  width: 16vw;
-  height: 100vh;
-  padding-top: 4%;
 `;
