@@ -116,7 +116,9 @@ function DetailedPost() {
         <DetialContent>
           {/* 나중에 따로 넣을 모달,,,  */}
           <button onClick={showModal}>글 새로 작성 </button>
-          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
+          {modalOpen && (
+            <WritePostModal eventInfo={eventInfo} setModalOpen={setModalOpen} />
+          )}
           {/* 나중에 다른 컴포넌트로 넣을 모달 부분 */}
           <ContentHead>
             <BackButton
@@ -164,7 +166,7 @@ function DetailedPost() {
                   <DropdownItem onClick={() => setDeleteIndex(eventInfo.id)}>
                     삭제
                   </DropdownItem>
-                  <DropdownItem onClick={() => console.log("내용 수정")}>
+                  <DropdownItem onClick={() => showModal()}>
                     내용 수정
                   </DropdownItem>
                 </DropdownSetting>

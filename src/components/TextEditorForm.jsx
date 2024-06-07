@@ -15,7 +15,7 @@ import "quill/dist/quill.snow.css";
 import axios from "axios";
 import styled from "styled-components";
 
-const QuillEditor = ({ onChange }) => {
+const QuillEditor = ({ mainText, onChange }) => {
   const editorRef = useRef(null);
   const quillRef = useRef(null);
 
@@ -42,6 +42,10 @@ const QuillEditor = ({ onChange }) => {
     };
 
     quillRef.current = new Quill(editorRef.current, options);
+    const initialContent = mainText;
+    if (initialContent) {
+      quillRef.current.clipboard.dangerouslyPasteHTML(initialContent);
+    }
 
     // Update textarea value on text change
     quillRef.current.on("text-change", () => {
