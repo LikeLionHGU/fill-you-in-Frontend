@@ -19,6 +19,8 @@ export default function ViewMyPostPage() {
   const showModal = () => {
     setModalOpen(true);
   };
+
+  console.log(categoryId);
   const getEventInfo = async () => {
     const url =
       process.env.REACT_APP_BACK_URL + `/api/fillyouin/folders/${id}/events`;
@@ -67,7 +69,7 @@ export default function ViewMyPostPage() {
             <h3>멋쟁이 사자처럼</h3>
             <button onClick={showModal}>추가하기</button>
           </Nav>
-          <EventComponent />
+          <EventComponent categoryId={categoryId} />
           <ListWrapper>
             <Post>
               <PostThumbnail>

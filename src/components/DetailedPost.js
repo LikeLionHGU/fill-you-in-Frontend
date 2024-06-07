@@ -6,7 +6,7 @@ import { FaChevronLeft } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 // import ModifyProfile from "./ModifyProfile";
 import WritePostModal from "./WritePostModal";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function DetailedPost() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -14,9 +14,11 @@ function DetailedPost() {
     setModalOpen(true);
   };
   const { id } = useParams();
+  const { categoryId } = useParams();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const dropdownRefs = useRef([]);
+  const navigate = useNavigate();
 
   const [eventInfo, setEventInfo] = useState(null);
 
@@ -45,6 +47,35 @@ function DetailedPost() {
       };
 
       setEventInfo(variable);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const deleteEventInfo = async () => {
+    const url =
+      process.env.REACT_APP_BACK_URL + `/api/fillyouin/events/${eventInfo.id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "DELETE", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      }).then((json) => {
+        console.log(json.ok);
+        navigate(
+          `/AddFolderPage/${categoryId}/ViewMyPostPage/${eventInfo.folderId}`
+        );
+        if (!!json.ok) {
+          // window.location.reload();
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
     } catch (error) {
       console.error("error", error);
     }
@@ -88,7 +119,13 @@ function DetailedPost() {
           {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
           {/* 나중에 다른 컴포넌트로 넣을 모달 부분 */}
           <ContentHead>
-            <BackButton>
+            <BackButton
+              onClick={() =>
+                navigate(
+                  `/AddFolderPage/${categoryId}/ViewMyPostPage/${eventInfo.folderId}`
+                )
+              }
+            >
               <FaChevronLeft />
             </BackButton>
           </ContentHead>
@@ -151,9 +188,7 @@ function DetailedPost() {
           <ModalContent>
             <p>정말 삭제하시겠습니까?</p>
             <ModalButtons>
-              <button onClick={() => console.log("여기서 삭제 해야함!")}>
-                예
-              </button>
+              <button onClick={() => deleteEventInfo()}>예</button>
               <button onClick={() => setDeleteIndex(null)}>아니요</button>
             </ModalButtons>
           </ModalContent>

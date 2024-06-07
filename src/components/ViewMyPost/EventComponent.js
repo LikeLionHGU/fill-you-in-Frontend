@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export default function EventComponent() {
+export default function EventComponent({ categoryId }) {
   const [eventInfo, setEventInfo] = useRecoilState(eventInfoState);
   const navigate = useNavigate();
   return (
@@ -23,7 +23,9 @@ export default function EventComponent() {
         eventInfo.map((item) => (
           <Wrapper
             onDoubleClick={() =>
-              navigate(`/AddFolderPage/ViewMyPostPage/Detail/${item.id}`)
+              navigate(
+                `/AddFolderPage/${categoryId}/ViewMyPostPage/Detail/${item.id}`
+              )
             }
           >
             <img src={item.imageUrl} alt="img" />
