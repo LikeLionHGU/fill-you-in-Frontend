@@ -98,7 +98,7 @@ export default function AddFolderPage() {
           <p> 한선규 님, 안녕하세요!</p>
           <div className="folderWrapper">
             <AddBtnComponent />
-            <FolderComponent categoryID={categoryID} />
+            <FolderComponent categoryId={categoryID} />
           </div>
         </AddArea>
       </Wrapper>
