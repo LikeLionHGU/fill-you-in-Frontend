@@ -119,8 +119,6 @@ function DetailedPost() {
       <DetailBodyContainer>
         <ArchiveTimelineSidebar />
         <DetialContent>
-          {/* 나중에 따로 넣을 모달,,,  */}
-          <button onClick={showModal}>글 새로 작성 </button>
           {modalOpen && (
             <WritePostModal eventInfo={eventInfo} setModalOpen={setModalOpen} />
           )}
@@ -136,34 +134,14 @@ function DetailedPost() {
               <FaChevronLeft />
             </BackButton>
           </ContentHead>
-          {/* DetailedPost */}
+
           <ContentBody>
             <PostHead>
-              {/* <PostHeadTitle> */}
               <div className="folder-title">{eventInfo.title}</div>
               <div className="folder-date">
                 {eventInfo.startDate} ~ {eventInfo.endDate}
               </div>
-              {/* </PostHeadTitle> */}
             </PostHead>
-            {/* <SettingDots>
-              <HiOutlineDotsHorizontal
-                onClick={() => setActiveDropdown(true)}
-              />
-
-              {activeDropdown === true && ( // 삭제, 이름 변경하는 dropdown 메뉴 부분
-                <DropdownSetting>
-                  <DropdownItem onClick={() => setDeleteIndex(1)}>
-                    { <DropdownItem onClick={() => confirmDeleteButton(index)}> }
-                    삭제
-                  </DropdownItem>
-                  { <DropdownItem onClick={() => startEditing(index)}> }
-                  <DropdownItem onClick={() => console.log("내용 수정")}>
-                    내용 수정
-                  </DropdownItem>
-                </DropdownSetting>
-              )}
-            </SettingDots> */}
             <SettingDots ref={(el) => (dropdownRefs.current[0] = el)}>
               <HiOutlineDotsHorizontal onClick={() => toggleDropdown(0)} />
               {activeDropdown === 0 && (
