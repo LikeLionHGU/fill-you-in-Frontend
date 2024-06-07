@@ -14,42 +14,50 @@ const Modal = styled.dialog`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-
+  background-color: white;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   > h3 {
     font-family: "Pretendard-SemiBold";
     color: #005f5f;
     margin: 0;
   }
+`;
+const ButtonCmp = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  > form {
-    > .add {
-      width: 100px;
-      height: 35px;
-      margin-left: 15px;
-      border-radius: 30px;
-      border: none;
-      background-color: #06b5b5;
-      color: #ffffff;
-      font-family: "Pretendard-SemiBold";
-
-      &:hover {
-        background-color: gray;
-      }
+  > .button-cancel {
+    display: flex;
+    width: 100px;
+    height: 35px;
+    margin-right: 15px;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #06b5b5;
+    font-family: "Pretendard-SemiBold";
+    background-color: #ffffff;
+    color: #06b5b5;
+    transition: 0.2s;
+    cursor: pointer;
+    &:hover {
+      background-color: #f1f1f1;
     }
-
-    > .cancle {
-      width: 100px;
-      height: 35px;
-      margin-right: 15px;
-      border-radius: 30px;
-      border: 2px solid #06b5b5;
-      font-family: "Pretendard-SemiBold";
-      background-color: #ffffff;
-      color: #06b5b5;
-
-      &:hover {
-        background-color: #f1f1f1;
-      }
+  }
+  > .button-add {
+    width: 100px;
+    height: 35px;
+    margin-left: 15px;
+    border-radius: 30px;
+    border: none;
+    background-color: #06b5b5;
+    color: #ffffff;
+    font-family: "Pretendard-SemiBold";
+    transition: 0.2s;
+    cursor: pointer;
+    &:hover {
+      background-color: #008888;
     }
   }
 `;
@@ -188,21 +196,23 @@ function RenameModalComponent() {
         />
       </InputArea>
       <form method="dialog">
-        <button
-          className="cancle"
-          onClick={() => {
-            setModalState({ state: false });
-            setInputValue("");
-          }}
-        >
-          취소
-        </button>
-        <button
-          className="add"
-          onClick={modalState.name === "추가" ? addFolder : updateFolder}
-        >
-          {modalState.name}
-        </button>
+        <ButtonCmp>
+          <div
+            className="button-cancel"
+            onClick={() => {
+              setModalState({ state: false });
+              setInputValue("");
+            }}
+          >
+            취소
+          </div>
+          <button
+            className="button-add"
+            onClick={modalState.name === "추가" ? addFolder : updateFolder}
+          >
+            {modalState.name}
+          </button>
+        </ButtonCmp>
       </form>
     </Modal>
   );
