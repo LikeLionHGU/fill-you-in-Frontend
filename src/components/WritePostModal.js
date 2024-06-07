@@ -222,7 +222,7 @@ function WritePostModal({ eventInfo, setModalOpen }) {
               <ModalInfo>
                 {/* <ModalInfoText> */}
                 <TestEditorForm
-                  mainText={eventInfo.mainText}
+                  mainText={eventInfo ? eventInfo.mainText : null}
                   onChange={(content) =>
                     setPost((prevPost) => ({
                       ...prevPost,
