@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { eventInfoState } from "../components/atom";
-import EventComponent from "../components/ViewMyPost/EventComponent";
 import WritePostModal from "../components/WritePostModal";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
@@ -92,6 +91,7 @@ export default function ViewMyPostPage() {
 
   useEffect(() => {
     getEventInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

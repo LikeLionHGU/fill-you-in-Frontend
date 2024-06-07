@@ -34,7 +34,9 @@ const Wrapper = styled.div`
 `;
 
 export default function CrudBtnsComponent({ show, setShow, id }) {
+  // eslint-disable-next-line no-unused-vars
   const [modalState, setModalState] = useRecoilState(reNmModalState);
+  // eslint-disable-next-line no-unused-vars
   const [deleteMdState, setDeleteMdState] = useRecoilState(deleteModal);
 
   const updateFolder = () => {

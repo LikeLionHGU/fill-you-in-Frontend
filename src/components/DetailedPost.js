@@ -100,6 +100,7 @@ function DetailedPost() {
 
   useEffect(() => {
     getEventInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleDropdown = (index) => {
@@ -155,9 +156,6 @@ function DetailedPost() {
               )}
             </SettingDots>
             <PostBody>
-              {/* <PostTitle>
-                <div className="post-title">{eventInfo.title}</div>
-              </PostTitle> */}
               <PostContent>
                 <div
                   dangerouslySetInnerHTML={{ __html: eventInfo.mainText }}

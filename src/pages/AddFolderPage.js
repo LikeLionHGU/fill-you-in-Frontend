@@ -41,6 +41,7 @@ const AddArea = styled.div`
 `;
 
 export default function AddFolderPage() {
+  // eslint-disable-next-line no-unused-vars
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
 
@@ -86,10 +87,13 @@ export default function AddFolderPage() {
     if (categoryId === undefined) {
       fetchData();
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getFolderInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryID]);
 
   if (!categoryID)

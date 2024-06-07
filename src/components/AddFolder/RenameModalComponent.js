@@ -92,6 +92,7 @@ function RenameModalComponent() {
   const [inputValue, setInputValue] = useState("");
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const [modalState, setModalState] = useRecoilState(reNmModalState);
+  // eslint-disable-next-line no-unused-vars
   const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
 
   const setFolderData = async () => {
