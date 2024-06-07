@@ -4,13 +4,15 @@ import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import TestEditorForm from "./TextEditorForm";
 import { useParams } from "react-router-dom";
 
-function WritePostModal({ setModalOpen }) {
+function WritePostModal({ eventInfo, setModalOpen }) {
   const [modalPost, setModalPost] = useState([]);
   const [post, setPost] = useState({
     postContent: "", // 초기 상태
   });
   const [requiredField, setRequiredField] = useState(true);
   const { id } = useParams();
+
+  console.log(eventInfo);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -71,6 +73,49 @@ function WritePostModal({ setModalOpen }) {
     window.location.reload();
   };
 
+  const handleReSubmitPost = async (event) => {
+    event.preventDefault();
+
+    const postAllContent = {
+      folderId: parseInt(id),
+      title: post.title,
+      startDate: post.startDate,
+      endDate: post.endDate,
+      mainText: post.postContent,
+    };
+
+    console.log(postAllContent);
+    console.log(JSON.stringify(postAllContent));
+
+    const url = process.env.REACT_APP_BACK_URL + `/api/fillyouin/events/${id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("loginToken"),
+        },
+        body: JSON.stringify(postAllContent),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log(json.ok);
+      if (json.ok) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+
+    closeModal();
+    window.location.reload();
+  };
+
   // const getPost = async () => {
   //   const url =
   //     process.env.REACT_APP_BACK_URL + "/api/fillyouin/folders/1/events"; // <<<< 맞음
@@ -102,6 +147,16 @@ function WritePostModal({ setModalOpen }) {
   // useEffect(() => {
   //   getPost();
   // }, []); // 빈 배열을 추가하여 처음 마운트될 때만 호출되도록 함
+
+  useEffect(() => {
+    if (eventInfo !== undefined) {
+      setPost({
+        title: eventInfo.title,
+        startDate: eventInfo.startDate,
+        endDate: eventInfo.endDate,
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -152,7 +207,7 @@ function WritePostModal({ setModalOpen }) {
                     <InputField
                       type="date"
                       className="activity-end-date"
-                      value={post.end}
+                      value={post.endDate}
                       onChange={(e) =>
                         setPost((prevPost) => ({
                           ...prevPost,
@@ -167,6 +222,7 @@ function WritePostModal({ setModalOpen }) {
               <ModalInfo>
                 {/* <ModalInfoText> */}
                 <TestEditorForm
+                  mainText={eventInfo.mainText}
                   onChange={(content) =>
                     setPost((prevPost) => ({
                       ...prevPost,
@@ -178,7 +234,10 @@ function WritePostModal({ setModalOpen }) {
                 {/* </ModalInfoText> */}
               </ModalInfo>
               <ModalButtons>
-                <SaveButton type="submit" onClick={handleSubmitPost}>
+                <SaveButton
+                  type="submit"
+                  onClick={eventInfo ? handleReSubmitPost : handleSubmitPost}
+                >
                   저장하기
                 </SaveButton>
               </ModalButtons>
