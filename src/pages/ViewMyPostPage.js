@@ -44,6 +44,7 @@ export default function ViewMyPostPage() {
   const showModal = () => {
     setModalOpen(true);
   };
+  const [folderName, setFolderName] = useState(null);
 
   console.log(categoryId);
   const getEventInfo = async () => {
@@ -69,7 +70,7 @@ export default function ViewMyPostPage() {
         imageUrl: item.imageUrl,
       }));
       setEventInfo(variable);
-      console.log(variable);
+      setFolderName(responseData.folderName);
     } catch (error) {
       console.error("error", error);
     }
@@ -94,7 +95,7 @@ export default function ViewMyPostPage() {
             >
               <ArrowBackIosIcon />
             </div>
-            <p className="folder-title">멋쟁이 사자처럼</p>
+            <p className="folder-title">{folderName}</p>
             <div onClick={showModal} className="button-add-post">
               <AddCircleOutlinedIcon />
             </div>
