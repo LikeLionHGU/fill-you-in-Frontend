@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import TestEditorForm from "./TextEditorForm";
+import { useParams } from "react-router-dom";
 
 function WritePostModal({ setModalOpen }) {
   const [modalPost, setModalPost] = useState([]);
@@ -9,6 +10,7 @@ function WritePostModal({ setModalOpen }) {
     postContent: "", // 초기 상태
   });
   const [requiredField, setRequiredField] = useState(true);
+  const { id } = useParams();
 
   const closeModal = () => {
     setModalOpen(false);
@@ -30,15 +32,15 @@ function WritePostModal({ setModalOpen }) {
     event.preventDefault();
 
     const postAllContent = {
-      folderId: 4,
+      folderId: parseInt(id),
       title: post.title,
       startDate: post.startDate,
       endDate: post.endDate,
       mainText: post.postContent,
     };
 
-    console.log("받은데이터: ");
     console.log(postAllContent);
+    console.log(JSON.stringify(postAllContent));
 
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/events";
 
@@ -64,6 +66,9 @@ function WritePostModal({ setModalOpen }) {
     } catch (error) {
       console.error("error", error);
     }
+
+    closeModal();
+    window.location.reload();
   };
 
   // const getPost = async () => {
