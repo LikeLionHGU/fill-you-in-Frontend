@@ -6,15 +6,49 @@ import { FaChevronLeft } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 // import ModifyProfile from "./ModifyProfile";
 import WritePostModal from "./WritePostModal";
+import { useParams } from "react-router-dom";
 
 function DetailedPost() {
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
   };
+  const { id } = useParams();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const dropdownRefs = useRef([]);
+
+  const [eventInfo, setEventInfo] = useState(null);
+
+  const getEventInfo = async () => {
+    const url = process.env.REACT_APP_BACK_URL + `/api/fillyouin/events/${id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET", //(+ GET인지 POST인지 명세 확인)
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("loginToken"), // Bearer 토큰으로 요청
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      const variable = {
+        folderId: responseData.folderId,
+        id: responseData.id,
+        title: responseData.title,
+        startDate: responseData.startDate,
+        endDate: responseData.endDate,
+        mainText: responseData.mainText,
+      };
+
+      setEventInfo(variable);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
 
   const handleClickOutside = (event) => {
     if (
@@ -34,10 +68,15 @@ function DetailedPost() {
     // eslint-disable-next-line
   }, [activeDropdown]);
 
+  useEffect(() => {
+    getEventInfo();
+  }, []);
+
   const toggleDropdown = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
+  if (!eventInfo) return <h1>Loading..</h1>;
   return (
     <div>
       <WhiteNavBtns />
@@ -57,8 +96,10 @@ function DetailedPost() {
           <ContentBody>
             <PostHead>
               {/* <PostHeadTitle> */}
-              <div className="folder-title">멋쟁이사자처럼_방학 프로젝트</div>
-              <div className="folder-date">24.01~ 24.02</div>
+              <div className="folder-title">멋사</div>
+              <div className="folder-date">
+                {eventInfo.startDate} ~ {eventInfo.endDate}
+              </div>
               {/* </PostHeadTitle> */}
             </PostHead>
             {/* <SettingDots>
@@ -94,35 +135,12 @@ function DetailedPost() {
             </SettingDots>
             <PostBody>
               <PostTitle>
-                <div className="post-title">첫 해커톤</div>
+                <div className="post-title">{eventInfo.title}</div>
               </PostTitle>
               <PostContent>
-                <div>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam vitae semper nisi, eu pulvinar massa. Donec lobortis
-                  pulvinar egestas. Duis eu felis efficitur, tempus felis eget,
-                  gravida orci. Sed finibus neque vel ipsum laoreet, eget
-                  vulputate lorem ultrices. Fusce efficitur neque et convallis
-                  vehicula. <br /> <br /> Fusce at dictum lacus. Nullam nunc
-                  dui, faucibus at volutpat in, ullamcorper eget orci. Nullam
-                  volutpat sem ac turpis consectetur pulvinar ut non elit.
-                  Curabitur nunc lectus, auctor ac ligula id, porttitor
-                  hendrerit nunc. In tempor pretium volutpat. Integer congue
-                  rhoncus risus, in tincidunt nisi fringilla id. Donec faucibus
-                  pellentesque eros sit amet hendrerit. Sed pellentesque libero
-                  gravida purus mattis blandit. Quisque blandit dolor vel
-                  dignissim sollicitudin. <br /> <br />
-                  Ut sodales lobortis cursus. Suspendisse potenti. Aenean
-                  egestas eu dui non dictum. Donec metus metus, tristique at
-                  pharetra faucibus, eleifend ac turpis. Integer a egestas
-                  ligula. Donec sit amet vulputate tellus. Fusce id egestas
-                  ligula. Suspendisse eu quam nulla. Aliquam ac risus libero.{" "}
-                  <br /> <br />
-                  Quisque vehicula tincidunt massa a interdum. Vestibulum ante
-                  ipsum primis in faucibus orci luctus et ultrices posuere
-                  cubilia curae; Nullam velit lectus, elementum eu est in,
-                  bibendum ultricies augue.
-                </div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: eventInfo.mainText }}
+                ></div>
               </PostContent>
             </PostBody>
           </ContentBody>
@@ -264,6 +282,9 @@ const PostContent = styled.div`
   /* border: 2px solid pink; */
   height: 100%;
   padding: 10px;
+  div > p > img {
+    width: 50%;
+  }
 `;
 
 const DeleteModal = styled.div`

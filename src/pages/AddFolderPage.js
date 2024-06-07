@@ -10,7 +10,8 @@ import WhiteNavBtns from "../components/WhiteNavBtns";
 import { useRecoilState } from "recoil";
 import { folderInfoState, categoryIDState } from "../components/atom";
 import { useEffect } from "react";
-import { GetFirstInfo, GetFolderInfo } from "../components/AddFolder/Api";
+import { GetFirstInfo } from "../components/AddFolder/Api";
+import { useParams } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,6 +43,8 @@ const AddArea = styled.div`
 export default function AddFolderPage() {
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
+
+  const { categoryId } = useParams();
 
   const getFolderInfo = async () => {
     const url =
@@ -77,7 +80,9 @@ export default function AddFolderPage() {
         setCategoryID(firstCategoryID);
       }
     };
-    fetchData();
+    if (categoryID === null) {
+      fetchData();
+    }
   }, []);
 
   useEffect(() => {
@@ -93,7 +98,7 @@ export default function AddFolderPage() {
           <p> 한선규 님, 안녕하세요!</p>
           <div className="folderWrapper">
             <AddBtnComponent />
-            <FolderComponent />
+            <FolderComponent categoryID={categoryID} />
           </div>
         </AddArea>
       </Wrapper>

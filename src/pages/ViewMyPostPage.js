@@ -1,18 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../src/font/font.module.css";
 import WhiteNavBtns from "../components/WhiteNavBtns";
 import ArchiveTimelineSidebar from "../components/ArchiveTimelineSidebar";
 import styled from "styled-components";
+import { useNavigate, useParams } from "react-router-dom";
 import loginScreen from "../img/loginPageChara.svg";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { eventInfoState } from "../components/atom";
 import EventComponent from "../components/ViewMyPost/EventComponent";
+import WritePostModal from "../components/WritePostModal";
 
 export default function ViewMyPostPage() {
   const [eventInfo, setEventInfo] = useRecoilState(eventInfoState);
   const { id } = useParams();
-
+  const { categoryId } = useParams();
+  const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
   const getEventInfo = async () => {
     const url =
       process.env.REACT_APP_BACK_URL + `/api/fillyouin/folders/${id}/events`;
@@ -54,9 +61,12 @@ export default function ViewMyPostPage() {
         </Sidebar>
         <ViewListContainer>
           <Nav>
-            <button>뒤로가기</button>
+          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
+           <button onClick={() => navigate(`/AddFolderPage?${categoryId}`)}>
+            뒤로가기
+            </button>
             <h3>멋쟁이 사자처럼</h3>
-            <button>추가하기</button>
+            <button onClick={showModal}>추가하기</button>
           </Nav>
           <EventComponent />
           <ListWrapper>

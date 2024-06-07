@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { eventInfoState } from "../atom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import WritePostModal from "../WritePostModal";
 
 const Wrapper = styled.div`
   border: 2px solid blue;
