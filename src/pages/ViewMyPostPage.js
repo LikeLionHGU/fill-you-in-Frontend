@@ -10,6 +10,7 @@ import EventComponent from "../components/ViewMyPost/EventComponent";
 import WritePostModal from "../components/WritePostModal";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+import imgSample from "../img/profile_rock.png";
 
 const Post = ({ title, createdDate, mainText, imageUrl }) => {
   const sanitizeHtml = require("sanitize-html");
@@ -26,7 +27,18 @@ const Post = ({ title, createdDate, mainText, imageUrl }) => {
   return (
     <PostContainer>
       <PostThumbnail>
-        <img src={imageUrl} alt="thumbnail" />
+        {(!imageUrl && imageUrl === null) || imageUrl === undefined ? (
+          <>
+            {console.log("no profile", imageUrl)}
+            <img src={imgSample} alt="thumbnail" />
+          </>
+        ) : (
+          <>
+            <img src={imageUrl} alt="thumbnail" />
+          </>
+        )}
+
+        {/* <img src={imageUrl} alt="thumbnail" /> */}
       </PostThumbnail>
       <PostTextsBox>
         <PostTitle>{title}</PostTitle>
