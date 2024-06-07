@@ -55,6 +55,7 @@ const Modal = styled.dialog`
 
 export default function DeleteModalComponent() {
   const [deleteMdState, setDeleteMdState] = useRecoilState(deleteModal);
+  // eslint-disable-next-line no-unused-vars
   const [foldetInfo, setFolderInfo] = useRecoilState(folderInfoState);
 
   const deleteFolderData = async () => {

@@ -32,6 +32,7 @@ const AddBtn = styled.button`
 `;
 
 export default function AddBtnComponent() {
+  // eslint-disable-next-line no-unused-vars
   const [modalState, setModalState] = useRecoilState(reNmModalState);
 
   const addFolder = () => {

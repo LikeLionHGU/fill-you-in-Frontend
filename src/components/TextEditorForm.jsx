@@ -59,6 +59,7 @@ const QuillEditor = ({ mainText, onChange }) => {
     // Add image handler
     quillRef.current.getModule("toolbar").addHandler("image", selectLocalImage);
     // eslint-disable-next-lin
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onChange]);
 
   const selectLocalImage = () => {

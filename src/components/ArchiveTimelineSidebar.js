@@ -8,6 +8,7 @@ function ArchiveTimelineSidebar() {
   const [buttons, setButtons] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [cid, setCid] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [categoryID, setCategoryID] = useRecoilState(categoryIDState);
 
   const dropdownRefs = useRef([]);
