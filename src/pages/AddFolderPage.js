@@ -46,6 +46,8 @@ export default function AddFolderPage() {
 
   const { categoryId } = useParams();
 
+  const userName = localStorage.getItem("userName");
+
   const getFolderInfo = async () => {
     if (!categoryID) return;
     const url =
@@ -114,7 +116,7 @@ export default function AddFolderPage() {
       <Wrapper>
         <Sidebar />
         <AddArea>
-          <p> 님, 안녕하세요!</p>
+          <p>{userName} 님, 안녕하세요!</p>
           <div className="folderWrapper">
             <AddBtnComponent />
             <FolderComponent categoryId={categoryID} />
