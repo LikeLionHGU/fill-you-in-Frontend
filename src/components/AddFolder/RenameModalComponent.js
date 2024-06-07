@@ -200,8 +200,9 @@ function RenameModalComponent() {
           <div
             className="button-cancel"
             onClick={() => {
-              setModalState({ state: false });
               setInputValue("");
+              setModalState({ state: false });
+              window.location.reload();
             }}
           >
             취소
