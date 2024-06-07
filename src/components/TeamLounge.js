@@ -346,12 +346,6 @@ function SelectBox({
   showSelect,
   options,
 }) {
-  console.log("AAAAA", {
-    showSelect,
-    name,
-    bool: showSelect === name,
-    options,
-  });
   return (
     <div>
       <input
@@ -440,7 +434,6 @@ function TeamLounge() {
       const fn = () => {
         console.log("AAAB", document.activeElement);
         const currentEl = document.activeElement;
-        console.log("AAAB", currentEl.tagName);
         if (currentEl.tagName !== "SELECT")
           setShowSelect(document.activeElement?.getAttribute("name"));
       };
@@ -459,7 +452,6 @@ function TeamLounge() {
       job: "",
       field: "",
     });
-    console.log("AAAA Focus", showSelect);
 
     const { Skill, Job, Field } = inputValue;
 
@@ -555,7 +547,7 @@ function TeamLounge() {
               <DepartmentSearch>
                 <div>학부</div>
                 <select
-                  onChange={handleSelectChange}
+                  onChange={(e) => handleSelectChange(e, "Department")}
                   value={post.departments}
                   name="Department"
                 >
@@ -639,7 +631,9 @@ function TeamLounge() {
       }
       const responseData = await response.json();
       const variable = responseData.departments.map((item) => item.name);
-      setDepartments(variable);
+      const arr = [" ", ...variable];
+      console.log(arr);
+      setDepartments(arr);
     } catch (error) {
       console.error("error", error);
     }
