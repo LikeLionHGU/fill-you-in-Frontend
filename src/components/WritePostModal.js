@@ -81,7 +81,7 @@ function WritePostModal({ eventInfo, setModalOpen }) {
       title: post.title,
       startDate: post.startDate,
       endDate: post.endDate,
-      mainText: post.postContent,
+      // mainText: post.postContent,
     };
 
     console.log(postAllContent);
@@ -222,7 +222,7 @@ function WritePostModal({ eventInfo, setModalOpen }) {
               <ModalInfo>
                 {/* <ModalInfoText> */}
                 <TestEditorForm
-                  mainText={eventInfo.mainText}
+                  mainText={eventInfo ? eventInfo.mainText : null}
                   onChange={(content) =>
                     setPost((prevPost) => ({
                       ...prevPost,
