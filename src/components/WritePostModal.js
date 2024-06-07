@@ -5,33 +5,39 @@ import TestEditorForm from "./TextEditorForm";
 import { useParams } from "react-router-dom";
 
 function WritePostModal({ eventInfo, setModalOpen }) {
-  const [modalPost, setModalPost] = useState([]);
   const [post, setPost] = useState({
-    postContent: "", // 초기 상태
+    title: "",
+    startDate: "",
+    endDate: "",
+    postContent: "",
+    // postContent: "", // 초기 상태
   });
-  const [requiredField, setRequiredField] = useState(true);
   const { id } = useParams();
-
   console.log(eventInfo);
+  useEffect(() => {
+    if (eventInfo) {
+      setPost({
+        title: eventInfo.title,
+        startDate: eventInfo.startDate,
+        endDate: eventInfo.endDate,
+        postContent: eventInfo.mainText || "",
+      });
+    }
+  }, [eventInfo]);
 
   const closeModal = () => {
     setModalOpen(false);
   };
 
-  const handleSubmit = async (data) => {
-    setModalOpen(false); // 나중에 백엔드랑 연결할 때 여기서 저장해서 넘겨줘야함.
-  };
-
-  // const handleRequiredFieldTrue = () => {
-  //   setRequiredField(true);
-  // };
-
-  // const handleRequiredFieldFalse = () => {
-  //   setRequiredField(false);
-  // };
-
   const handleSubmitPost = async (event) => {
+    // 나중에 백엔드랑 연결할 때 여기서 저장해서 넘겨줘야함.
     event.preventDefault();
+
+    const form = event.target;
+    if (!form.checkValidity()) {
+      // validation 확인하기
+      return;
+    }
 
     const postAllContent = {
       folderId: parseInt(id),
@@ -41,8 +47,8 @@ function WritePostModal({ eventInfo, setModalOpen }) {
       mainText: post.postContent,
     };
 
-    console.log(postAllContent);
-    console.log(JSON.stringify(postAllContent));
+    // console.log(postAllContent);
+    // console.log(JSON.stringify(postAllContent));
 
     const url = process.env.REACT_APP_BACK_URL + "/api/fillyouin/events";
 
@@ -75,6 +81,10 @@ function WritePostModal({ eventInfo, setModalOpen }) {
 
   const handleReSubmitPost = async (event) => {
     event.preventDefault();
+    const form = event.target;
+    if (!form.checkValidity()) {
+      return;
+    }
 
     const postAllContent = {
       folderId: parseInt(id),
@@ -84,8 +94,8 @@ function WritePostModal({ eventInfo, setModalOpen }) {
       mainText: post.postContent ? post.postContent : eventInfo.mainText,
     };
 
-    console.log(postAllContent);
-    console.log(JSON.stringify(postAllContent));
+    // console.log(postAllContent);
+    // console.log(JSON.stringify(postAllContent));
 
     const url = process.env.REACT_APP_BACK_URL + `/api/fillyouin/events/${id}`;
 
@@ -115,20 +125,9 @@ function WritePostModal({ eventInfo, setModalOpen }) {
     closeModal();
     window.location.reload();
   };
-
-  useEffect(() => {
-    if (eventInfo !== undefined) {
-      setPost({
-        title: eventInfo.title,
-        startDate: eventInfo.startDate,
-        endDate: eventInfo.endDate,
-      });
-    }
-  }, []);
-
   return (
     <>
-      <form onSubmit={handleSubmitPost}>
+      <form onSubmit={eventInfo ? handleReSubmitPost : handleSubmitPost}>
         <ModalBackground>
           <Modal>
             <ModalContents>
@@ -188,26 +187,18 @@ function WritePostModal({ eventInfo, setModalOpen }) {
                 </ModalPostInfos>
               </ModealHeader>
               <ModalInfo>
-                {/* <ModalInfoText> */}
                 <TestEditorForm
                   mainText={eventInfo ? eventInfo.mainText : null}
                   onChange={(content) =>
                     setPost((prevPost) => ({
                       ...prevPost,
-                      // endDate:
                       postContent: content,
                     }))
                   }
                 />
-                {/* </ModalInfoText> */}
               </ModalInfo>
               <ModalButtons>
-                <SaveButton
-                  type="submit"
-                  onClick={eventInfo ? handleReSubmitPost : handleSubmitPost}
-                >
-                  저장하기
-                </SaveButton>
+                <SaveButton type="submit">저장하기</SaveButton>
               </ModalButtons>
             </ModalContents>
           </Modal>
@@ -220,35 +211,20 @@ function WritePostModal({ eventInfo, setModalOpen }) {
 export default WritePostModal;
 
 const ModalBackground = styled.div`
-  z-index: 1000; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
+  z-index: 1500; // 마이페이지 내용보다 위에 보이도록(검은색 반투명 배경)
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.2); // 검은배경에 20% 투명도
-  /* border: 2px solid red; */
   position: fixed; //모달 위치 fix
-  bottom: 0; // 모달 위치 - 바닥으로 내림
-  left: 0; // 모달 위치 - 왼쪽에 붙임 */
   top: 0;
+  left: 0;
   right: 0;
-  z-index: 1500;
+  bottom: 0;
 `;
 
-// 아래 컴포넌트는 나중에 배경만 눌렀을때 모달 끄고싶으면 사용!!!!!
-// eslint-disable-next-line
-const ModalExitBackground = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  position: fixed;
-  bottom: 0; // 모달 위치 - 바닥으로 내림
-  left: 0; // 모달 위치 - 왼쪽에 붙임 */
-  top: 0;
-  right: 0;
-  z-index: 1500;
-`;
 const Modal = styled.div`
   display: flex;
   flex-direction: column;
@@ -266,12 +242,9 @@ const Modal = styled.div`
 const ModalContents = styled.div`
   display: flex;
   flex-direction: column;
-  /* border: 1px solid red; */
   width: 95%;
-  /* 아래부분 추가 */
   height: 98%;
   position: relative;
-  /* 위 부분 추가 */
 `;
 const ModealHeader = styled.div`
   display: flex;
@@ -290,19 +263,14 @@ const ModealHeader = styled.div`
   }
 `;
 const CancelButton = styled.div`
-  /* border: 1px solid green; */
   display: flex;
   align-items: center;
   justify-content: center;
   color: #06b5b5;
-
   font-family: "Pretendard-SemiBold", Helvetica;
-
   width: 30px;
   height: 30px;
   margin-top: -5px;
-  background-color: none;
-  /* border-radius: 25px; */
   cursor: pointer;
   > svg {
     width: 35px;
@@ -313,17 +281,12 @@ const ModalPostInfos = styled.div`
   display: flex;
   width: 100%;
   height: 60px;
-
-  /* border: 2px solid red; */
   justify-content: space-between;
   align-items: end;
-  /* margin-bottom: 5px; */
   margin-bottom: 10px;
   .InputFieldWrapper {
     position: relative;
-    display: inline-block;
     display: flex;
-
     flex-direction: column-reverse;
     margin-right: 10px;
     width: 50%;
@@ -381,52 +344,26 @@ const InputField = styled.input`
 const DateWrapper = styled.div`
   display: flex;
   flex-direction: row;
-
-  /* height: 40px; */
-  /* border: 2px solid white; */
 `;
 
 const ModalInfo = styled.div`
   display: flex;
-
   flex-direction: column;
   height: 100%;
   width: 100%;
 `;
-// const ModalInfoText = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   height: 80%;
-//   width: 100%;
-//   border: 5px solid purple;
-//   /* justify-content: center; */
-//   font-size: 100px;
-//   overflow-y: auto; /* 추가 */
-//   overflow-x: scroll;
-//   /* & { */
-//   -ms-overflow-style: none;
-//   scrollbar-width: none;
-
-//   /* } */
-// `;
 
 const ModalButtons = styled.div`
   display: flex;
-
   justify-content: center;
   align-items: end;
-  /* border: 2px solid pink; */
-  /* height: 25%; */
   position: absolute; /* 추가 */
   bottom: 10px; /* 추가 */
   width: 100%; /* 추가 */
-  //padding: 10px 0; /* 추가 */
-  background: none; /* 추가 */
   cursor: pointer;
 `;
 
-const SaveButton = styled.div`
+const SaveButton = styled.button`
   padding: 10px 60px;
   border-radius: 7px;
   background-color: #06b5b5;
@@ -435,8 +372,9 @@ const SaveButton = styled.div`
   font-weight: 500;
   font-family: "Pretendard-SemiBold", Helvetica;
   transition: 0.2s;
+  border: none;
+  cursor: pointer;
   &:hover {
     background-color: #008888;
-    cursor: pointer;
   }
 `;
