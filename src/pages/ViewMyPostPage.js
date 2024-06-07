@@ -19,8 +19,10 @@ const Post = ({ title, createdDate, mainText, imageUrl }) => {
   }
 
   const htmlString = mainText;
-  const textString = stripHTML(htmlString);
-  console.log(textString);
+  let textString = stripHTML(htmlString);
+  // console.log(textString);
+  if (textString.length > 50) textString = textString.substring(0, 50) + "...";
+
   return (
     <PostContainer>
       <PostThumbnail>
