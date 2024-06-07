@@ -4,29 +4,13 @@ import WhiteNavBtns from "../components/WhiteNavBtns";
 import ArchiveTimelineSidebar from "../components/ArchiveTimelineSidebar";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import loginScreen from "../img/loginPageChara.svg";
+import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { eventInfoState } from "../components/atom";
 import EventComponent from "../components/ViewMyPost/EventComponent";
 import WritePostModal from "../components/WritePostModal";
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: baseline;
-`;
-
-const Nav = styled.div`
-  margin: 30px 50px 50px;
-  padding-bottom: 15px;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-bottom: 1px solid black;
-
-  > h3 {
-    font-family: "Pretendard-SemiBold";
-  }
-`;
 export default function ViewMyPostPage() {
   const [eventInfo, setEventInfo] = useRecoilState(eventInfoState);
   const { id } = useParams();
@@ -72,17 +56,157 @@ export default function ViewMyPostPage() {
     <>
       <WhiteNavBtns img="blue" />
       <Wrapper>
-        <ArchiveTimelineSidebar />
-        {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
-        <Nav>
-          <button onClick={() => navigate(`/AddFolderPage?${categoryId}`)}>
+        <Sidebar>
+          <ArchiveTimelineSidebar />
+        </Sidebar>
+        <ViewListContainer>
+          <Nav>
+          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
+           <button onClick={() => navigate(`/AddFolderPage?${categoryId}`)}>
             뒤로가기
-          </button>
-          <h3>멋쟁이 사자처럼</h3>
-          <button onClick={showModal}>추가하기</button>
-        </Nav>
-        <EventComponent />
+            </button>
+            <h3>멋쟁이 사자처럼</h3>
+            <button onClick={showModal}>추가하기</button>
+          </Nav>
+          <EventComponent />
+          <ListWrapper>
+            <Post>
+              <PostThumbnail>
+                <img src={loginScreen} alt="thumbnail" />
+              </PostThumbnail>
+              <PostTextsBox>
+                <PostTitle>멋쟁이사자 아이디어톤, 본선 진출!</PostTitle>
+                <PostContent>
+                  홀리데이 해커톤에서 사이드 프로젝트를 했습니다! 저는
+                  기획자로서 멋쟁이 사자처럼에서 ...
+                </PostContent>
+                <PostDate>2023.06.03</PostDate>
+              </PostTextsBox>
+            </Post>
+            <Post>
+              <PostThumbnail>
+                <img src={loginScreen} alt="thumbnail" />
+              </PostThumbnail>
+              <PostTextsBox>
+                <PostTitle>멋쟁이사자 아이디어톤, 본선 진출!</PostTitle>
+                <PostContent>
+                  홀리데이 해커톤에서 사이드 프로젝트를 했습니다! 저는
+                  기획자로서 멋쟁이 사자처럼에서 ...
+                </PostContent>
+                <PostDate>2023.06.03</PostDate>
+              </PostTextsBox>
+            </Post>
+            <Post>
+              <PostThumbnail>
+                <img src={loginScreen} alt="thumbnail" />
+              </PostThumbnail>
+              <PostTextsBox>
+                <PostTitle>멋쟁이사자 아이디어톤, 본선 진출!</PostTitle>
+                <PostContent>
+                  홀리데이 해커톤에서 사이드 프로젝트를 했습니다! 저는
+                  기획자로서 멋쟁이 사자처럼에서 ...
+                </PostContent>
+                <PostDate>2023.06.03</PostDate>
+              </PostTextsBox>
+            </Post>
+          </ListWrapper>
+        </ViewListContainer>
       </Wrapper>
     </>
   );
 }
+const Sidebar = styled.div`
+  display: flex;
+  border: 2px solid purple;
+`;
+const ViewListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border: 2px solid pink;
+  padding-left: 5%;
+  padding-right: 5%;
+  /* height: 100%; */
+`;
+const ListWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid green; */
+`;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  border: 2px solid red;
+`;
+
+const Nav = styled.div`
+  display: flex;
+  flex-direction: row;
+  /* margin: 30px 50px 50px; */
+  padding-bottom: 15px;
+  width: 100%;
+
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 2px solid black;
+  /* border: 2px solid blue; */
+
+  > h3 {
+    font-family: "Pretendard-SemiBold";
+  }
+`;
+
+const Post = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 47%;
+  /* border: 2px solid gold; */
+  border-bottom: 2px solid lightgray;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
+
+const PostThumbnail = styled.div`
+  display: flex;
+  width: 90px;
+  height: 90px;
+  padding: 10px 10px;
+  border: 2px solid gray;
+`;
+const PostTextsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  /* border: 2px solid red; */
+  margin-top: 6px;
+`;
+const PostTitle = styled.div`
+  display: flex;
+  font-weight: bold;
+  font-size: 14px;
+  height: 22%;
+  /* border: 2px solid orange; */
+`;
+const PostContent = styled.div`
+  display: flex;
+  align-items: center;
+  color: gray;
+  font-size: 13px;
+  height: 60%;
+  /* border: 2px solid cyan; */
+`;
+const PostDate = styled.div`
+  display: flex;
+  align-items: end;
+  color: gray;
+  font-size: 12px;
+  height: 19%;
+  margin-bottom: 0px;
+
+  /* border: 1px solid black; */
+`;

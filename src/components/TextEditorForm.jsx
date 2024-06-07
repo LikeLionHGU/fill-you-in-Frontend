@@ -25,11 +25,13 @@ const QuillEditor = ({ onChange }) => {
     }
 
     const toolbarOptions = [
-      ["bold", "italic", "underline", "strike"],
-      [{ header: 1 }, { header: 2 }],
-      [{ list: "ordered" }, { list: "bullet" }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ align: [] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }, "link"],
       [{ color: [] }, { background: [] }],
-      ["image", "link"],
+      ["image"],
     ];
 
     const options = {
@@ -52,6 +54,7 @@ const QuillEditor = ({ onChange }) => {
 
     // Add image handler
     quillRef.current.getModule("toolbar").addHandler("image", selectLocalImage);
+    // eslint-disable-next-lin
   }, [onChange]);
 
   const selectLocalImage = () => {
