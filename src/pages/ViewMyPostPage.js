@@ -86,18 +86,25 @@ export default function ViewMyPostPage() {
               <AddCircleOutlinedIcon />
             </div>
           </Nav>
-          <EventComponent />
+          {/* <EventComponent /> */}
+
           <ListWrapper>
             {/* {eventInfo.map((event) => ( */}
             {Array.isArray(eventInfo) &&
               eventInfo.map((event) => (
-                <Post
-                  key={event.id}
-                  title={event.title}
-                  createdDate={event.createdDate}
-                  mainText={event.mainText}
-                  imageUrl={event.imageUrl}
-                />
+                <div
+                  onDoubleClick={() =>
+                    navigate(`/AddFolderPage/ViewMyPostPage/Detail/${id}`)
+                  }
+                >
+                  <Post
+                    key={event.id}
+                    title={event.title}
+                    createdDate={event.createdDate}
+                    mainText={event.mainText}
+                    imageUrl={event.imageUrl}
+                  />
+                </div>
               ))}
           </ListWrapper>
         </ViewListContainer>
@@ -176,7 +183,8 @@ const Nav = styled.div`
 const PostContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 47%;
+  /* width: 47%; */
+  width: 500px;
   /* border: 2px solid gold; */
   border-bottom: 2px solid lightgray;
   padding-top: 20px;

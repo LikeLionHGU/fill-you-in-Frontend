@@ -96,7 +96,7 @@ function DetailedPost() {
           <ContentBody>
             <PostHead>
               {/* <PostHeadTitle> */}
-              <div className="folder-title">멋사</div>
+              <div className="folder-title">{eventInfo.title}</div>
               <div className="folder-date">
                 {eventInfo.startDate} ~ {eventInfo.endDate}
               </div>
@@ -124,7 +124,7 @@ function DetailedPost() {
               <HiOutlineDotsHorizontal onClick={() => toggleDropdown(0)} />
               {activeDropdown === 0 && (
                 <DropdownSetting>
-                  <DropdownItem onClick={() => console.log("내용 삭제")}>
+                  <DropdownItem onClick={() => setDeleteIndex(eventInfo.id)}>
                     삭제
                   </DropdownItem>
                   <DropdownItem onClick={() => console.log("내용 수정")}>
@@ -134,9 +134,9 @@ function DetailedPost() {
               )}
             </SettingDots>
             <PostBody>
-              <PostTitle>
+              {/* <PostTitle>
                 <div className="post-title">{eventInfo.title}</div>
-              </PostTitle>
+              </PostTitle> */}
               <PostContent>
                 <div
                   dangerouslySetInnerHTML={{ __html: eventInfo.mainText }}
@@ -297,7 +297,7 @@ const DeleteModal = styled.div`
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1500;
+  z-index: 3000;
 `;
 
 const ModalContent = styled.div`

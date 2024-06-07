@@ -81,7 +81,7 @@ export default function AddFolderPage() {
         setCategoryID(firstCategoryID);
       }
     };
-    if (categoryID === null) {
+    if (categoryId === undefined) {
       fetchData();
     }
   }, []);

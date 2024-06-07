@@ -7,6 +7,11 @@ import WritePostModal from "../WritePostModal";
 
 const Wrapper = styled.div`
   border: 2px solid blue;
+
+  > img {
+    width: 90px;
+    height: 90px;
+  }
 `;
 
 export default function EventComponent() {
