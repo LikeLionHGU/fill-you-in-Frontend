@@ -66,7 +66,7 @@ export default function FolderComponent({ categoryId }) {
       {folderInfo &&
         folderInfo.map((item) => (
           <Folder
-            onDoubleClick={() => {
+            onClick={() => {
               navigate(
                 `/AddFolderPage/${categoryId}/ViewMyPostPage/${item.id}`
               );

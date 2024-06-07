@@ -92,8 +92,8 @@ export default function AddFolderPage() {
 
   if (!categoryID)
     return (
-      <>
-        <div
+      <div>
+        {/* <div
           style={{
             display: "flex",
             width: "100%",
@@ -104,8 +104,8 @@ export default function AddFolderPage() {
           }}
         >
           Loading...
-        </div>
-      </>
+        </div> */}
+      </div>
     );
 
   return (
@@ -114,7 +114,7 @@ export default function AddFolderPage() {
       <Wrapper>
         <Sidebar />
         <AddArea>
-          <p> (사용자) 님, 안녕하세요!</p>
+          <p> 님, 안녕하세요!</p>
           <div className="folderWrapper">
             <AddBtnComponent />
             <FolderComponent categoryId={categoryID} />

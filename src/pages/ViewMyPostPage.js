@@ -83,7 +83,7 @@ export default function ViewMyPostPage() {
             >
               <ArrowBackIosIcon />
             </div>
-            <h3>멋쟁이 사자처럼</h3>
+            <p className="folder-title">멋쟁이 사자처럼</p>
             <div onClick={showModal} className="button-add-post">
               <AddCircleOutlinedIcon />
             </div>
@@ -94,7 +94,7 @@ export default function ViewMyPostPage() {
             {Array.isArray(eventInfo) &&
               eventInfo.map((event) => (
                 <div
-                  onDoubleClick={() =>
+                  onClick={() =>
                     navigate(
                       `/AddFolderPage/${categoryId}/ViewMyPostPage/Detail/${event.id}`
                     )
@@ -137,6 +137,9 @@ const ListWrapper = styled.div`
   width: 100%;
   height: 100%;
   /* border: 2px solid green; */
+  /* > div {
+    cursor: pointer;
+  } */
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -148,29 +151,32 @@ const Wrapper = styled.div`
 const Nav = styled.div`
   display: flex;
   flex-direction: row;
-
-  /* padding-bottom: 15px; */
   width: 100%;
 
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid black;
+  border-bottom: 1.5px solid black;
   /* border: 2px solid blue; */
 
-  > h3 {
-    font-family: "Pretendard-SemiBold";
+  > .folder-title {
+    font-family: "Pretendard";
+    font-weight: 500;
   }
   .button-go-back {
     /* border: 2px solid red; */
     cursor: pointer;
     transition: 0.5s;
     > svg {
-      transform: scale(1.2);
+      /* border: 2px solid red; */
+      margin-bottom: -10px;
+      transform: scale(1.1);
       color: black;
+      font-size: medium;
     }
   }
   .button-add-post {
     /* border: 2px solid red; */
+    transform: scale(0.9);
     cursor: pointer;
     transition: 0.5s;
     > svg {
@@ -198,13 +204,17 @@ const PostThumbnail = styled.div`
   display: flex;
   width: 90px;
   height: 90px;
-  padding: 10px 10px;
-  border: 2px solid gray;
+  padding: 5px 5px;
+  /* border: 2px solid gray; */
+  > img {
+    width: 100%;
+  }
 `;
 const PostTextsBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 75%;
+  cursor: pointer;
   /* border: 2px solid red; */
   margin-top: 6px;
 `;
