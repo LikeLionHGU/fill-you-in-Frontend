@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { eventInfoState } from "../atom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import WritePostModal from "../WritePostModal";
 
 const Wrapper = styled.div`
   border: 2px solid blue;
@@ -15,6 +14,7 @@ const Wrapper = styled.div`
 `;
 
 export default function EventComponent({ categoryId }) {
+  // eslint-disable-next-line no-unused-vars
   const [eventInfo, setEventInfo] = useRecoilState(eventInfoState);
   const navigate = useNavigate();
   return (

@@ -101,6 +101,7 @@ function DetailedPost() {
 
   useEffect(() => {
     getEventInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleDropdown = (index) => {
@@ -156,9 +157,6 @@ function DetailedPost() {
               )}
             </SettingDots>
             <PostBody>
-              {/* <PostTitle>
-                <div className="post-title">{eventInfo.title}</div>
-              </PostTitle> */}
               <PostContent>
                 <div
                   dangerouslySetInnerHTML={{ __html: eventInfo.mainText }}
@@ -281,21 +279,6 @@ const PostBody = styled.div`
   height: 100%;
   /* border: 2px solid orange; */
 `;
-const PostTitle = styled.div`
-  display: flex;
-  width: 100%;
-  height: 9%;
-  /* border: 2px solid purple; */
-  align-items: center;
-  /* padding-left: 10px; */
-
-  > .post-title {
-    // 포스트 제목
-    font-weight: bolder;
-    font-size: 25px;
-    margin-left: 10px;
-  }
-`;
 
 const PostContent = styled.div`
   display: flex;
@@ -372,11 +355,4 @@ const DropdownItem = styled.div`
   &:hover {
     background-color: #f1f1f1;
   }
-`;
-
-const Background = styled.div`
-  display: flex;
-  width: 16vw;
-  height: 100vh;
-  padding-top: 4%;
 `;

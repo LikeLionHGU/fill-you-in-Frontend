@@ -58,6 +58,7 @@ const Folder = styled.div`
 `;
 
 export default function FolderComponent({ categoryId }) {
+  // eslint-disable-next-line no-unused-vars
   const [folderInfo, setFolderInfo] = useRecoilState(folderInfoState);
   const navigate = useNavigate();
 
