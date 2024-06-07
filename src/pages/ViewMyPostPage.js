@@ -4,12 +4,25 @@ import WhiteNavBtns from "../components/WhiteNavBtns";
 import ArchiveTimelineSidebar from "../components/ArchiveTimelineSidebar";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import loginScreen from "../img/loginPageChara.svg";
-import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { eventInfoState } from "../components/atom";
 import EventComponent from "../components/ViewMyPost/EventComponent";
 import WritePostModal from "../components/WritePostModal";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+
+const Post = ({ title, createdDate, mainText, imageUrl }) => (
+  <PostContainer>
+    <PostThumbnail>
+      <img src={imageUrl} alt="thumbnail" />
+    </PostThumbnail>
+    <PostTextsBox>
+      <PostTitle>{title}</PostTitle>
+      <PostContent>{mainText}</PostContent>
+      <PostDate>{createdDate}</PostDate>
+    </PostTextsBox>
+  </PostContainer>
+);
 
 export default function ViewMyPostPage() {
   const [eventInfo, setEventInfo] = useRecoilState(eventInfoState);
@@ -61,73 +74,51 @@ export default function ViewMyPostPage() {
         </Sidebar>
         <ViewListContainer>
           <Nav>
-          {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
-           <button onClick={() => navigate(`/AddFolderPage?${categoryId}`)}>
-            뒤로가기
-            </button>
+            {modalOpen && <WritePostModal setModalOpen={setModalOpen} />}
+            <div
+              onClick={() => navigate(`/AddFolderPage?${categoryId}`)}
+              className="button-go-back"
+            >
+              <ArrowBackIosIcon />
+            </div>
             <h3>멋쟁이 사자처럼</h3>
-            <button onClick={showModal}>추가하기</button>
+            <div onClick={showModal} className="button-add-post">
+              <AddCircleOutlinedIcon />
+            </div>
           </Nav>
           <EventComponent />
           <ListWrapper>
-            <Post>
-              <PostThumbnail>
-                <img src={loginScreen} alt="thumbnail" />
-              </PostThumbnail>
-              <PostTextsBox>
-                <PostTitle>멋쟁이사자 아이디어톤, 본선 진출!</PostTitle>
-                <PostContent>
-                  홀리데이 해커톤에서 사이드 프로젝트를 했습니다! 저는
-                  기획자로서 멋쟁이 사자처럼에서 ...
-                </PostContent>
-                <PostDate>2023.06.03</PostDate>
-              </PostTextsBox>
-            </Post>
-            <Post>
-              <PostThumbnail>
-                <img src={loginScreen} alt="thumbnail" />
-              </PostThumbnail>
-              <PostTextsBox>
-                <PostTitle>멋쟁이사자 아이디어톤, 본선 진출!</PostTitle>
-                <PostContent>
-                  홀리데이 해커톤에서 사이드 프로젝트를 했습니다! 저는
-                  기획자로서 멋쟁이 사자처럼에서 ...
-                </PostContent>
-                <PostDate>2023.06.03</PostDate>
-              </PostTextsBox>
-            </Post>
-            <Post>
-              <PostThumbnail>
-                <img src={loginScreen} alt="thumbnail" />
-              </PostThumbnail>
-              <PostTextsBox>
-                <PostTitle>멋쟁이사자 아이디어톤, 본선 진출!</PostTitle>
-                <PostContent>
-                  홀리데이 해커톤에서 사이드 프로젝트를 했습니다! 저는
-                  기획자로서 멋쟁이 사자처럼에서 ...
-                </PostContent>
-                <PostDate>2023.06.03</PostDate>
-              </PostTextsBox>
-            </Post>
+            {/* {eventInfo.map((event) => ( */}
+            {Array.isArray(eventInfo) &&
+              eventInfo.map((event) => (
+                <Post
+                  key={event.id}
+                  title={event.title}
+                  createdDate={event.createdDate}
+                  mainText={event.mainText}
+                  imageUrl={event.imageUrl}
+                />
+              ))}
           </ListWrapper>
         </ViewListContainer>
       </Wrapper>
     </>
   );
 }
+
 const Sidebar = styled.div`
   display: flex;
-  border: 2px solid purple;
+  /* border: 2px solid purple; */
 `;
+
 const ViewListContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  border: 2px solid pink;
+  /* border: 2px solid pink; */
   padding-left: 5%;
   padding-right: 5%;
-  /* height: 100%; */
 `;
 const ListWrapper = styled.div`
   display: flex;
@@ -141,17 +132,17 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 `;
 
 const Nav = styled.div`
   display: flex;
   flex-direction: row;
-  /* margin: 30px 50px 50px; */
-  padding-bottom: 15px;
+
+  /* padding-bottom: 15px; */
   width: 100%;
 
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid black;
   /* border: 2px solid blue; */
@@ -159,9 +150,30 @@ const Nav = styled.div`
   > h3 {
     font-family: "Pretendard-SemiBold";
   }
+  .button-go-back {
+    /* border: 2px solid red; */
+    cursor: pointer;
+    transition: 0.5s;
+    > svg {
+      transform: scale(1.2);
+      color: black;
+    }
+  }
+  .button-add-post {
+    /* border: 2px solid red; */
+    cursor: pointer;
+    transition: 0.5s;
+    > svg {
+      transform: scale(1.7);
+      color: #04b1b1;
+      &:hover {
+        transform: scale(1.9);
+      }
+    }
+  }
 `;
 
-const Post = styled.div`
+const PostContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 47%;

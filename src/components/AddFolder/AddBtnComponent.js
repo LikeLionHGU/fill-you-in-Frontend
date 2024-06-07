@@ -12,7 +12,11 @@ const AddBtn = styled.button`
   border: none;
   background-color: #ffffff;
   padding: 0;
-
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    transform: scale(1.05);
+  }
   > #emptyFolder {
     width: 20vw;
     height: 19vh;

@@ -47,6 +47,7 @@ export default function AddFolderPage() {
   const { categoryId } = useParams();
 
   const getFolderInfo = async () => {
+    if (!categoryID) return;
     const url =
       process.env.REACT_APP_BACK_URL +
       `/api/fillyouin/categories/${categoryID}/folders`; //id는 recoil로 쓰기..?
@@ -89,13 +90,31 @@ export default function AddFolderPage() {
     getFolderInfo();
   }, [categoryID]);
 
+  if (!categoryID)
+    return (
+      <>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            fontSize: "50px",
+            textAlign: "center",
+            textJustify: "center",
+          }}
+        >
+          Loading...
+        </div>
+      </>
+    );
+
   return (
     <>
       <WhiteNavBtns img="blue" />
       <Wrapper>
         <Sidebar />
         <AddArea>
-          <p> 한선규 님, 안녕하세요!</p>
+          <p> (사용자) 님, 안녕하세요!</p>
           <div className="folderWrapper">
             <AddBtnComponent />
             <FolderComponent categoryID={categoryID} />

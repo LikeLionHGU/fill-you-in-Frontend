@@ -16,7 +16,11 @@ const Folder = styled.button`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  cursor: pointer;
+  transition: 0.1s;
+  &:hover {
+    transform: scale(1.02);
+  }
   > div {
     width: 100%;
     display: flex;

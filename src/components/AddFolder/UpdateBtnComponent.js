@@ -4,13 +4,24 @@ import CrudBtnsComponent from "./CrudBtnsComponent";
 import styled from "styled-components";
 
 const UpdateBtn = styled.button`
+  display: flex;
+  align-items: center;
   border: none;
   background-color: #04b1b1;
-  margin-bottom: 25px;
+
+  margin-bottom: 20px;
   margin-right: 5px;
 
+  /* border: 2px solid white; */
+  /* scale: 1; */
+  cursor: pointer;
   > img {
     width: 1vw;
+  }
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    /* transform: scale(1.2); */
   }
 `;
 
