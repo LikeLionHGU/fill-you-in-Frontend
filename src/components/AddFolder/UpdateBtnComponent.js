@@ -31,7 +31,7 @@ export default function UpdateBtnComponent({ id }) {
   return (
     <>
       <UpdateBtn
-        onFocus={() => {
+        onFocus={(e) => {
           setShowOption(true);
         }}
         onBlur={(e) => {
