@@ -13,6 +13,9 @@ export const GetFirstInfo = async () => {
       throw new Error(`HTTP Error! Status: ${response.status}`);
     }
     const responseData = await response.json();
+    if (responseData.categories.length === 0) {
+      return null;
+    }
     const variable = responseData.categories.map((item) => ({
       name: item.name,
       id: item.id,

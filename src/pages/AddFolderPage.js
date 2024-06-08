@@ -96,24 +96,6 @@ export default function AddFolderPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryID]);
 
-  if (!categoryID)
-    return (
-      <div>
-        {/* <div
-          style={{
-            display: "flex",
-            width: "100%",
-            height: "100%",
-            fontSize: "50px",
-            textAlign: "center",
-            textJustify: "center",
-          }}
-        >
-          Loading...
-        </div> */}
-      </div>
-    );
-
   return (
     <>
       <WhiteNavBtns img="blue" />
@@ -122,7 +104,11 @@ export default function AddFolderPage() {
         <AddArea>
           <p>{userName} 님, 안녕하세요!</p>
           <div className="folderWrapper">
-            <AddBtnComponent />
+            {categoryID ? (
+              <AddBtnComponent />
+            ) : (
+              <h3>카테고리를 추가해주세요</h3>
+            )}
             <FolderComponent categoryId={categoryID} />
           </div>
         </AddArea>
