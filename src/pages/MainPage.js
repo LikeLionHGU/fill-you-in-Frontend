@@ -79,9 +79,9 @@ export default function MainPage() {
             <br />
             필유인 입니다.
           </p>
-          <p>나의 이력을 관리하고 원하는 팀을 구성할 수 있어요</p>
+          <p>나의 경험을 기록하고 다양한 사람들과 소통을 할 수 있어요</p>
         </div>
-        <input placeholder="원하는 공모전, 대회 등을 입력해보세요" />
+        <input placeholder="공모전, 대회 등 다양한 경험을 입력해보세요" />
         <Link to="mainImg" spy={true} smooth={true}>
           <button className={styles.move} style={{ cursor: "pointer" }}>
             <img src="img/move.png" alt="img" />
@@ -89,13 +89,13 @@ export default function MainPage() {
         </Link>
       </div>
       <ProfileComponent post={post} />
-      <div className={styles.grid}>
-        <img src="img/mainImg2.png" alt="img" />
-        <img src="img/mainImg.png" alt="img" id="mainImg" />
+      <div className={styles.grid} style={{ position: "relative" }}>
+        <img src="img/mainUpper.jpg" alt="img" />
+        <NavigateBtn onClick={() => navigate("/TeamLounge/Search")}>
+          나에게 맞는 팀원 찾기
+        </NavigateBtn>
+        <img src="img/mainDown.jpg" alt="img" id="mainImg" />
       </div>
-      <NavigateBtn onClick={() => navigate("/TeamLounge/Search")}>
-        나에게 맞는 팀원 찾기
-      </NavigateBtn>
     </div>
   );
 }
@@ -105,6 +105,10 @@ export default function MainPage() {
 // `;
 
 const NavigateBtn = styled.button`
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  transform: translate(-50%, -50%);
   font-family: "Pretendard-Regular";
   font-size: 19px;
   color: white;
