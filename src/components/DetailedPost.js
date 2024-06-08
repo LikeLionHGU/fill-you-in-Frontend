@@ -8,7 +8,7 @@ import WritePostModal from "./WritePostModal";
 import { useNavigate, useParams } from "react-router-dom";
 
 function DetailedPost() {
-  var vaaa;
+  var vaa;
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
@@ -47,8 +47,8 @@ function DetailedPost() {
       };
 
       setEventInfo(variable);
-      vaaa = responseData;
-      console.log(vaaa);
+      vaa = responseData;
+      console.log(vaa);
     } catch (error) {
       console.error("error", error);
     }
