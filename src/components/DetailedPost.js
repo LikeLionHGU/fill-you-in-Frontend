@@ -8,6 +8,7 @@ import WritePostModal from "./WritePostModal";
 import { useNavigate, useParams } from "react-router-dom";
 
 function DetailedPost() {
+  const fffff = "";
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
