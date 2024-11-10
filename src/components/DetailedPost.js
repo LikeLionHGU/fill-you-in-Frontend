@@ -7,6 +7,7 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import WritePostModal from "./WritePostModal";
 import { useNavigate, useParams } from "react-router-dom";
 
+//
 function DetailedPost() {
   var va;
   const [modalOpen, setModalOpen] = useState(false);
